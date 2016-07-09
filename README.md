@@ -7,3 +7,5 @@
 >项目地址为：http://jz.xxgzs.org/xxjzApp/index.php
 
 目前项目还在建设中，暂时无法提供演示，但可以自行搭建。
+
+项目配置文件在/Application/Common/Conf/config.php中，搭建时自行修改，后续将增加数据库安装文件。
