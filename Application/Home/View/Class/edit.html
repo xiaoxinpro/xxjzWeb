@@ -1,0 +1,31 @@
+<extend name="Public:common"/>
+<block name="main">
+    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+        <fieldset>
+        <legend>编辑分类</legend>
+        <div class="am-input-group">
+            <span class="am-input-group-label"><b>名称</b></span>
+            <input type="text" class="am-form-field" id="text-class" name="class_name" value="{$ClassName}">
+        </div>
+        <div><p></p></div>
+        <div class="am-input-group">
+            <span class="am-input-group-label"><b>类别</b></span>
+            <select id="select-type" class="am-form-field" name="class_type" >
+                <if condition="$ClassType eq 1">
+                    <option value="1">收入</option>
+                    <option value="2">支出</option>
+                <else/>
+                    <option value="2">支出</option>
+                    <option value="1">收入</option>
+                </if>
+            </select>
+        </div>
+        <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="class_submit" value="编辑"></p>
+        
+        <p><a href="javascript:void(0);" class="am-btn am-btn-block am-btn-danger" 
+                    onclick="isDelete('__APP__/Home/Class/del/id/{$ClassId}')" >删除</a></p>
+                
+        <p><a href="__APP__/Home/Class/index/type/{$ClassType}" class="am-btn am-btn-block am-btn-default">返回</a></p>
+        </fieldset>
+    </form>
+</block>

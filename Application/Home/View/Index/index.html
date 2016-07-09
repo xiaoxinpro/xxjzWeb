@@ -1,0 +1,21 @@
+<extend name="Public:common"/>
+<block name="main">
+    
+    <div class="am-alert am-alert-secondary" data-am-alert>
+        <button type="button" class="am-close">&times;</button>
+        <p><b>{$UserName}，欢迎使用小歆记账APP！&nbsp;</b><a href="/index.php" class="am-btn-sm am-btn-warning">返回旧版</a></p>
+    </div>
+    
+    <include file="Public:list_index"/>
+        
+    <div id="money-table" class="am-alert am-alert-secondary" data-am-alert>
+        <button type="button" class="am-close">&times;</button>
+        <p class="am-text-sm">
+        总收入:<font class="am-text-success">{$AccountStatistic['SumInMoney']}</font> &nbsp;
+        总支出:<font class="am-text-danger" >{$AccountStatistic['SumOutMoney']}</font> &nbsp;
+          剩余:<font class="am-text-primary">{$AccountStatistic['SumInMoney']-$AccountStatistic['SumOutMoney']}</font>
+        </p>
+    </div>
+    
+    <include file="Public:list_common"/>
+</block>

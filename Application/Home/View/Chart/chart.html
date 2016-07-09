@@ -1,0 +1,162 @@
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <script type="text/javascript" src="http://libs.useso.com/js/jquery/1.8.3/jquery.min.js"></script>
+  <script type="text/javascript" src="http://libs.useso.com/js/highcharts/4.0.1/highcharts.js"></script><!-- js/highcharts.js-->
+  <!-- <script type="text/javascript" src="js/modules/exporting.js" charset="gbk"></script> 导出表格插件-->
+  <script>
+    
+    $(function () {
+        var divTop = document.getElementsByClassName('DivTop');
+        divTop.style = "width:100%";
+
+        //年度汇总柱状图
+        $('#container_Year').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '<? echo $y.'年收入与支出金额汇总'; ?>'
+            },
+            subtitle: {
+                text: null
+            },
+            credits: {
+                enabled: false
+            },
+            xAxis: {
+                categories: [
+                    '1月',
+                    '2月',
+                    '3月',
+                    '4月',
+                    '5月',
+                    '6月',
+                    '7月',
+                    '8月',
+                    '9月',
+                    '10月',
+                    '11月',
+                    '12月'
+                ]
+            },
+            yAxis: {
+                min: 0,
+                labels: {
+                    formatter:function(){
+                        return this.value + "元";
+                    }
+                },
+                title: {
+                    text: null //'金额（元）'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:12px" align="center">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0"><b>{series.name}: </b></td>' +
+                    '<td style="padding:0"><b>{point.y:.2f} 元</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: '收入',
+                color: '#69cf8a',
+                data: <? echo $JsonInMoney; ?>
+
+            }, {
+                name: '支出',
+                color: '#ff922b',
+                data: <? echo $JsonOutMoney; ?>
+
+            }]
+        });
+        
+        //收入分类汇总饼图
+        $('#container_InClass').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '<? echo $y.'年收入分类汇总'; ?>'
+            },
+            subtitle: {
+                text: '<? echo '总收入'.$DataArray['InSumMoney'].'元'; ?>',
+                style: {
+                    color: 'green',
+                    fontWeight: 'bold'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        format: '<b>{point.name}: {point.percentage:.1f} %</b>'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '收入',
+                data: <? echo $JsonInClassPer; ?>
+            }]
+        });
+        
+        //支出分类汇总饼图
+        $('#container_OutClass').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: '<? echo $y.'年支出分类汇总'; ?>'
+            },
+            subtitle: {
+                text: '<? echo '总支出'.$DataArray['OutSumMoney'].'元'; ?>',
+                style: {
+                    color: 'red',
+                    fontWeight: 'bold'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        format: '<b>{point.name}: {point.percentage:.1f} %</b>'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: '支出',
+                data: <? echo $JsonOutClassPer; ?>
+            }]
+        });
+    });         
+
+  </script>
+</head>
+

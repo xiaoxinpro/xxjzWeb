@@ -1,0 +1,74 @@
+<extend name="Public:base"/>
+<block name="main">
+    
+<div class="am-center">
+    <div class="am-container">
+        <form class="am-form" method="post" id="doc-vld-msg" data-am-validator>
+          <fieldset>
+            <legend>注册账号</legend>
+        
+            <div class="am-form-group">
+              <label for="regist_username">账号</label>
+              <input type="text" class="" name="regist_username" placeholder="输入用户名（至少2个字符）"
+                minlength="2" maxlength="16" data-validation-message="用户名长度要求在2-16位之间。" required/>
+            </div>
+
+            <div class="am-form-group">
+              <label for="regist_email">邮箱</label>
+              <input type="email" class="" name="regist_email" 
+                placeholder="输入邮箱（用于找回密码）" minlength="4" maxlength="32" 
+                data-validation-message="请输入长度在4-32位之间的有效电子邮箱地址。" required/>
+            </div>
+
+            <div class="am-form-group">
+              <label for="regist_password">密码</label>
+              <input type="password" class="" name="regist_password" placeholder="输入密码（建议6位以上）" 
+                minlength="4" maxlength="24" id="doc-vld-pwd-1" 
+                data-validation-message="密码长度要求在4-24位之间。" required/>
+            </div>
+        
+            <div class="am-form-group">
+              <label for="regist_password">确认密码</label>
+              <input type="password" class="" name="regist_password2" placeholder="请再次输入密码" 
+                data-equal-to="#doc-vld-pwd-1" id="doc-vld-pwd-2" 
+                data-validation-message="请与上面输入的密码保持一致" required/>
+            </div>
+            
+            <p><input type="submit" class="am-btn am-btn-success am-btn-block" name="regist_submit" value="注册"></p>
+            
+          </fieldset>
+        </form>
+        
+    </div>
+    
+</div>
+
+<literal>
+<script type="text/javascript">
+$(function() {
+
+  $('#doc-vld-msg').validator({
+    onValid: function(validity) {
+      $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+    },
+
+    onInValid: function(validity) {
+      var $field = $(validity.field);
+      var $group = $field.closest('.am-form-group');
+      var $alert = $group.find('.am-alert');
+      // 使用自定义的提示信息 或 插件内置的提示信息
+      var msg = $field.data('validationMessage') || this.getValidationMessage(validity);
+
+      if (!$alert.length) {
+        $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+          appendTo($group);
+      }
+
+      $alert.html(msg).show();
+    }
+  });
+});
+</script>
+</literal>
+
+</block>

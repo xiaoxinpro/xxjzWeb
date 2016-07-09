@@ -1,0 +1,14 @@
+pace-theme-minimal          无任何现象          0.409kb
+pace-theme-mac-osx          仿Mac顶部进度条     2.98kb
+pace-theme-loading-bar      中央带%进度条       9.25kb
+pace-theme-flat-top         无任何现象          0.885kb
+pace-theme-flash            加载完成后闪烁      2.14kb
+pace-theme-fill-left        背景向右侧填充进度  0.442kb
+pace-theme-corner-indicator 右上角圆圈转动      1.94kb
+pace-theme-center-simple    中央简单进度条      1.021kb
+pace-theme-center-radar     中央1/4圆圈转动     1.39kb
+pace-theme-center-circle    中央%圆立体旋转     2.12kb
+pace-theme-center-atom      显示不全            2.74kb
+pace-theme-bounce           右上角小圆逐渐远离  4.98kb
+pace-theme-big-counter      无现象              0.86kb
+pace-theme-barber-shop      上方带条纹进度条    3.23kb

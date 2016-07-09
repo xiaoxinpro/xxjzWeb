@@ -1,0 +1,57 @@
+<extend name="Public:common"/>
+<block name="main">
+    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+        <fieldset id="accordion">
+        <legend data-am-collapse="{parent: '#accordion', target: '#do-not-say-1'}">查询账目</legend>
+        <if condition="$ShowFind eq 1">
+            <div id="do-not-say-1" class="am-collapse am-in">
+        <else/>
+            <div id="do-not-say-1" class="am-collapse">
+        </if>
+        <div class="am-input-group">
+            <span class="am-input-group-label"><b>选择分类</b></span>
+            <select id="select-type" class="am-form-field" name="find_class" value="{$FindDataClass}">
+                <option value="all">全部分类</option>
+                <option value="outClass">支出--</option>
+                <foreach name="outClassData" item="ClassName">
+                    <option value="{$key}">----{$ClassName}</option>
+                </foreach>
+                <option value="inClass">收入--</option>
+                <foreach name="inClassData" item="ClassName">
+                    <option value="{$key}">----{$ClassName}</option>
+                </foreach>
+            </select>
+        </div>
+        <div><p></p></div>
+        <div class="am-input-group">
+            <span class="am-input-group-label"><b>起始时间</b></span>
+            <input type="date" class="am-form-field" id="text-start-time" name="find_start_time" value="{$FindData.starttime}" />
+        </div>
+        <div><p></p></div>
+        <div class="am-input-group">
+            <span class="am-input-group-label"><b>终止时间</b></span>
+            <input type="date" class="am-form-field" id="text-end-time" name="find_end_time"  value="{$FindData.endtime}" />
+        </div>
+        <div><p></p></div>
+        <div class="am-input-group">
+            <span class="am-input-group-label"><b>备注信息</b></span>
+            <input type="text" class="am-form-field" id="text-mark" name="find_mark" value="{$FindData.acremark}" >
+        </div>
+        <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="find_submit" value="查询"></p>
+        </div>
+        <p><a href="__APP__/Home/Find/reboot" class="am-btn am-btn-block am-btn-danger">重置</a></p>
+        <p><a href="__APP__/Home/Index/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
+        </fieldset>
+    </form>
+    
+    <div id="money-table" class="am-alert am-alert-secondary" data-am-alert>
+        <button type="button" class="am-close">&times;</button>
+        <p class="am-text-sm">
+          收入:<font class="am-text-success">{$SumInMoney}</font> &nbsp;
+          支出:<font class="am-text-danger" >{$SumOutMoney}</font> &nbsp;
+          剩余:<font class="am-text-primary">{$SumInMoney - $SumOutMoney}</font>
+        </p>
+    </div>
+    
+    <include file="Public:list_common"/>
+</block>

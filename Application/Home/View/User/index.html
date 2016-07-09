@@ -1,0 +1,109 @@
+
+<extend name="Public:common"/>
+<block name="main">
+
+    <div data-am-widget="tabs" class="am-tabs am-tabs-secondary" >
+        <ul class="am-tabs-nav am-cf">
+            <if condition="$type eq 1">
+                <li class=""><a href="[data-tab-panel-0]">账号设置</a></li>
+                <li class="am-active"><a href="[data-tab-panel-1]">修改密码</a></li>
+                <li class=""><a href="[data-tab-panel-2]">其他设置</a></li>
+            <elseif condition="$type eq 2"/>
+                <li class=""><a href="[data-tab-panel-0]">账号设置</a></li>
+                <li class=""><a href="[data-tab-panel-1]">修改密码</a></li>
+                <li class="am-active"><a href="[data-tab-panel-2]">其他设置</a></li>
+            <else/>
+                <li class="am-active"><a href="[data-tab-panel-0]">账号设置</a></li>
+                <li class=""><a href="[data-tab-panel-1]">修改密码</a></li>
+                <li class=""><a href="[data-tab-panel-2]">其他设置</a></li>
+            </if>
+        </ul>
+        <div class="am-tabs-bd">
+
+            <!-- 账号设置 -->
+            <if condition="$type eq 0">
+                <div data-tab-panel-0 class="am-tab-panel am-active">
+            <else/>
+                <div data-tab-panel-0 class="am-tab-panel ">
+            </if>
+                <form class="am-form am-form-horizontal" id="from-msg" method="post" data-am-validator>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>登录账号</b></span>
+                        <input type="text" class="am-form-field" id="text-money" name="user_name" placeholder="输入新的登录账号" minlength="2" required/>
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>验证邮箱</b></span>
+                        <input type="email" class="am-form-field" id="text-mark" name="user_email" placeholder="输入注册时填写的邮箱({$Email})" required/>
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>验证密码</b></span>
+                        <input type="password" class="am-form-field" id="text-time" name="user_password" placeholder="输入登录密码" required/>
+                    </div>
+                    <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
+                    <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="user_submit" value="修改账号"></p>
+                    <p><a href="__APP__/Home/Index/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
+                </form>
+            </div>
+
+            <!-- 修改密码 -->
+            <if condition="$type eq 1">
+                <div data-tab-panel-1 class="am-tab-panel am-active">
+            <else/>
+                <div data-tab-panel-1 class="am-tab-panel ">
+            </if>
+                <form class="am-form am-form-horizontal" id="from-msg" method="post" data-am-validator>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>输入旧密码</b></span>
+                        <input type="password" class="am-form-field" id="user-password" name="user_password" placeholder="请输入当前登录密码" required/>
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>输入新密码</b></span>
+                        <input type="password" class="am-form-field" id="user-password-1" name="user_password_new" placeholder="请输入新密码" minlength="6" required/>
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>确认新密码</b></span>
+                        <input type="password" class="am-form-field" id="user-password-2" name="user_password_new2" placeholder="再次输入新密码" data-equal-to="#user-password-1" required/>
+                    </div>
+                    <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
+                    <p><input type="submit" class="am-btn am-btn-success am-btn-block" name="user_submit" value="修改密码"></p>
+                    <p><a href="__APP__/Home/Index/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
+                </form>
+            </div>
+
+            <!-- 其他设置 -->
+            <if condition="$type eq 2">
+                <div data-tab-panel-2 class="am-tab-panel am-active">
+            <else/>
+                <div data-tab-panel-2 class="am-tab-panel">
+            </if>
+                <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>设置1</b></span>
+                        <input type="text" class="am-form-field" id="text-money" name="user_password" />
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>设置2</b></span>
+                        <input type="text" class="am-form-field" id="text-mark" name="user_password_new" />
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>设置3</b></span>
+                        <input type="text" class="am-form-field" id="text-time" name="user_password_new2" />
+                    </div>
+                    <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
+                    <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="user_submit" value="提交"></p>
+                    <p><a href="__APP__/Home/Index/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+

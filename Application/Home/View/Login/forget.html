@@ -1,0 +1,36 @@
+<extend name="Public:base"/>
+<block name="main">
+    
+<div class="am-center">
+    <div class="am-container">
+        <form class="am-form" method="post" data-am-validator>
+          <fieldset>
+            <legend>重置用户密码</legend>
+        
+            <div class="am-form-group">
+              <label for="forget_username">账号</label>
+              <input type="text" class="" name="forget_username" placeholder="{$username}" disabled/>
+            </div>
+        
+            <div class="am-form-group">
+              <label for="forget_password">密码</label>
+              <input type="password" class="" name="forget_password" placeholder="输入新密码" 
+                minlength="4" maxlength="24" id="doc-vld-pwd-1" required/>
+            </div>
+        
+            <div class="am-form-group">
+              <label for="forget_password">确认密码</label>
+              <input type="password" class="" name="forget_password2" placeholder="请与上面输入的密码值一致" 
+                data-equal-to="#doc-vld-pwd-1" id="doc-vld-pwd-2" required/>
+            </div>
+            
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="forget_submit" value="提交"></p>
+            
+          </fieldset>
+        </form>
+        
+    </div>
+    
+</div>
+
+</block>

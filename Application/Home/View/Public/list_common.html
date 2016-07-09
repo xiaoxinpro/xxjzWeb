@@ -1,0 +1,61 @@
+<p></p>
+<table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
+    <thead>
+        <tr>
+            <th width='80' bgcolor="#FFFFFF">分类</th>
+            <th width='80' bgcolor="#FFFFFF">金额</th>
+            <th width='80' bgcolor="#FFFFFF">收支</th>
+            <th width='110' bgcolor="#FFFFFF">时间</th>
+            <th width='100' bgcolor="#FFFFFF">备注</th>
+            <th width='80' bgcolor="#FFFFFF">操作</th>
+        </tr>
+    </thead>
+    <tbody class="">
+        <volist name="ShowData" id="data">
+        <tr>
+            <td class="am-text-middle">{$data.class}</td>
+            <td class="am-text-middle">{$data.money}</td>
+            <td class="am-text-middle">{$data.type}</td>
+            <td class="am-text-middle am-text-xs"><php>echo date("Y-m-d",$data['time']);</php></td>
+            <td class="am-text-middle">{$data.mark}</td>
+            <td class="am-text-middle">
+                <php>
+                    echo "<a href=".U("Home/Edit/index?id=".$data['id']).">编辑</a>";
+                    echo " ";
+                    echo "<a href=\"javascript:void(0);\" onclick=\"isDelete('__APP__/Home/Edit/del/id/".$data['id']."')\" >删除</a>";
+                </php>
+            </td>
+        </tr>
+        </volist>
+    </tbody>
+</table>
+
+<!--分页大于1时显示-->
+<gt name="PageMax" value="1">
+<ul data-am-widget="pagination" class="am-pagination am-pagination-select">
+    <li class="am-pagination-prev ">
+        <if condition="1 neq $Page "> <a href="__ACTION__/p/{$Page-1}#money-table" class="">上一页</a> 
+        <else /> <a href="__ACTION__/p/{$Page}#money-table" class="">上一页</a> 
+        </if>
+    </li>
+    
+    <li class="am-pagination-select">
+        <select id="pid" onchange="SelectChange()">
+            <foreach name="ArrPage" item="i">
+                <if condition="$i eq $Page "> 
+                    <option value="__ACTION__/p/{$i}#money-table" selected="selected">&nbsp;{$i}</option>
+                <else /> 
+                    <option value="__ACTION__/p/{$i}#money-table" class="">&nbsp;{$i}</option>
+                </if>
+            </foreach>
+        </select>
+    </li>
+    
+    
+    <li class="am-pagination-next ">
+        <if condition="$PageMax neq $Page "> <a href="__ACTION__/p/{$Page+1}#money-table" class="">下一页</a>
+        <else /> <a href="__ACTION__/p/{$Page}#money-table" class="">下一页</a> 
+        </if>
+    </li>
+</ul>
+</gt>

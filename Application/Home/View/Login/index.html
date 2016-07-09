@@ -1,0 +1,66 @@
+<extend name="Public:base"/>
+<block name="main">
+    
+<div class="am-center">
+    <div class="am-container">
+        <form class="am-form" method="post" data-am-validator>
+          <fieldset>
+            <legend>账号登录</legend>
+        
+            <div class="am-form-group">
+              <label for="login_username">账号</label>
+              <input type="text" class="" name="login_username" placeholder="输入用户名" 
+                minlength="2" maxlength="16" required/>
+            </div>
+        
+            <div class="am-form-group">
+              <label for="login_password">密码</label>
+              <input type="password" class="" name="login_password" placeholder="输入密码" 
+                minlength="4" maxlength="24" required/>
+            </div>
+            
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="login_submit" value="登录"></p>
+            
+            <p><button type="button" class="am-btn am-btn-block am-btn-default" data-am-modal="{target: '#my-popup'}">忘记密码</button></p>
+            
+          </fieldset>
+        </form>
+    </div>
+
+
+<div class="am-popup" id="my-popup">
+  <div class="am-popup-inner">
+    <div class="am-popup-hd">
+        <h4 class="am-popup-title">找回用户密码</h4>
+        <span data-am-modal-close class="am-close">&times;</span>
+    </div>
+    <div class="am-container" >
+        <form class="am-form" method="post" data-am-validator>
+          <fieldset>
+            <div class="am-form-group">
+              <label for="forget_email">邮箱</label>
+              <input type="email" class="" name="forget_email" placeholder="输入邮箱" required/>
+            </div>
+            
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" data-am-modal="{target: '#my-modal-loading'}"
+                name="forget_submit" value="验证邮箱"></p>
+            
+            <p><a data-am-modal-close role="button" class="am-btn am-btn-default am-btn-block">返回登录页</a></p>
+            
+          </fieldset>
+        </form>
+    </div>
+    <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">正在发送邮件...</div>
+            <div class="am-modal-bd">
+                <span class="am-icon-spinner am-icon-spin"></span>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+    
+</div>
+
+</block>
