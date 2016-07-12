@@ -81,15 +81,19 @@ class LoginController extends Controller {
             $username = I('post.username','','htmlspecialchars');
             $password = I('post.password','','htmlspecialchars');
             $submit   = I('post.submit','','htmlspecialchars');
+			$type     = I('post.type','','htmlspecialchars');
             $refurl   = I('post.refurl','','htmlspecialchars');
         }else{
             $username = I('get.username','','htmlspecialchars');
             $password = I('get.password','','htmlspecialchars');
             $submit   = I('get.submit','','htmlspecialchars');
+			$type     = I('get.type','','htmlspecialchars');
             $refurl   = I('get.refurl','','htmlspecialchars');
         }
         if($refurl){
             $refurl = str_replace('_','/',$refurl);
+		}elseif($type){
+			$refurl = 'Home/'.$type.'/index';
         }else{
             $refurl = 'Home/Index/index';
         }
