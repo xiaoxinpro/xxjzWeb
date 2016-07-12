@@ -664,50 +664,45 @@
     }
 
     //获取年度收支数据（年份）
-    function getYearData($y){
+    function getYearData($y,$uid){
         if($y >= 2000){
             $DataArray['Year'] = $y;
             $mInSumMoney  = 0; //收入总金额
             $mOutSumMoney = 0; //支出总金额
             $mInClassMoney  = array(); //分类收入金额
             $mOutClassMoney = array(); //分类支出金额
+            $ArrInClass  = GetClassData($uid, 1);
+            $ArrOutClass = GetClassData($uid, 2);
             for($m=1;$m<=12;$m++){
                 $t = mktime(0,0,0,$m,1,$y);
                 $tStart = mktime(0,0,0,date("m",$t),1,date("Y",$t));
                 $tEnd = mktime(23,59,59,date("m",$t),date("t",$t),date("Y",$t));
                 $fristDay = date("Y-m-d",$tStart);
                 $lastDay = date("Y-m-d",$tEnd);
-                //echo "$m月:第一天:$fristDay 最后一天:$lastDay";
-                $SQL_Time=" actime >= ".strtotime($fristDay." 0:0:0")." and actime <= ".strtotime($lastDay." 23:59:59");
-                $SQL_Query = "SELECT * FROM jizhang_account where ".$SQL_Time." and jiid='$_SESSION[uid]' ";
-                $DataSQL=mysql_query($SQL_Query);
-                
-                //存储数据初始化
+                //dump($m."月:第一天:".$fristDay." 最后一天:".$lastDay);// "$m月:第一天:$fristDay 最后一天:$lastDay";
+                $ArrSQL = array();
+                $ArrSQL['actime'] = array(array('egt',strtotime($fristDay." 0:0:0")),array('elt',strtotime($lastDay." 23:59:59")));
+                $ArrSQL['jiid'] = $uid;
+
                 $mInMoney[$m]  = 0;
                 $mOutMoney[$m] = 0;
-                
-                while($row = mysql_fetch_array($DataSQL)){
-                    //获取收入/支出
-                    $sql = "select * from jizhang_account_class where classid= $row[acclassid] and ufid='$_SESSION[uid]'";
-                    $classquery = mysql_query($sql);
-                    $classinfo  = mysql_fetch_array($classquery);
-                    $classname  = $classinfo['classname'];
-                    
-                    if($classinfo[classtype]==1){
-                        //收入
-                        $mInMoney[$m]  = $mInMoney[$m]  + $row[acmoney];
-                        $mInClassMoney[$classname] = $mInClassMoney[$classname] + $row[acmoney];
-                    }else{
-                        //支出
-                        $mOutMoney[$m] = $mOutMoney[$m] + $row[acmoney];
-                        $mOutClassMoney[$classname] = $mOutClassMoney[$classname] + $row[acmoney];
-                    }
+                foreach ($ArrInClass as $ClassId => $ClassName) {
+                    $ArrSQL['acclassid'] = $ClassId;
+                    $mInClassMoney[$ClassName][$m] += floatval(M('account')->where($ArrSQL)->sum('acmoney'));
+                    $mInSumClassMoney[$ClassName]  += $mInClassMoney[$ClassName][$m];
+                    $mInMoney[$m]  += $mInClassMoney[$ClassName][$m];
                 }
+                //dump($m.'月收入:'.$mInMoney[$m]);
+                foreach ($ArrOutClass as $ClassId => $ClassName) {
+                    $ArrSQL['acclassid'] = $ClassId;
+                    $mOutClassMoney[$ClassName][$m] += floatval(M('account')->where($ArrSQL)->sum('acmoney'));
+                    $mOutSumClassMoney[$ClassName]  += $mOutSumClassMoney[$ClassName][$m];
+                    $mOutMoney[$m]  += $mOutClassMoney[$ClassName][$m];
+                }
+                //dump($m.'月支出:'.$mOutMoney[$m]);
+                
                 $mInSumMoney  = $mInSumMoney + $mInMoney[$m];
                 $mOutSumMoney = $mOutSumMoney + $mOutMoney[$m];
-                //echo $m.'月:收入:'.$mInMoney[$m].' 支出:'.$mOutMoney[$m];
-                //$mInMoney[$m]  = round($mInMoney[$m]);  //四舍五入处理
-                //$mOutMoney[$m] = round($mOutMoney[$m]); //四舍五入处理
             }
             $DataArray['InMoney'] = $mInMoney;
             $DataArray['OutMoney']= $mOutMoney;
@@ -715,6 +710,9 @@
             $DataArray['OutClassMoney']= $mOutClassMoney;
             $DataArray['InSumMoney'] = $mInSumMoney;
             $DataArray['OutSumMoney']= $mOutSumMoney;
+            $DataArray['InSumClassMoney'] = $mInSumClassMoney;
+            $DataArray['OutSumClassMoney']= $mOutSumClassMoney;
+            dump($DataArray);
         }
         else{
             $DataArray['Year'] = "FALSE";
