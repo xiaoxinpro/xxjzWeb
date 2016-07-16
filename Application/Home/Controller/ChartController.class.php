@@ -3,15 +3,17 @@ namespace Home\Controller;
 use Think\Controller;
 class ChartController extends BaseController {
     public function index(){
+    	$uid = session('uid');
 	    $y = I('get.year', 2016, 'int');
-	    $DataJson = getYearData($y);
+	    $DataJson = getYearData($y,$uid);
 	    //echo $DataJson;
 	    if($DataJson['Year'] == "FALSE") echo "<meta http-equiv=refresh content='0; url=index.php'>";
 	    $DataArray = json_decode($DataJson,TRUE);
 	    $JsonInMoney = ArrayToNumData($DataArray['InMoney']);
 	    $JsonOutMoney = ArrayToNumData($DataArray['OutMoney']);
-	    $JsonInClassPer = ArrayKeyToNumData($DataArray['InClassMoney']);
-	    $JsonOutClassPer = ArrayKeyToNumData($DataArray['OutClassMoney']);
+	    $JsonInClassPer = ArrayKeyToNumData($DataArray['InSumClassMoney']);
+	    $JsonOutClassPer = ArrayKeyToNumData($DataArray['OutSumClassMoney']);
+	    $JsonSurplusMoney= ArrayToNumData($DataArray['SurplusMoney']);
 
 	    $this -> assign('y',$y);
 	    $this -> assign('DataJson',$DataJson);
@@ -20,6 +22,7 @@ class ChartController extends BaseController {
 	    $this -> assign('JsonOutMoney',$JsonOutMoney);
 	    $this -> assign('JsonInClassPer',$JsonInClassPer);
 	    $this -> assign('JsonOutClassPer',$JsonOutClassPer);
+	    $this -> assign('JsonSurplusMoney',$JsonSurplusMoney);
 
         $this -> display();
     }
