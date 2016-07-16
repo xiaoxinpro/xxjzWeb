@@ -667,10 +667,13 @@
     function getYearData($y,$uid){
         if($y >= 2000){
             $DataArray['Year'] = $y;
+            $mInMoney  = array(); //月收入金额
+            $mOutMoney = array(); //月支出金额
             $mInSumMoney  = 0; //收入总金额
             $mOutSumMoney = 0; //支出总金额
             $mInClassMoney  = array(); //分类收入金额
             $mOutClassMoney = array(); //分类支出金额
+            $mSurplusMoney  = array(); //年剩余金额
             $ArrInClass  = GetClassData($uid, 1);
             $ArrOutClass = GetClassData($uid, 2);
             for($m=1;$m<=12;$m++){
@@ -696,23 +699,27 @@
                 foreach ($ArrOutClass as $ClassId => $ClassName) {
                     $ArrSQL['acclassid'] = $ClassId;
                     $mOutClassMoney[$ClassName][$m] += floatval(M('account')->where($ArrSQL)->sum('acmoney'));
-                    $mOutSumClassMoney[$ClassName]  += $mOutSumClassMoney[$ClassName][$m];
+                    $mOutSumClassMoney[$ClassName]  += $mOutClassMoney[$ClassName][$m];
                     $mOutMoney[$m]  += $mOutClassMoney[$ClassName][$m];
                 }
                 //dump($m.'月支出:'.$mOutMoney[$m]);
                 
+                $mSurplusMoney[$m] = $mInMoney[$m] - $mOutMoney[$m];
                 $mInSumMoney  = $mInSumMoney + $mInMoney[$m];
                 $mOutSumMoney = $mOutSumMoney + $mOutMoney[$m];
+                $mSurplusSumMoney[$m] = $mInSumMoney - $mOutSumMoney;
             }
             $DataArray['InMoney'] = $mInMoney;
             $DataArray['OutMoney']= $mOutMoney;
+            $DataArray['SurplusMoney'] = $mSurplusMoney;
             $DataArray['InClassMoney'] = $mInClassMoney;
             $DataArray['OutClassMoney']= $mOutClassMoney;
             $DataArray['InSumMoney'] = $mInSumMoney;
             $DataArray['OutSumMoney']= $mOutSumMoney;
             $DataArray['InSumClassMoney'] = $mInSumClassMoney;
             $DataArray['OutSumClassMoney']= $mOutSumClassMoney;
-            dump($DataArray);
+            $DataArray['SurplusSumMoney'] = $mSurplusSumMoney;
+            //dump($DataArray);
         }
         else{
             $DataArray['Year'] = "FALSE";
@@ -736,7 +743,7 @@
     function ArrayKeyToNumData($arr){
         $str = "[";
         foreach($arr as $key => $value){
-            $str = "$str ['$key',$value] ,";
+            $str = "$str {value:$value,name:'$key'} ,";
         }
         $str = substr($str,0,-1); // 去除最后一个,
         $str = $str."]";
