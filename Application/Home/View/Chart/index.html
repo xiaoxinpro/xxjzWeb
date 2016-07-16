@@ -1,13 +1,143 @@
-<extend name="Chart:chart"/>
 <extend name="Public:common"/>
 <block name="main">
-    <body style="text-align:center;">
-      <div id="container_Year" style="height:320px"></div>
-      <hr>
-      <div id="container_InClass" style="height:320px"></div>
-      <hr>
-      <div id="container_OutClass" style="height:320px"></div>
-      <hr>
-    </body>
-</block>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- 引入 echarts.js -->
+    <!-- <script src="echarts.min.js"></script> -->
+    <script src="//cdn.bootcss.com/echarts/3.2.1/echarts.min.js"></script>
+</head>
+<body style="text-align:center;">
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="chart-year" style="height:350px"></div>
+    <hr>
+    <div id="chart-InClass" style="height:350px"></div>
+    <hr>
+    <div id="chart-OutClass" style="height:350px"></div>
+    <hr>
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var chartYear = echarts.init(document.getElementById('chart-year'));
+        var chartInClass = echarts.init(document.getElementById('chart-InClass'));
+        var chartOutClass = echarts.init(document.getElementById('chart-OutClass'));
+
+        // 指定图表的配置项和数据
+        var optionYear = {
+            title: {
+                text: '{$y}年收入与支出金额汇总',
+                top: 'top',
+                x: 'center'
+            },
+            color: ['#5eb95e','#dd514c'],  //蓝色：3398DB 红色：c23531 青色：61a0a8 橙色：d48265 绿色：91c7ae
+            tooltip : {
+                trigger: 'axis',
+                extraCssText: 'text-align: left;',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data:['收入','支出'],
+                top: 'bottom',
+                x: 'center'
+            },
+            grid: {
+		        left: '3%',
+		        right: '4%',
+		        bottom: '12%',
+		        containLabel: true
+		    },
+            xAxis: {
+            	type: 'category',
+                data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
+            },
+            yAxis: {
+            	type : 'value'
+            },
+            barGap: '5%',
+            series: [{
+                name: '收入',
+                type: 'bar',
+                data: {$JsonInMoney}
+            },{
+                name: '支出',
+                type: 'bar',
+                data: {$JsonOutMoney}
+            }]
+        };
+
+        var optionInClass = {
+            title : {
+                text: '{$y}年收入分类汇总',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{b} : ({d}%)<br/>{c} 元"
+            },
+            series : [
+                {
+                    name: '收入分类',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data: {$JsonInClassPer},
+                    labelLine : {
+                        normal: {
+                            smooth: true
+                        }
+                    },
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var optionOutClass = {
+            title : {
+                text: '{$y}年支出分类汇总',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{b} : ({d}%)<br/>{c} 元"
+            },
+            series : [
+                {
+                    name: '支出分类',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data: {$JsonOutClassPer},
+                    labelLine : {
+                        normal: {
+                            smooth: true
+                        }
+                    },
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        chartYear.setOption(optionYear);
+        chartInClass.setOption(optionInClass);
+        chartOutClass.setOption(optionOutClass);
+    </script>
+</body>
+</html>
+</block>
