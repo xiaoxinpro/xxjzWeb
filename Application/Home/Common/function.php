@@ -750,20 +750,6 @@
         return $str;
     }
 
-    //数据转表格百分比
-    function NumToPerData($arr){
-        $ArrayPer = array();
-        $sum = 0;
-        //求数据和
-        foreach($arr as $key => $value){
-            $sum = $sum + $value;
-        }
-        //计算百分比
-        foreach($arr as $key => $value){
-            $ArrayPer[$key] = $value / $sum;
-        }
-        return ArrayKeyToNumData($ArrayPer);
-    }
 ?>
 
 

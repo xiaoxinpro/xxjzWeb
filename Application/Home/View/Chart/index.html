@@ -37,7 +37,7 @@
                 top: 'top',
                 x: 'center'
             },
-            color: ['#5eb95e','#dd514c','#F37B1D','3398DB'],  //蓝色：3398DB 红色：c23531 青色：61a0a8 橙色：d48265 绿色：91c7ae
+            color: ['#90ee7e','#ff0066','#f7a35c','7cb5ec'],  //蓝色：3398DB 红色：c23531 青色：61a0a8 橙色：d48265 绿色：91c7ae
             tooltip : {
                 trigger: 'axis',
                 extraCssText: 'text-align: left;',
@@ -96,6 +96,8 @@
                 text: '{$y}年收入分类汇总',
                 x:'center'
             },
+            color: ["#7cb5ec", "#f7a35c", "#90ee7e", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+        "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
             tooltip : {
                 trigger: 'item',
                 formatter: "{b} : ({d}%)<br/>{c} 元"
@@ -107,13 +109,19 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data: {$JsonInClassPer},
+                    selectedOffset: 100,
                     labelLine : {
                         normal: {
                             smooth: true
                         }
                     },
                     itemStyle: {
+                        normal :{
+                            borderColor: "#FFF",
+                            borderWidth: 1
+                        },
                         emphasis: {
+                            borderWidth: 0,
                             shadowBlur: 10,
                             shadowOffsetX: 0,
                             shadowColor: 'rgba(0, 0, 0, 0.5)'
@@ -128,6 +136,8 @@
                 text: '{$y}年支出分类汇总',
                 x:'center'
             },
+            color: ["#7cb5ec", "#f7a35c", "#90ee7e", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+        "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
             tooltip : {
                 trigger: 'item',
                 formatter: "{b} : ({d}%)<br/>{c} 元"
@@ -145,7 +155,12 @@
                         }
                     },
                     itemStyle: {
+                        normal :{
+                            borderColor: "#FFF",
+                            borderWidth: 1
+                        },
                         emphasis: {
+                            borderWidth: 0,
                             shadowBlur: 10,
                             shadowOffsetX: 0,
                             shadowColor: 'rgba(0, 0, 0, 0.5)'
