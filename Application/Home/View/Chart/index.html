@@ -1,6 +1,12 @@
 <extend name="Public:common"/>
 <block name="main">
 
+<ul class="am-pagination am-pagination-centered" >
+    <li class="am-pagination-prev"><a href="__APP__/Home/Chart/index/year/{$y-1}">&laquo; {$y-1}年</a></li>
+    <li class=""><a href="__APP__/Home/Chart/index">今年</a></li>
+    <li class="am-pagination-next"><a href="__APP__/Home/Chart/index/year/{$y+1}">{$y+1}年 &raquo;</a></li>
+</ul>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,9 +19,9 @@
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
     <div id="chart-year" style="height:350px"></div>
     <hr>
-    <div id="chart-InClass" style="height:350px"></div>
+    <div id="chart-InClass" style="height:320px"></div>
     <hr>
-    <div id="chart-OutClass" style="height:350px"></div>
+    <div id="chart-OutClass" style="height:320px"></div>
     <hr>
 
     <script type="text/javascript">
@@ -31,7 +37,7 @@
                 top: 'top',
                 x: 'center'
             },
-            color: ['#5eb95e','#dd514c'],  //蓝色：3398DB 红色：c23531 青色：61a0a8 橙色：d48265 绿色：91c7ae
+            color: ['#5eb95e','#dd514c','#F37B1D','3398DB'],  //蓝色：3398DB 红色：c23531 青色：61a0a8 橙色：d48265 绿色：91c7ae
             tooltip : {
                 trigger: 'axis',
                 extraCssText: 'text-align: left;',
@@ -40,22 +46,28 @@
                 }
             },
             legend: {
-                data:['收入','支出'],
+                data:['收入','支出','月剩余','年剩余'],
+                selected:{
+                    '收入' : true,
+                    '支出' : true,
+                    '月剩余' : false,
+                    '年剩余' : false
+                },
                 top: 'bottom',
                 x: 'center'
             },
             grid: {
-		        left: '3%',
-		        right: '4%',
-		        bottom: '12%',
-		        containLabel: true
-		    },
+                left: '3%',
+                right: '4%',
+                bottom: '12%',
+                containLabel: true
+            },
             xAxis: {
-            	type: 'category',
+                type: 'category',
                 data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
             },
             yAxis: {
-            	type : 'value'
+                type : 'value'
             },
             barGap: '5%',
             series: [{
@@ -66,6 +78,16 @@
                 name: '支出',
                 type: 'bar',
                 data: {$JsonOutMoney}
+            },{
+                name: '月剩余',
+                type: 'line',
+                smooth: true,
+                data: {$JsonSurplusMoney}
+            },{
+                name: '年剩余',
+                type: 'line',
+                smooth: true,
+                data: {$JsonSurplusSumMoney}
             }]
         };
 

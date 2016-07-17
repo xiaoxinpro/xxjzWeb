@@ -23,7 +23,7 @@
                 <div data-tab-panel-0 class="am-tab-panel ">
             </if>
                 <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
-                    <fieldset>
+                    
                     <legend>新建分类</legend>
                     <div class="am-input-group">
                         <span class="am-input-group-label"><b>名称</b></span>
@@ -43,7 +43,7 @@
                         </select>
                     </div>
                     <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="class_submit" value="新建"></p>
-                    </fieldset>
+                    
                 </form>
             </div>
             
@@ -52,7 +52,7 @@
             <else/>
                 <div data-tab-panel-1 class="am-tab-panel ">
             </if>
-                <fieldset>
+                
                 <legend>收入分类</legend>
                 <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
                     <thead>
@@ -83,7 +83,7 @@
                         </volist>
                     </tbody>
                 </table>
-                </fieldset>
+                
             </div>
             
             <if condition="$type eq 2">
@@ -91,7 +91,7 @@
             <else/>
                 <div data-tab-panel-2 class="am-tab-panel">
             </if>
-                <fieldset>
+                
                 <legend>支出分类</legend>
                 <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
                     <thead>
@@ -122,7 +122,7 @@
                         </volist>
                     </tbody>
                 </table>
-                </fieldset>
+                
             </div>
         </div>
     </div>

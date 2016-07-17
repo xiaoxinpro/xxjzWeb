@@ -17,7 +17,6 @@
                 <div data-tab-panel-2 class="am-tab-panel am-active">
             </if>
                 <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
-                    <fieldset>
                     <legend>添加支出</legend>
                     <input type="hidden" name="add_type" value="2">
                     <div class="am-input-group">
@@ -50,7 +49,6 @@
                     
                     <p><button type="submit" name="submit" class="am-btn am-btn-warning am-btn-block">添加</button></p>
                     <p><a href="{$refURL}" class="am-btn am-btn-block am-btn-default">返回</a></p>
-                    </fieldset>
                 </form>
             </div>
             <if condition="$type eq 1">
@@ -60,7 +58,6 @@
             </if>
             
                 <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
-                    <fieldset>
                     <legend>添加收入</legend>
                     <input type="hidden" name="add_type" value="1">
                     <div class="am-input-group">
@@ -93,9 +90,10 @@
                     
                     <p><button type="submit" name="submit" class="am-btn am-btn-success am-btn-block">添加</button></p>
                     <p><a href="{$refURL}" class="am-btn am-btn-block am-btn-default">返回</a></p>
-                    </fieldset>
                 </form>
             </div>
         </div>
     </div>
+    <include file="Public:list_common"/>
+    <a href="__APP__/Home/Index/index/p/2" class="am-btn am-btn-block am-btn-default">更多</a>
 </block>
