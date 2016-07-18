@@ -164,7 +164,7 @@
         ClearFindCache();
     }
     
-    //清除缓存
+    //清除数据缓存
     function ClearDataCache() {
         $uid = session('uid');
         if($uid){
@@ -179,6 +179,7 @@
             }
             S('account_data_0_'.$uid,null);
             S('account_count_'.$uid,null);
+            S('chart_yeat_'.$uid,null);
         }
     }
     
@@ -665,6 +666,10 @@
 
     //获取年度收支数据（年份）
     function getYearData($y,$uid){
+        $CacheData = S('chart_yeat_'.$uid);
+        if ($CacheData[$y]) {
+            return $CacheData[$y];
+        }
         if($y >= 2000){
             $DataArray['Year'] = $y;
             $mInMoney  = array(); //月收入金额
@@ -720,11 +725,12 @@
             $DataArray['OutSumClassMoney']= $mOutSumClassMoney;
             $DataArray['SurplusSumMoney'] = $mSurplusSumMoney;
             //dump($DataArray);
-        }
-        else{
+        }else{
             $DataArray['Year'] = "FALSE";
         }
         $DataJson = json_encode($DataArray);
+        $CacheData[$y] = $DataJson;
+        S('chart_yeat_'.$uid, $CacheData);
         return $DataJson;
     }
     
