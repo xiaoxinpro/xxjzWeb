@@ -6,9 +6,14 @@ class ChartController extends BaseController {
         $uid = session('uid');
         $y = I('get.year', date('Y'), 'int');
         $DataJson = getYearData($y,$uid);
-        //echo $DataJson;
-        if($DataJson['Year'] == "FALSE") echo "<meta http-equiv=refresh content='0; url=index.php'>";
+        // dump($DataJson) ;
         $DataArray = json_decode($DataJson,TRUE);
+        if($DataArray['Year'] == "FALSE") {
+            ShowAlert('这里已脱离服务范围，请穿越回'.date('Y').'年...',U('Home/Chart/index'));
+            $this -> display('Public/base');
+        }elseif ($DataArray['InSumMoney'] + $DataArray['OutSumMoney'] === 0) {
+            //无数据
+        }
         $JsonInMoney = ArrayToNumData($DataArray['InMoney']);
         $JsonOutMoney = ArrayToNumData($DataArray['OutMoney']);
         $JsonInClassPer = ArrayKeyToNumData($DataArray['InSumClassMoney']);
