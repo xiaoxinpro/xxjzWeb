@@ -14,13 +14,17 @@ return array(
     'DB_CHARSET'=> 'utf8',   // 字符集
     'DB_DEBUG'  =>  TRUE,    // 数据库调试模式 开启后可以记录SQL日志
     
-    //静态缓存配置
-    'HTML_CACHE_ON'     =>    false, // 关闭静态缓存
-    
-    //生成URL区分大小写
-    'URL_CASE_INSENSITIVE' => false,
+    //系统配置
+    'HTML_CACHE_ON'         => false,       // 关闭静态缓存
+    'URL_CASE_INSENSITIVE'  => false,       // 区分大小写(必须)
     
     //应用配置信息
-    'PAGE_SIZE' => '15',
+    'USER_LOGIN_TIMES'  => 10,              // 用户登录次
+    'PAGE_SIZE'         => 15,              // 表格分页数
+    'MAIL_HOST'         => '',              // 邮箱SMTP主机
+    'MAIL_USERNAME'     => '',              // 邮箱用户名
+    'MAIL_PASSWORD'     => '',              // 邮箱密码
+    'MAIL_FROM'         => '',              // 发件人邮箱
+    'MAIL_FROMNAME'     => '小歆记账',      // 发件人名字
     
 );
