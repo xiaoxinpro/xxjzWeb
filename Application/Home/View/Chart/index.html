@@ -94,6 +94,7 @@
         var optionInClass = {
             title : {
                 text: '{$y}年收入分类汇总',
+                subtext: '总收入{$DataArray.InSumMoney}元',
                 x:'center'
             },
             color: ["#7cb5ec", "#f7a35c", "#90ee7e", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
@@ -109,7 +110,6 @@
                     radius : '55%',
                     center: ['50%', '60%'],
                     data: {$JsonInClassPer},
-                    selectedOffset: 100,
                     labelLine : {
                         normal: {
                             smooth: true
@@ -134,6 +134,7 @@
         var optionOutClass = {
             title : {
                 text: '{$y}年支出分类汇总',
+                subtext: '总支出{$DataArray.OutSumMoney}元',
                 x:'center'
             },
             color: ["#7cb5ec", "#f7a35c", "#90ee7e", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
