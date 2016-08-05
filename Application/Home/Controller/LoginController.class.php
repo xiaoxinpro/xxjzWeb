@@ -101,9 +101,19 @@ class LoginController extends Controller {
         if(UserLogin($username,$password)){
             session('submit',$submit);
             ClearAllCache(); //清除缓存
-            $this -> redirect($refurl);
+            if ($submit == "xxjzAUI") {
+                $arrData = array('uid'=>session('uid'),'uname'=>session('username'));
+                die(json_encode($arrData));
+            } else {
+                $this -> redirect($refurl);
+            }
         }else{
-            $this -> redirect('Home/Login/index');
+            if ($submit == "xxjzAUI") {
+                $arrData = array('uid'=>'0','uname'=>'用户名或密码错误！');
+                die(json_encode($arrData));
+            } else {
+                $this -> redirect('Home/Login/index');
+            }
         }
     }
     
