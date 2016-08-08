@@ -225,10 +225,10 @@
     }
     
     //查询记账数据
-    function FindAccountData($data) {
+    function FindAccountData($data,$p = 0) {
         $strSQL = GetFindSqlArr($data);
         $DbCount = M('account')->where($strSQL)->count();
-        $DbData = M('account')->where($strSQL)->order("actime DESC , acid DESC")->select();
+        //$DbData = M('account')->where($strSQL)->order("actime DESC , acid DESC")->select();
         if($data['zhifu'] == 1){
             $inSumData  = SumDbAccount($strSQL);
             $outSumData = 0.0;
@@ -241,6 +241,17 @@
             $data['zhifu'] = 2;
             $outSumData = SumDbAccount(GetFindSqlArr($data));
             $data['zhifu'] = null;
+        }
+        if($p > 0) {
+            $pagesize = C('PAGE_SIZE');  
+            $offset = ($p-1)*$pagesize;
+            $DbData = M('account')->where($strSQL)->order("actime DESC , acid DESC")->limit("$offset,$pagesize")->select();
+            $ret['pagemax'] = intval(($DbCount-1) / $pagesize) + 1;
+            $ret['page'] = $p;
+        }else{
+            $DbData = M('account')->where($strSQL)->order("actime DESC , acid DESC")->select();
+            $ret['pagemax'] = 1;
+            $ret['page'] = 1;
         }
         $ret['SumInMoney']  = $inSumData;
         $ret['SumOutMoney'] = $outSumData;
@@ -270,6 +281,24 @@
         $ret['count'] = $DbCount;
         $ret['data'] = $DbData;
         return $ret;
+    }
+
+    //按日期获取记账数据
+    function GetDateAccountData($uid, $pageParam) {
+        $data = array();
+        $data['jiid'] = $uid;
+        if ($pageParam['gettype'] == 'year' ) {
+            $data['starttime'] = $pageParam['year'].'-01-01';
+            $data['endtime']   = $pageParam['year'].'-12-31';
+        } elseif ($pageParam['gettype'] == 'month' ) {
+            $data['starttime'] = $pageParam['year'].'-'.$pageParam['month'].'-01';
+            $data['endtime']   = date('Y-m-d', strtotime($data['starttime']." +1 month -1 day"));
+        } elseif ($pageParam['gettype'] == 'day' ) {
+            $data['starttime'] = $pageParam['year'].'-'.$pageParam['month'].'-'.$pageParam['day'];
+            $data['endtime']   = $data['starttime'];
+        }
+        $ret = FindAccountData($data, $pageParam['page']);
+        return NumTimeToStrTime($ret);
     }
     
     //获取分类数据(用户id,1=收入 2=支出)
@@ -754,6 +783,38 @@
         $str = substr($str,0,-1); // 去除最后一个,
         $str = $str."]";
         return $str;
+    }
+
+    //时间戳转字符串
+    function NumTimeToStrTime($NumTime, $Format = 'Y-m-d') {
+        if (is_array($NumTime)) {
+            foreach ($NumTime as $key => $value) {
+                $NumTime[$key] = NumTimeToStrTime($value, $Format);
+            }
+        } else {
+            if (intval($NumTime) >= strtotime('2000-01-01')) {
+                return date($Format, $NumTime);
+            }
+        }
+        return $NumTime;
+    }
+
+    //数据增加分类名
+    function AccountDataAddClassName($uid, $AccountData) {
+        if (is_array($AccountData)) {
+            foreach ($AccountData as $key => $value) {
+                if (is_array($value)) {
+                    $AccountData[$key] = AccountDataAddClassName($uid, $value);
+                } else {
+                    if ($AccountData['acclassid']) {
+                        $ClassData = GetClassIdData($AccountData['acclassid'], $uid);
+                        $AccountData['classname'] = $ClassData['classname'];
+                    }
+                    continue;
+                }
+            }
+        }
+        return $AccountData;
     }
 
 ?>
