@@ -148,7 +148,7 @@ class ApiController extends Controller {
 
         switch ($type) {
             case 'get':
-                $arrData['data'] = 'get数据';
+                $arrData['data'] = GetDateAccountData($uid, $data);
                 break;
             
             case 'add':
@@ -164,6 +164,11 @@ class ApiController extends Controller {
         }
 
         die(json_encode($arrData));
+    }
+
+    public function test()
+    {
+        //dump(NumTimeToStrTime("1470240000"));
     }
 
 /***************************************************************************************************/
