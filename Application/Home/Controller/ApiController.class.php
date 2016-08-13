@@ -91,6 +91,7 @@ class ApiController extends Controller {
             case 'get':
                 $arrData['data']['in']  = GetClassData($uid, 1);
                 $arrData['data']['out'] = GetClassData($uid, 2);
+                $arrData['data']['all'] = GetClassData($uid);
                 break;
             
             case 'getin':
@@ -99,6 +100,10 @@ class ApiController extends Controller {
             
             case 'getout':
                 $arrData['data'] = GetClassData($uid, 2);
+                break;
+
+            case 'getall':
+                $arrData['data'] = GetClassData($uid);
                 break;
             
             case 'add':
