@@ -1,5 +1,5 @@
 
-##项目(Web服务端)
+##小歆记账WebApp项目(Web服务端)
 
 ###1、简介
 小歆记账WebApp是一个跨平台的记账工具，此项目为Web服务端；使用ThinkPHP+MySQL作为后台，AmazeUI作为前端。
