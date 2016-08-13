@@ -255,8 +255,6 @@
         }
         $ret['SumInMoney']  = $inSumData;
         $ret['SumOutMoney'] = $outSumData;
-        $ret['pagemax']     = 1;
-        $ret['page']        = 1;
         $ret['count']       = $DbCount;
         $ret['data']        = $DbData;
         return $ret;
@@ -799,23 +797,6 @@
         return $NumTime;
     }
 
-    //数据增加分类名
-    function AccountDataAddClassName($uid, $AccountData) {
-        if (is_array($AccountData)) {
-            foreach ($AccountData as $key => $value) {
-                if (is_array($value)) {
-                    $AccountData[$key] = AccountDataAddClassName($uid, $value);
-                } else {
-                    if ($AccountData['acclassid']) {
-                        $ClassData = GetClassIdData($AccountData['acclassid'], $uid);
-                        $AccountData['classname'] = $ClassData['classname'];
-                    }
-                    continue;
-                }
-            }
-        }
-        return $AccountData;
-    }
 
 ?>
 
