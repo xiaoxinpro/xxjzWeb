@@ -153,7 +153,11 @@ class ApiController extends Controller {
 
         switch ($type) {
             case 'get':
-                $arrData['data'] = GetDateAccountData($uid, $data);
+                $arrData['data'] = GetDateAccountData($uid, $data); // 获取记账数据
+                break;
+
+            case 'get_year':
+                $arrData['data'] = getYearData($data['year'], $uid); // 获取年度统计
                 break;
             
             case 'add':
@@ -173,6 +177,13 @@ class ApiController extends Controller {
 
     public function test()
     {
+        $uid = session('uid');
+        $data['gettype'] = 'day';
+        $data['year'] = 2016;
+        $data['month'] = 08;
+        $data['day'] = 14;
+        $data['p'] = 0;
+        dump(GetDateAccountData($uid, $data));
         //dump(NumTimeToStrTime("1470240000"));
     }
 
