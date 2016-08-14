@@ -294,6 +294,11 @@
         } elseif ($pageParam['gettype'] == 'day' ) {
             $data['starttime'] = $pageParam['year'].'-'.$pageParam['month'].'-'.$pageParam['day'];
             $data['endtime']   = $data['starttime'];
+        } elseif ($pageParam['gettype'] == 'all' ) {
+            if ($pageParam['year'] && $pageParam['month'] && $pageParam['day']) {
+                $data['starttime'] = '2000-01-01';
+                $data['endtime']   = $pageParam['year'].'-'.$pageParam['month'].'-'.$pageParam['day'];
+            }
         }
         $ret = FindAccountData($data, $pageParam['page']);
         return NumTimeToStrTime($ret);
