@@ -157,7 +157,7 @@ class ApiController extends Controller {
                 break;
 
             case 'get_year':
-                $arrData['data'] = getYearData($data['year'], $uid); // 获取年度统计
+                $arrData['data'] = json_decode(getYearData($data['year'], $uid), true); // 获取年度统计
                 break;
             
             case 'add':
@@ -166,6 +166,14 @@ class ApiController extends Controller {
                 $arrData['data']['ret'] = $ret[0];
                 $arrData['data']['msg'] = $ret[1];
                 ClearDataCache(); //清除缓存
+                break;
+
+            case 'edit':
+                // code...
+                break;
+
+            case 'del':
+                // code...
                 break;
 
             default:
