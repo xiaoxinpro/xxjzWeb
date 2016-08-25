@@ -155,6 +155,23 @@ class LoginController extends Controller {
     }
     
     public function regist(){
+        if (IS_POST) {
+            if ($_POST['regist_submit']) {
+                $username = I('post.regist_username');
+                $password = I('post.regist_password');
+                $email = I('post.regist_email');
+                $ret = RegistShell($username, $password, $email);
+                if ($ret[0]) {
+                    ShowAlert($ret[1], U('/Home/Login/index'));
+                } else {
+                    ShowAlert($ret[1]);
+                }
+            } else {
+                $this -> redirect('Home/Login/index');
+            }
+        } else {
+
+        }
         $this -> display();
     }
     
