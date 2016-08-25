@@ -159,6 +159,14 @@ class ApiController extends Controller {
             case 'get_year':
                 $arrData['data'] = json_decode(getYearData($data['year'], $uid), true); // 获取年度统计
                 break;
+
+            case 'get_id':
+                $arrData['data'] = NumTimeToStrTime(GetIdData($data['acid']));
+                if ($data['jiid'] != $uid) {
+                    $arrData['uid'] = 0;
+                    $arrData['data'] = '用户验证未通过，请重新登录！';
+                }
+                break;
             
             case 'add':
                 $data['jiid'] = $uid;
@@ -169,11 +177,27 @@ class ApiController extends Controller {
                 break;
 
             case 'edit':
-                // code...
+                if (CheakIdShell($data['acid'], $uid)) {
+                    $ret = UpdataAccountData($data);
+                    $arrData['data']['ret'] = $ret[0];
+                    $arrData['data']['msg'] = $ret[1];
+                    ClearDataCache(); //清除缓存
+                } else {
+                    $arrData['data']['ret'] = false;
+                    $arrData['data']['msg'] = '未通过合法性验证！';
+                }
                 break;
 
             case 'del':
-                // code...
+                if (CheakIdShell($data['acid'], $uid)) {
+                    $ret = DelIdData($data['acid']);
+                    $arrData['data']['ret'] = $ret[0];
+                    $arrData['data']['msg'] = $ret[1];
+                    ClearDataCache(); //清除缓存
+                } else {
+                    $arrData['data']['ret'] = false;
+                    $arrData['data']['msg'] = '未通过合法性验证！';
+                }
                 break;
 
             default:
