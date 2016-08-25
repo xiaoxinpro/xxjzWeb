@@ -35,6 +35,14 @@
         }
     }
 
+    function isEmail($email) {
+        if (ereg("/^[a-z]([a-z0-9]*[-_\.]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/i; ",$email)) { 
+            return true;
+        } else { 
+            return false;
+        } 
+    }
+
     function GetUserEmail($uid,$isAll=false) {
         $sql = array('uid' => intval($uid));
         $Email = M("user")->where($sql)->getField('email');
@@ -51,7 +59,7 @@
     function UpdataUserName($uid, $Username, $Email ,$Password) {
         $user = session('username');
         $isShell = UserShell($user, md5($user.md5($Password)));
-        dump($user.$Password);
+        //dump($user.$Password);
         if(!$isShell) {
             return array(false, '验证密码失败，请重新输入登录密码！');
         }
@@ -83,9 +91,36 @@
         M("user")->where(array('uid' => intval($uid)))->setField('password',md5($new));
         return array(true, $user);
     }
-    
-    function ForgetShell(){
-        
+
+    function RegistShell($Username, $Password, $Email) {
+        if(strlen($Username) < 2) {
+            return array(false, '用户名不合法！');
+        }
+        if(strlen($Password) < 4) {
+            return array(false, '密码长度过短，请重新输入新密码！');
+        }
+        if (!isEmail($Email)) {
+            return array(false, '邮箱格式有误，请重新输入邮箱。');
+        }
+        $isCheak = intval(M("user")->where(array('username' => $Username))->getField('uid'));
+        if($isCheak > 0) {
+            return array(false, '用户名已存在，请更换用户名再试！');
+        }
+        $isCheak = intval(M("user")->where(array('email' => $Email))->getField('uid'));
+        if($isCheak > 0) {
+            return array(false, '该邮箱已注册过，如忘记密码请尝试找回密码。');
+        }
+        $data = array();
+        $data['username'] = $Username;
+        $data['password'] = md5($Password);
+        $data['email'] = $Email;
+        $data['utime'] = time();
+        $DbData = M('account')->add($data);
+        if($DbData > 0){
+            return array(true, '新账号注册成功!', $DbData);
+        }else{
+            return array(false, '写入数据库出错(>_<)');
+        }
     }
     
     function ShowAlert($msg,$url=null)
@@ -180,6 +215,7 @@
             S('account_data_0_'.$uid,null);
             S('account_count_'.$uid,null);
             S('chart_yeat_'.$uid,null);
+            S('account_date_'.$uid,null);
         }
     }
     
@@ -196,6 +232,9 @@
     function GetFindSqlArr($data)
     {
         $arrSQL = array();
+        if($data['acid']){
+            $arrSQL['acid'] = $data['acid'];
+        }
         if($data['jiid']){
             $arrSQL['jiid'] = $data['jiid'];
         }
@@ -300,8 +339,15 @@
                 $data['endtime']   = $pageParam['year'].'-'.$pageParam['month'].'-'.$pageParam['day'];
             }
         }
-        $ret = FindAccountData($data, $pageParam['page']);
-        return NumTimeToStrTime($ret);
+        //缓存处理
+        $CacheKey = md5(implode('_', $pageParam));
+        $CacheData = S('account_date_'.$uid);
+        if (!$CacheData[$CacheKey]) {
+            $ret = FindAccountData($data, $pageParam['page']);
+            $CacheData[$CacheKey] = NumTimeToStrTime($ret);
+            S('account_date_'.$uid, $CacheData);
+        }
+        return $CacheData[$CacheKey];
     }
     
     //获取分类数据(用户id,1=收入 2=支出)
