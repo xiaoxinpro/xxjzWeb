@@ -29,6 +29,11 @@ class AddController extends BaseController {
         // SetRefURL(__SELF__);
         $MoneyClass[1] = GetClassData($uid,1);
         $MoneyClass[2] = GetClassData($uid,2);
+        if (!is_array($MoneyClass[2])) {
+            ShowAlert('请先添加记账分类', U('/Home/Class/index'));
+        } elseif (!is_array($MoneyClass[1])) {
+            ShowAlert('【收入】分类也要添加的！', U('/Home/Class/index/class/in'));
+        }
         $this -> assign('type',$type);
         $this -> assign('refURL',$refURL);
         $this -> assign('inMoneyClass',$MoneyClass[1]);
