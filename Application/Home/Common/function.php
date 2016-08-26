@@ -36,7 +36,7 @@
     }
 
     function isEmail($email) {
-        if (ereg("/^[a-z]([a-z0-9]*[-_\.]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[\.][a-z]{2,3}([\.][a-z]{2})?$/i; ",$email)) { 
+        if (preg_match("/^[-a-zA-Z0-9_.]+@([0-9A-Za-z][0-9A-Za-z-]+\.)+[A-Za-z]{2,5}$/",$email)) { 
             return true;
         } else { 
             return false;
@@ -115,7 +115,7 @@
         $data['password'] = md5($Password);
         $data['email'] = $Email;
         $data['utime'] = time();
-        $DbData = M('account')->add($data);
+        $DbData = M('user')->add($data);
         if($DbData > 0){
             return array(true, '新账号注册成功!', $DbData);
         }else{
@@ -360,7 +360,7 @@
         
         $DbClass = M('account_class')->cache('account_class_'.$type.'_'.$uid)->where($strSQL)->select();
         
-        $ret = array();
+        //$ret = array();
         foreach($DbClass as $key => $Data) {
             $classId = $Data['classid'];
             $className = $Data['classname'];
@@ -545,6 +545,9 @@
         if(!is_numeric($data['acclassid'])){
             $data['acclassid'] = GetClassId($data['acclassid']);
         }
+        if (intval($data['acclassid']) == 0) {
+            return array(false,'请先添加分类再进行记账...');
+        }
         $strSQL  = 'classid = '.$data['acclassid'];
         $DbClass = M('account_class')->where($strSQL)->find();
         if(!is_array($DbClass)){
@@ -638,9 +641,6 @@
             return array(false,'非法操作333');
         }
         $condition['ufid'] = $data['ufid'];
-        if(!M("account_class")->where($condition)->select()){
-            return array(false,'用户不存在!!!');
-        }
         $condition['classname'] = $data['classname'];
         if(M("account_class")->where($condition)->select()){
             return array(false,'分类已存在(@_@)');
