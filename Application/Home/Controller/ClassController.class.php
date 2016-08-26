@@ -127,7 +127,8 @@ class ClassController extends BaseController {
                         ShowAlert('已成功转移'.$ret.'条数据到【'.$ClassName2.'】中！',U('Home/Class/del/id/'.$ClassId));
                         $this -> display('Public/base');
                     }else{
-                        $this -> error('非法操作');
+                        ShowAlert('没有检测到可转移的分类，请添加分类再试...', U('Home/Class/index'));
+                        $this -> display('Public/base');
                     }
                 }
             }elseif(!GetClassAccountNum($ClassId,$uid)) {
@@ -141,6 +142,10 @@ class ClassController extends BaseController {
                     $this -> assign('ClassName',$DbData[1]['classname']);
                     $this -> assign('ClassType',$DbData[1]['classtype']);
                     $this -> assign('ClassData',$ClassData);
+
+                    if (count($ClassData) > 1) {
+                        ShowAlert('没有检测到可转移的分类!');
+                    }
 
                     //不显示搜索
                     $ShowFind = 0;
