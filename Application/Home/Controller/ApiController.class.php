@@ -200,6 +200,17 @@ class ApiController extends Controller {
                 }
                 break;
 
+            case 'find':
+                if ($data['jiid'] == $uid) {
+                    $ret = FindAccountData($data['data'], $data['page']);
+                    $arrData['data']['ret'] = $ret[0];
+                    $arrData['data']['msg'] = $ret[1];
+                } else {
+                    $arrData['data']['ret'] = false;
+                    $arrData['data']['msg'] = '未通过用户验证！';
+                }
+                break;
+
             default:
                 break;
         }
@@ -210,13 +221,15 @@ class ApiController extends Controller {
     public function test()
     {
         $uid = session('uid');
-        $data['gettype'] = 'day';
-        $data['year'] = 2016;
-        $data['month'] = 08;
-        $data['day'] = 14;
-        $data['p'] = 0;
-        dump(GetDateAccountData($uid, $data));
-        //dump(NumTimeToStrTime("1470240000"));
+        //C('USER_LOGIN_TIMES', 15);
+        dump(C('config.php'));
+        // $data['gettype'] = 'day';
+        // $data['year'] = 2016;
+        // $data['month'] = 08;
+        // $data['day'] = 14;
+        // $data['p'] = 0;
+        // dump(GetDateAccountData($uid, $data));
+        // dump(NumTimeToStrTime("1470240000"));
     }
 
 /***************************************************************************************************/
