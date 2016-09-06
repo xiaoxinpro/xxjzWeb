@@ -202,9 +202,9 @@ class ApiController extends Controller {
 
             case 'find':
                 if ($data['jiid'] == $uid) {
-                    $ret = FindAccountData($data['data'], $data['page']);
-                    $arrData['data']['ret'] = $ret[0];
-                    $arrData['data']['msg'] = $ret[1];
+                    $ret = NumTimeToStrTime(FindAccountData($data, $data['page']));
+                    $arrData['data']['ret'] = true;
+                    $arrData['data']['msg'] = $ret;
                 } else {
                     $arrData['data']['ret'] = false;
                     $arrData['data']['msg'] = '未通过用户验证！';
