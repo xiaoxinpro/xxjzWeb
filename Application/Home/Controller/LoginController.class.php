@@ -107,7 +107,12 @@ class LoginController extends Controller {
             } else {
                 $this -> redirect($refurl);
             }
-        }else{
+        } else if(intval(S('login_times_'.$username)) > C('USER_LOGIN_TIMES')) {
+            if ($submit == "xxjzAUI") {
+                $arrData = array('uid'=>'0','uname'=>'你的账号已被锁定，请联系管理员解锁！');
+                die(json_encode($arrData));
+            }
+        } else {
             if ($submit == "xxjzAUI") {
                 $arrData = array('uid'=>'0','uname'=>'用户名或密码错误！');
                 die(json_encode($arrData));
