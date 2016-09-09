@@ -49,12 +49,24 @@ class LoginController extends Controller {
                     $body    = "<br>".$username."：<br />请点击下面的链接，按流程进行密码重设。<br><a href=\"".$StrHtml."\">确认密码找回</a><p><pre>".$StrHtml."</pre></br>";   
                     $file    = null;
                     if (!SendMail($address,$subject,$body,$file)) {
-                        LoginMassage("服务器出错，请稍后再试！","danger");
+                        if (I('post.forget_submit') == 'xxjzAUI') {
+                            die(json_encode(array('uid'=>false, 'msg'=>'服务器出错，请稍后再试！')));
+                        } else {
+                            LoginMassage("服务器出错，请稍后再试！","danger");
+                        }
                     }else{ 
-                        LoginMassage("找回密码的链接已发送至您的邮箱，请查收！");
+                        if (I('post.forget_submit') == 'xxjzAUI') {
+                            die(json_encode(array('uid'=>true, 'msg'=>'找回密码的链接已发送至您的邮箱！')));
+                        } else {
+                            LoginMassage("找回密码的链接已发送至您的邮箱，请查收！");
+                        }
                     }
                 }else{
-                    LoginMassage("该邮箱未注册过账号！","danger");
+                    if (I('post.forget_submit') == 'xxjzAUI') {
+                        die(json_encode(array('uid'=>false, 'msg'=>'该邮箱未注册过账号！')));
+                    } else {
+                        LoginMassage("该邮箱未注册过账号！","danger");
+                    }
                 }
                 $this -> display();
             }else{
@@ -166,10 +178,16 @@ class LoginController extends Controller {
                 $password = I('post.regist_password');
                 $email = I('post.regist_email');
                 $ret = RegistShell($username, $password, $email);
-                if ($ret[0]) {
-                    ShowAlert($ret[1], U('/Home/Login/index'));
+                if (I('post.regist_submit') == 'xxjzAUI') {
+                    $arrData['uid'] = ($ret[0]) ? $ret[2] : 0 ;
+                    $arrData['msg'] = $ret[1];
+                    die(json_encode($arrData));
                 } else {
-                    ShowAlert($ret[1]);
+                    if ($ret[0]) {
+                        ShowAlert($ret[1], U('/Home/Login/index'));
+                    } else {
+                        ShowAlert($ret[1]);
+                    }
                 }
             } else {
                 $this -> redirect('Home/Login/index');
