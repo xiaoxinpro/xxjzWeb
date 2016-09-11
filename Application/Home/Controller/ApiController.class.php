@@ -218,11 +218,36 @@ class ApiController extends Controller {
         die(json_encode($arrData));
     }
 
+    //表格数据api
+    public function chart() {
+        if (IS_POST) {
+            $type = I('post.type','year','intval');
+            $date = I('post.date',time(),'intval');
+        } else {
+            $type = I('get.type','year','intval');
+            $date = I('get.date',time(),'intval');
+        }
+        $uid = session('uid');
+        $year = date('Y', $date);
+        $month = date('m', $date);
+        $day = date('d', $date);
+        die(dump($year));
+        switch ($type) {
+            case 'year':
+                die(getYearData($year, $uid));
+                break;
+            
+            default:
+                die('非法操作！');
+                break;
+        }
+    }
+
     public function test()
     {
         $uid = session('uid');
         //C('USER_LOGIN_TIMES', 15);
-        dump(C('config.php'));
+        dump(json_decode(getYearData(2015, $uid)));
         // $data['gettype'] = 'day';
         // $data['year'] = 2016;
         // $data['month'] = 08;
