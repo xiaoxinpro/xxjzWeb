@@ -160,6 +160,10 @@ class ApiController extends Controller {
                 $arrData['data'] = json_decode(getYearData($data['year'], $uid), true); // 获取年度统计
                 break;
 
+            case 'get_all_year':
+                $arrData['data'] = json_decode(getAllYearData($uid), true); // 获取历年统计
+                break;
+
             case 'get_id':
                 $arrData['data'] = NumTimeToStrTime(GetIdData($data['acid']));
                 if ($data['jiid'] != $uid) {
@@ -231,7 +235,6 @@ class ApiController extends Controller {
         $year = date('Y', $date);
         $month = date('m', $date);
         $day = date('d', $date);
-        die(dump($year));
         switch ($type) {
             case 'year':
                 die(getYearData($year, $uid));
@@ -247,7 +250,7 @@ class ApiController extends Controller {
     {
         $uid = session('uid');
         //C('USER_LOGIN_TIMES', 15);
-        dump(json_decode(getYearData(2015, $uid)));
+        dump(json_decode(getAllYearData($uid)));
         // $data['gettype'] = 'day';
         // $data['year'] = 2016;
         // $data['month'] = 08;
