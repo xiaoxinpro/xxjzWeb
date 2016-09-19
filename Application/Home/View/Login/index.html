@@ -19,15 +19,17 @@
                 minlength="4" maxlength="24" required/>
             </div>
             
-            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="login_submit" value="登录"></p>
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block am-radius" name="login_submit" value="登录"></p>
             
-            <p><button type="button" class="am-btn am-btn-block am-btn-default" data-am-modal="{target: '#my-popup'}">忘记密码</button></p>
+            <p><button type="button" class="am-btn am-btn-block am-btn-success am-radius" data-am-modal="{target: '#my-xxjz'}">客户端</button></p>
+
+            <p><button type="button" class="am-btn am-btn-block am-btn-default am-radius" data-am-modal="{target: '#my-popup'}">忘记密码</button></p>
             
           </fieldset>
         </form>
     </div>
 
-    <div style="position:fixed; bottom:1rem; width:100%;">
+    <div style="position:fixed; bottom:0; width:100%; line-height:200%; background-color: #fff;">
       <div class="am-text-center am-text-secondary am-text-sm">
         <a href="__APP__/Home/Login/regist">注册账号</a>
         &nbsp;|&nbsp;
@@ -50,10 +52,10 @@
               <input type="email" class="" name="forget_email" placeholder="输入邮箱" required/>
             </div>
             
-            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" data-am-modal="{target: '#my-modal-loading'}"
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block am-radius" data-am-modal="{target: '#my-modal-loading'}"
                 name="forget_submit" value="验证邮箱"></p>
             
-            <p><a data-am-modal-close role="button" class="am-btn am-btn-default am-btn-block">返回登录页</a></p>
+            <p><a data-am-modal-close role="button" class="am-btn am-btn-default am-btn-block am-radius">返回登录页</a></p>
             
           </fieldset>
         </form>
@@ -65,6 +67,34 @@
                 <span class="am-icon-spinner am-icon-spin"></span>
             </div>
         </div>
+    </div>
+  </div>
+</div>
+
+<div class="am-popup" id="my-xxjz">
+  <div class="am-popup-inner">
+    <div class="am-popup-hd">
+        <h4 class="am-popup-title">APP下载</h4>
+        <span data-am-modal-close class="am-close">&times;</span>
+    </div>
+    <div class="am-container" >
+      <fieldset>
+        <legend>小歆记账AUI</legend>
+
+          <!-- <img class="am-img-responsive" src="http://s.amazeui.org/media/i/demos/bing-1.jpg" alt=""/> -->
+          <a class="am-btn am-btn-success am-btn-block am-radius" href="http://downloadpkg.apicloud.com/app/download?path=http://7xwwr4.com1.z0.glb.clouddn.com/9bf82624d2c3b4b50617f7db27c369ee.ipa">
+            <i class="am-icon-apple"></i>&nbsp;苹果
+          </a>
+
+          <!-- <img class="am-img-responsive" src="http://s.amazeui.org/media/i/demos/bing-1.jpg" alt=""/> -->
+          <a class="am-btn am-btn-success am-btn-block am-radius" href="http://downloadpkg.apicloud.com/app/download?path=http://7xwwr4.com1.z0.glb.clouddn.com/48fc29fbb9a82330aeb4527b1a30787_d">
+            <i class="am-icon-android"></i>&nbsp;安卓
+          </a>
+          
+          <hr />
+
+
+      </fieldset>
     </div>
   </div>
 </div>
