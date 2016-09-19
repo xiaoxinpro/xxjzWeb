@@ -410,9 +410,9 @@
     function SumDbAccount($StrSQL) {
         $Ret = M('account')->where($StrSQL)->Sum('acmoney');
         if($Ret == null){
-            $Ret = 0.0;
+            $Ret = 0.00;
         }
-        return $Ret;
+        return floatval($Ret);
     }
     
     //获取指定时间段的记账结果(开始时间戳,结束时间戳,收支,用户id)
@@ -810,6 +810,56 @@
         $CacheData[$y] = $DataJson;
         S('chart_yeat_'.$uid, $CacheData);
         return $DataJson;
+    }
+
+    //获取用户记账区间(时间戳)
+    function getAccountTimeBetween($uid) {
+        if ($uid > 0) {
+            $arrSQL = array();
+            $arrSQL['jiid'] = $uid;
+            $TimeMax = intval(M('account')->where($arrSQL)->max('actime'));
+            $TimeMin = intval(M('account')->where($arrSQL)->min('actime'));
+            if (($TimeMax >= $TimeMin)&&($TimeMin > 1)) {
+                $ret['TimeMax'] = $TimeMax;
+                $ret['TimeMin'] = $TimeMin;
+                $ret['YearMax'] = intval(date('Y', $TimeMax));
+                $ret['YearMin'] = intval(date('Y', $TimeMin));
+                $ret['DateMax'] = date('Y-m-d', $TimeMax);
+                $ret['DateMin'] = date('Y-m-d', $TimeMin);
+                return $ret;
+            }
+        }
+    }
+
+    //获取历年收支数据(年份)
+    function getAllYearData($uid) {
+        $TimeBetween = getAccountTimeBetween($uid);
+        if (is_array($TimeBetween)) {
+            $DataArray = array();
+            $YearMax = $TimeBetween['YearMax'];
+            $YearMin = $TimeBetween['YearMin'];
+            $arrSQL['jiid'] = $uid;
+            for ($y=$YearMin; $y <= $YearMax; $y++) { 
+                $TimeMin = strtotime($y.'-01-01 00:00:00');
+                $TimeMax = strtotime($y.'-12-31 23:59:59');
+                $arrSQL['actime'] = array(array('egt',$TimeMin),array('elt',$TimeMax));
+                $arrSQL['zhifu'] = 1;
+                $yInMoney[$y] = SumDbAccount($arrSQL);
+                $arrSQL['zhifu'] = 2;
+                $yOutMoney[$y] = SumDbAccount($arrSQL);
+                $ySurplusMoney[$y] = $yInMoney[$y] - $yOutMoney[$y];
+            }
+            $DataArray['YearMax'] = $YearMax;
+            $DataArray['YearMin'] = $YearMin;
+            $DataArray['InMoney'] = $yInMoney;
+            $DataArray['OutMoney']= $yOutMoney;
+            $DataArray['SurplusMoney'] = $ySurplusMoney;
+            $DataArray['InSumMoney'] = array_sum($yInMoney);
+            $DataArray['OutSumMoney']= array_sum($yOutMoney);
+            $DataArray['SurplusSumMoney'] = $DataArray['InSumMoney'] - $DataArray['OutSumMoney'];
+            $DataJson = json_encode($DataArray);
+            return $DataJson;
+        }
     }
     
     //数组转表格数据
