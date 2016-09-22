@@ -225,10 +225,10 @@ class ApiController extends Controller {
     //表格数据api
     public function chart() {
         if (IS_POST) {
-            $type = I('post.type','year','intval');
+            $type = I('post.type','year');
             $date = I('post.date',time(),'intval');
         } else {
-            $type = I('get.type','year','intval');
+            $type = I('get.type','year');
             $date = I('get.date',time(),'intval');
         }
         $uid = session('uid');
@@ -238,6 +238,10 @@ class ApiController extends Controller {
         switch ($type) {
             case 'year':
                 die(getYearData($year, $uid));
+                break;
+
+            case 'month':
+                die(getMonthData($year, $month, $uid));
                 break;
             
             default:
@@ -250,7 +254,7 @@ class ApiController extends Controller {
     {
         $uid = session('uid');
         //C('USER_LOGIN_TIMES', 15);
-        dump(json_decode(getAllYearData($uid)));
+        dump(json_decode(getMonthData(2016, 1, $uid)));
         // $data['gettype'] = 'day';
         // $data['year'] = 2016;
         // $data['month'] = 08;
