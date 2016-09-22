@@ -216,6 +216,8 @@
             S('account_count_'.$uid,null);
             S('chart_yeat_'.$uid,null);
             S('account_date_'.$uid,null);
+            S('account_time_between_'.$uid,null);
+            S('chart_all_year_'.$uid,null);
         }
     }
     
@@ -742,6 +744,66 @@
         return M('account')->where($arrSQL)->setField($arrUpdata);
     }
 
+    //获取月份收支数据（月份）
+    function getMonthData($y, $m, $uid) {
+        if (($y >= 2000)&&($m >= 1)&&(m <= 12)) {
+            $DataArray['Year'] = $y;
+            $DataArray['Month'] = $m;
+            $dInMoney  = array(); //日收入金额
+            $dOutMoney = array(); //日支出金额
+            $dInSumMoney  = 0; //收入总金额
+            $dOutSumMoney = 0; //支出总金额
+            $dInSumClassMoney  = array(); //分类收入金额
+            $dOutSumClassMoney = array(); //分类支出金额
+            $dSurplusMoney  = array(); //日剩余金额
+            $dSurplusSumMoney  = array(); //日剩余金额
+            $ArrInClass  = GetClassData($uid, 1);
+            $ArrOutClass = GetClassData($uid, 2);
+            //日数据统计
+            $numDay = date('d', strtotime($y.'-'.$m.'-01 +1 month -1 day'));
+            for ($d=1; $d <= $numDay; $d++) { 
+                $ArrSQL = array();
+                $fristDayTime = strtotime($y.'-'.$m.'-'.$d.' 0:0:0');
+                $lastDayTime = strtotime($y.'-'.$m.'-'.$d.' 23:59:59');
+                $ArrSQL['actime'] = array(array('egt',$fristDayTime),array('elt',$lastDayTime));
+                $ArrSQL['jiid'] = $uid;
+                $ArrSQL['zhifu'] = 1;
+                $dInMoney[$d]  = SumDbAccount($ArrSQL);
+                $ArrSQL['zhifu'] = 2;
+                $dOutMoney[$d] = SumDbAccount($ArrSQL);
+                $dSurplusMoney[$d] = $dInMoney[$d] - $dOutMoney[$d];
+                $dSurplusSumMoney[$d] = array_sum($dSurplusMoney);
+            }
+            $DataArray['InMoney'] = $dInMoney;
+            $DataArray['OutMoney']= $dOutMoney;
+            $DataArray['SurplusMoney'] = $dSurplusMoney;
+            $DataArray['InSumMoney'] = array_sum($dInMoney);
+            $DataArray['OutSumMoney']= array_sum($dOutMoney);
+            $DataArray['SurplusSumMoney'] = $dSurplusSumMoney;
+            //分类数据统计
+            $fristDayTime = strtotime($y.'-'.$m.'-01 0:0:0');
+            $lastDayTime = strtotime($y.'-'.$m.'-'.$numDay.' 23:59:59');
+            $ArrSQL['actime'] = array(array('egt',$fristDayTime),array('elt',$lastDayTime));
+            $ArrSQL['zhifu'] = 1;
+            foreach ($ArrInClass as $ClassId => $ClassName) {
+                $ArrSQL['acclassid'] = $ClassId;
+                $dInSumClassMoney[$ClassName] = SumDbAccount($ArrSQL);
+            }
+            $ArrSQL['zhifu'] = 2;
+            foreach ($ArrOutClass as $ClassId => $ClassName) {
+                $ArrSQL['acclassid'] = $ClassId;
+                $dOutSumClassMoney[$ClassName] = SumDbAccount($ArrSQL);
+            }
+            $DataArray['InSumClassMoney'] = $dInSumClassMoney;
+            $DataArray['OutSumClassMoney']= $dOutSumClassMoney;
+        } else {
+            $DataArray['Year'] = false;
+            $DataArray['Month'] = false;
+        }
+        $DataJson = json_encode($DataArray);
+        return $DataJson;
+    }
+
     //获取年度收支数据（年份）
     function getYearData($y,$uid){
         $CacheData = S('chart_yeat_'.$uid);
@@ -815,6 +877,11 @@
     //获取用户记账区间(时间戳)
     function getAccountTimeBetween($uid) {
         if ($uid > 0) {
+            $CacheData = S('account_time_between_'.$uid);
+            if ($CacheData) {
+                return $CacheData;
+            }
+
             $arrSQL = array();
             $arrSQL['jiid'] = $uid;
             $TimeMax = intval(M('account')->where($arrSQL)->max('actime'));
@@ -826,6 +893,7 @@
                 $ret['YearMin'] = intval(date('Y', $TimeMin));
                 $ret['DateMax'] = date('Y-m-d', $TimeMax);
                 $ret['DateMin'] = date('Y-m-d', $TimeMin);
+                S('account_time_between_'.$uid, $ret);
                 return $ret;
             }
         }
@@ -833,6 +901,11 @@
 
     //获取历年收支数据(年份)
     function getAllYearData($uid) {
+        $CacheData = S('chart_all_year_'.$uid);
+        if ($CacheData) {
+            return $CacheData;
+        }
+
         $TimeBetween = getAccountTimeBetween($uid);
         if (is_array($TimeBetween)) {
             $DataArray = array();
@@ -858,6 +931,7 @@
             $DataArray['OutSumMoney']= array_sum($yOutMoney);
             $DataArray['SurplusSumMoney'] = $DataArray['InSumMoney'] - $DataArray['OutSumMoney'];
             $DataJson = json_encode($DataArray);
+            S('chart_all_year_'.$uid, $DataJson);
             return $DataJson;
         }
     }
