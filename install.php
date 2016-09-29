@@ -114,9 +114,10 @@
             $Data['admin']['psw'] = $_POST['admin_psw'];
             $Data['admin']['email'] = $_POST['admin_email'];
             CheakData($Data);
-            InstallDB($Data['db']);
+            InstallDB($Data['db'],$Data['admin']);
+            WriteConfig($Data['db'],$Data['mail']);
             $jsonData = base64_encode(json_encode($Data));
-            $dbFile = fopen("install.tmp", "w") or die(ShowAlert("安装文件没有写入权限，请修改文件权限！","安装失败"));
+            $dbFile = fopen("install.tmp", "w") or die(ShowAlert("请手动删除根目录下的install.php文件。","安装完成"));
             fwrite($dbFile, $jsonData);
             fclose($dbFile);
             ShowAlert($Data['admin']['user']."安装已经完成，请点击下面跳转到登陆页！","安装完成");
@@ -209,6 +210,7 @@
         echo '</div></fieldset></div>';
     }
 
+    //验证数据
     function CheakData($Data) {
         if(strlen($Data['db']['host']) == 0) {
             die(ShowAlert('数据库主机不能为空','安装失败'));
@@ -251,7 +253,8 @@
         return $intable;
     }
 
-    function InstallDB($DbData) {
+    //安装数据库
+    function InstallDB($DbData, $DbUser) {
         //连接数据库
         $Conn = mysql_connect($DbData['host'],$DbData['user'],$DbData['psw']);
         if (!$Conn) {
@@ -269,7 +272,7 @@
             $DbName = $DbData['name'];
             $TableName = $DbData['prefix']."account";
             if(intable($DbData['name'],$TableName,$Conn)){
-                die(ShowAlert('请删除数据库中的表，或者修改表前缀！','数据表已存在'));
+                die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
                 $sql = "CREATE TABLE `$DbName`.`$TableName` (`acid` int(11) unsigned NOT NULL AUTO_INCREMENT,`acmoney` double(9,2) unsigned NOT NULL,`acclassid` int(8) NOT NULL,`actime` int(11) NOT NULL,`acremark` varchar(50) NOT NULL,`jiid` int(8) NOT NULL,`zhifu` int(8) NOT NULL,PRIMARY KEY (`acid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
                 $query=mysql_query($sql);
@@ -277,6 +280,78 @@
                     die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
                 }
             }
+            //创建account_class表(已存在则报错)
+            $TableName = $DbData['prefix']."account_class";
+            if(intable($DbData['name'],$TableName,$Conn)){
+                die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
+            }else{
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`classid` int(5) NOT NULL AUTO_INCREMENT,`classname` varchar(20) NOT NULL,`classtype` int(1) NOT NULL,`ufid` int(11) NOT NULL,PRIMARY KEY (`classid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $query=mysql_query($sql);
+                if(!$query){
+                    die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
+                }
+            }
+            //创建user表
+            $TableName = $DbData['prefix']."user";
+            if(intable($DbData['name'],$TableName,$Conn)){
+                die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
+            }else{
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`uid` int(11) NOT NULL AUTO_INCREMENT,`username` varchar(24) NOT NULL,`password` varchar(32) NOT NULL,`email` varchar(255) NOT NULL,`utime` int(11) NOT NULL,PRIMARY KEY (`uid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $query=mysql_query($sql);
+                if(!$query){
+                    die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
+                }
+            }
+            //创建管理员账号
+            $username = $DbUser['user'];
+            $password = md5($DbUser['psw']);
+            $email = $DbUser['email'];
+            $utime = strtotime("now");
+            $sql="select * from $TableName where username='$username'";
+            if(is_array(mysql_fetch_array(mysql_query($sql)))){
+                die(ShowAlert('默认用户已存在！','创建管理员失败'));
+            }else{
+                $utime=strtotime("now");
+                $sql="insert into $TableName (username, password,email,utime) values ('$username', '$password','$email','$utime')";
+                $query=mysql_query($sql);
+                if(!$query){
+                    die(ShowAlert('请检查该用户是否有权限添加数据权限。','创建管理员失败'));
+                }
+            }
         }
+    }
+
+    //写入配置文件 => /Application/Common/Conf/config.php
+    function WriteConfig($DbData, $EmailData) {
+        $cFile = fopen("./Application/Common/Conf/config.php", "w") or die("Unable to open file!");
+        $txt = "<?php return array( //'配置项'=>'配置值' \n";
+        $txt = $txt."\n//数据库配置信息\n";
+        $txt = $txt."'DB_TYPE'   => 'mysql',  // 数据库类型 \n";
+        $txt = $txt."'DB_HOST'   => '". $DbData['host'] ."',       // 服务器地址 \n";
+        $txt = $txt."'DB_NAME'   => '". $DbData['name'] ."',       // 数据库名 \n";
+        $txt = $txt."'DB_USER'   => '". $DbData['user'] ."',       // 用户名 \n";
+        $txt = $txt."'DB_PWD'    => '". $DbData['psw']  ."',       // 密码 \n";
+        $txt = $txt."'DB_PORT'   => 3306,     // 端口 \n";
+        $txt = $txt."'DB_PARAMS' =>  array(), // 数据库连接参数 \n";
+        $txt = $txt."'DB_PREFIX' => '". $DbData['prefix'] ."',  // 数据库表前缀  \n";
+        $txt = $txt."'DB_CHARSET'=> 'utf8',   // 字符集 \n";
+        $txt = $txt."'DB_DEBUG'  =>  TRUE,    // 数据库调试模式 开启后可以记录SQL日志 \n";
+
+        $txt = $txt."\n//系统配置\n";
+        $txt = $txt."'HTML_CACHE_ON'         => false,       // 关闭静态缓存 \n";
+        $txt = $txt."'URL_CASE_INSENSITIVE'  => false,       // 区分大小写(必须) \n";
+
+        $txt = $txt."\n//应用配置信息\n";
+        $txt = $txt."'USER_LOGIN_TIMES'  => 10,              // 用户登录次 \n";
+        $txt = $txt."'PAGE_SIZE'         => 15,              // 表格分页数 \n";
+        $txt = $txt."'MAIL_HOST'         => '".$EmailData['smtp']."',              // 邮箱SMTP主机 \n";
+        $txt = $txt."'MAIL_USERNAME'     => '".$EmailData['user']."',              // 邮箱用户名 \n";
+        $txt = $txt."'MAIL_PASSWORD'     => '".$EmailData['psw'] ."',              // 邮箱密码 \n";
+        $txt = $txt."'MAIL_FROM'         => '".$EmailData['from']."',              // 发件人邮箱 \n";
+        $txt = $txt."'MAIL_FROMNAME'     => '小歆记账',      // 发件人名字 \n";
+
+        $txt = $txt."\n); \n";
+        fwrite($cFile, $txt);
+        fclose($cFile);
     }
 ?>
