@@ -26,4 +26,20 @@
 
 ###3、目录结构
 
+    xxjzWeb  WEB部署目录（或者子目录）
+      ├─Application         应用目录
+      │  ├─Common           配置文件目录
+      │  ├─Home             模块目录
+      │  ├─index.html       index文件
+      ├─Public              静态文件目录
+      │  ├─Home             Home静态目录
+      │  │  ├─css           CSS目录
+      │  │  ├─fonts         字体目录
+      │  │  ├─i             图片目录
+      │  │  ├─js            JavaScript目录
+      ├─ThinkPHP            ThinkPHP目录
+      ├─index.php           入口文件
+      ├─install.php         安装文件
+      ├─README.md           README文件
+
 ###4、数据结构
