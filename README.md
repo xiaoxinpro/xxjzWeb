@@ -1,12 +1,18 @@
 
 ##小歆记账WebApp项目(Web服务端)
 
-###1、简介
+----------
+
+##1、简介
 小歆记账WebApp是一个跨平台的记账工具，此项目为Web服务端；使用ThinkPHP+MySQL作为后台，AmazeUI作为前端。
 
->项目地址为：http://jz.xxgzs.org/xxjzApp/index.php
+>GitHub：https://github.com/xiaoxinpro/xxjzWeb
 
-目前项目还在建设中，暂时无法提供演示，但可以自行搭建。
+>Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
+
+目前项目还在建设中，暂时无法提供演示账号，但可以自行搭建。
+
+----------
 
 ###2、安装使用
 
@@ -24,22 +30,62 @@
 打开根目录下的/index.php文件，将第**18**行改为
 `define('APP_DEBUG',false);`
 
+----------
+
 ###3、目录结构
 
     xxjzWeb  WEB部署目录（或者子目录）
-      ├─Application         应用目录
-      │  ├─Common           配置文件目录
-      │  ├─Home             模块目录
-      │  ├─index.html       index文件
-      ├─Public              静态文件目录
-      │  ├─Home             Home静态目录
-      │  │  ├─css           CSS目录
-      │  │  ├─fonts         字体目录
-      │  │  ├─i             图片目录
-      │  │  ├─js            JavaScript目录
-      ├─ThinkPHP            ThinkPHP目录
-      ├─index.php           入口文件
-      ├─install.php         安装文件
-      ├─README.md           README文件
+      ├─Application                          应用目录
+      │  ├─Common                            配置文件目录
+      │  │  ├─Common                         未使用
+      │  │  ├─Conf                           配置文件目录
+      │  │  │  ├─config.php                  配置文件
+      │  │  │  └─index.html                  index文件
+      │  │  └─index.html                     index文件
+      │  ├─Home                              模块目录
+      │  │  ├─Common                         公共函数目录
+      │  │  │  ├─function.php                全局函数文件
+      │  │  │  └─index.html                  index文件
+      │  │  ├─Conf                           未使用
+      │  │  ├─Controller                     控制器目录
+      │  │  │  ├─AddController.class.php     记账控制器文件
+      │  │  │  ├─ApiController.class.php     API控制器文件
+      │  │  │  ├─BaseController.class.php    公共控制器文件
+      │  │  │  ├─ChartController.class.php   图表控制器文件
+      │  │  │  ├─ClassController.class.php   分类控制器文件
+      │  │  │  ├─EditController.class.php    编辑账目控制器文件
+      │  │  │  ├─FindController.class.php    搜索账目控制器文件
+      │  │  │  ├─IndexController.class.php   主页控制器文件
+      │  │  │  ├─ListController.class.php    列表控制器文件
+      │  │  │  ├─LoginController.class.php   登录控制器文件
+      │  │  │  ├─UserController.class.php    用户控制器文件
+      │  │  │  └─index.html                  index文件
+      │  │  ├─Model                          未使用
+      │  │  └─View                           视图目录
+      │  │  │  ├─Add                         记账视图目录
+      │  │  │  ├─Chart                       图表视图目录
+      │  │  │  ├─Class                       分类视图目录
+      │  │  │  ├─Edit                        编辑视图目录
+      │  │  │  ├─Find                        搜索账目视图目录
+      │  │  │  ├─Index                       主页视图目录
+      │  │  │  ├─List                        列表视图目录
+      │  │  │  ├─Login                       登录视图目录
+      │  │  │  ├─Public                      公共视图目录
+      │  │  │  ├─User                        用户视图目录
+      │  │  │  └─index.html                  index文件
+      │  └─index.html                        index文件
+      ├─Public                               资源文件目录
+      │  └─Home                              Home资源目录
+      │     ├─css                            CSS目录
+      │     ├─fonts                          字体目录
+      │     ├─i                              图片目录
+      │     └─js                             JavaScript目录
+      ├─ThinkPHP                             ThinkPHP目录
+      ├─index.php                            入口文件
+      ├─install.php                          安装文件
+      └─README.md                            README文件
+
+
+----------
 
 ###4、数据结构
