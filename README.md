@@ -1,7 +1,7 @@
 #小歆记账WebApp项目(Web服务端)
 
 ##1、简介
-***
+
 
 小歆记账WebApp是一个跨平台的记账工具，此项目为Web服务端；使用ThinkPHP+MySQL作为后台，AmazeUI作为前端。
 
@@ -13,12 +13,12 @@
 
 
 ##2、安装使用
-***
+
 
 ###2.1、快速安装
 部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与管理员账号、密码和邮箱。提交后若配置信息无误则自动跳转到登陆页面。
 
-![小歆记账Web安装向导.png](http://upload-images.jianshu.io/upload_images/1568014-b9284b83fef9b783.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![小歆记账Web安装向导.png](http://upload-images.jianshu.io/upload_images/1568014-b9284b83fef9b783.png?imageMogr2/auto-orient/strip%7CimageView2/2/h/620)
 
 点击安装后若配置信息无误则自动跳转到登陆页面，使用刚刚填写的管理员账号和密码就可以登陆使用了。
 
@@ -42,7 +42,7 @@
 
 
 ##3、目录结构
-***
+
 
     xxjzWeb  WEB部署目录（或者子目录）
       ├─Application                          应用目录
@@ -97,7 +97,7 @@
 
 
 ##4、数据结构
-***
+
 ###4.1、账目表 xxjz_account
 | 字段 | 类型 | 注释 |
 |:--------:|--------|--------|
@@ -127,12 +127,12 @@
 |utime|int(11)|注册时间戳|
 
 ##5、Bug 反馈及需求提交
-***
+
 Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxinpro/xxjzWeb/issues)
 
 
 ##6、参考
-***
+
 * [ThinkPHP (Apache2 License)](https://github.com/top-think/thinkphp)
 * [Amaze UI (MIT License)](https://github.com/amazeui/amazeui)
 * [Font Awesome(SIL OFL 1.1 License)](https://github.com/FortAwesome/Font-Awesome)
