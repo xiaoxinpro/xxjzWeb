@@ -1,9 +1,11 @@
 #小歆记账WebApp项目(Web服务端)
 
+![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 ##1、简介
 
 
-小歆记账WebApp是一个跨平台的记账工具，此项目为Web服务端；使用ThinkPHP+MySQL作为后台，AmazeUI作为前端。
+小歆记账WebApp是一个面向移动端的记账工具，此项目为Web服务端；使用ThinkPHP+MySQL作为后台，AmazeUI作为前端。
 
 >GitHub：https://github.com/xiaoxinpro/xxjzWeb
 
@@ -11,14 +13,15 @@
 
 目前项目还在建设中，暂时无法提供演示账号，但可以自行搭建。
 
-
 ##2、安装使用
 
+
+>环境要求PHP5.3以上，MySQl数据库，支持Windows和Linux服务器环境。
 
 ###2.1、快速安装
 部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与管理员账号、密码和邮箱。提交后若配置信息无误则自动跳转到登陆页面。
 
-![小歆记账Web安装向导.png](http://upload-images.jianshu.io/upload_images/1568014-b9284b83fef9b783.png?imageMogr2/auto-orient/strip%7CimageView2/2/h/620)
+![小歆记账Web安装向导.png](http://upload-images.jianshu.io/upload_images/1568014-b9284b83fef9b783.png?imageMogr2/auto-orient/strip%7CimageView2/2/h/576)
 
 点击安装后若配置信息无误则自动跳转到登陆页面，使用刚刚填写的管理员账号和密码就可以登陆使用了。
 
@@ -138,3 +141,4 @@ Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxi
 * [Font Awesome(SIL OFL 1.1 License)](https://github.com/FortAwesome/Font-Awesome)
 
 可能会有部分项目遗漏，后续会不断整理更新。
+
