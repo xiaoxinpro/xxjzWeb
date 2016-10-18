@@ -25,7 +25,7 @@
             session('uid',$data['uid']);
             session('username',$username);
             session('user_shell',md5($data['username'].$data['password']));
-            S('user_key_'.$user,null); //清除登录验证缓存
+            S('user_key_'.$username, null); //清除登录验证缓存
             return true;
         }else{
             session(null);
@@ -207,14 +207,8 @@
             S('account_class_1_'.$uid,null);
             S('account_class_2_'.$uid,null);
             S('account_tatistic_'.$uid,null);
-            $p = S('account_count_'.$uid);
-            while($p > 0){
-                S('account_data_'.$p.'_'.$uid,null);
-                $p = $p - 1;
-            }
-            S('account_data_0_'.$uid,null);
-            S('account_count_'.$uid,null);
-            S('chart_yeat_'.$uid,null);
+            S('account_data_'.$uid,null);
+            S('chart_year_'.$uid,null);
             S('account_date_'.$uid,null);
             S('account_time_between_'.$uid,null);
             S('chart_all_year_'.$uid,null);
@@ -304,22 +298,29 @@
     //获取记账数据(用户id,页码)
     function GetAccountData($uid, $p) {
         //dump(S('account_data_'.$p));
-        $DbCount = M('account')->cache('account_count_'.$uid)->where("jiid='$uid'")->count();
-        $DbSQL = M('account')->cache('account_data_'.$p.'_'.$uid)->where("jiid='$uid'")->order("actime DESC , acid DESC");
-        if($p > 0) {
-            $pagesize = C('PAGE_SIZE');  
-            $offset = ($p-1)*$pagesize;
-            $DbData = $DbSQL -> limit("$offset,$pagesize") -> select();
-            $ret['pagemax'] = intval(($DbCount-1) / $pagesize) + 1;
-            $ret['page'] = $p;
-        }else{
-            $DbData = $DbSQL -> select();
-            $ret['pagemax'] = 1;
-            $ret['page'] = 1;
+        $CacheData = S('account_data_'.$uid);
+        if (array_key_exists($p, $CacheData)) {
+            return $CacheData[$p];
+        } else {
+            $DbCount = M('account')->where("jiid='$uid'")->count();
+            $DbSQL = M('account')->where("jiid='$uid'")->order("actime DESC , acid DESC");
+            if($p > 0) {
+                $pagesize = C('PAGE_SIZE');  
+                $offset = ($p-1)*$pagesize;
+                $DbData = $DbSQL -> limit("$offset,$pagesize") -> select();
+                $ret['pagemax'] = intval(($DbCount-1) / $pagesize) + 1;
+                $ret['page'] = $p;
+            }else{
+                $DbData = $DbSQL -> select();
+                $ret['pagemax'] = 1;
+                $ret['page'] = 1;
+            }
+            $ret['count'] = $DbCount;
+            $ret['data'] = $DbData;
+            $CacheData[$p] = $ret;
+            S('account_data_'.$uid, $CacheData);
+            return $ret;
         }
-        $ret['count'] = $DbCount;
-        $ret['data'] = $DbData;
-        return $ret;
     }
 
     //按日期获取记账数据
@@ -806,7 +807,7 @@
 
     //获取年度收支数据（年份）
     function getYearData($y,$uid){
-        $CacheData = S('chart_yeat_'.$uid);
+        $CacheData = S('chart_year_'.$uid);
         if ($CacheData[$y]) {
             return $CacheData[$y];
         }
@@ -870,7 +871,7 @@
         }
         $DataJson = json_encode($DataArray);
         $CacheData[$y] = $DataJson;
-        S('chart_yeat_'.$uid, $CacheData);
+        S('chart_year_'.$uid, $CacheData);
         return $DataJson;
     }
 
