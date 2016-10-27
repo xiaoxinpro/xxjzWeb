@@ -84,6 +84,8 @@ class LoginController extends Controller {
                 echo '<body href="javascript:void(0);" onload="WebApp_Login('.$str.')"></body>';
                 session('webAppUser',null);
             }
+            $this -> assign('app_ios_url', C('APP_IOS_URL'));
+            $this -> assign('app_android_url', C('APP_ANDROID_URL'));
             $this -> display();
         }
     }
