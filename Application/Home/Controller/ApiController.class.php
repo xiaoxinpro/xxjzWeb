@@ -71,10 +71,10 @@ class ApiController extends Controller {
     public function aclass() {
         if (IS_POST) {
             $type = I('post.type','get');
-            $data = json_decode(I('post.data',null));
+            $data = json_decode(base64_decode(I('post.data',null)),true);
         } else {
             $type = I('get.type','get');
-            $data = json_decode(I('get.data',null));
+            $data = json_decode(base64_decode(I('get.data',null)),true);
         }
 
         $arrData = array();
