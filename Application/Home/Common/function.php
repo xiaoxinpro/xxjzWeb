@@ -657,6 +657,7 @@
         if($isCheak[0]){
             $data = $isCheak[1];
             $DbData = M('account_class')->add($data);
+            ClearDataCache();
             if($DbData > 0){
                 return array(true,'新建分类成功!');
             }else{
@@ -673,6 +674,7 @@
         if($isCheak[0]) {
             $sql = array('classid' => intval($ClassId), 'ufid' => intval($uid));
             $ret = M("account_class")->where($sql)->setField('classname',$ClassName);
+            ClearDataCache();
             return array(true,'分类名修改成功！');
         }else{
             return $isCheak;
@@ -696,6 +698,7 @@
             M("account_class")->where($sql)->setField('classtype',$Type);
             $sql = array('acclassid' => intval($ClassId), 'jiid' => intval($uid));
             M("account")->where($sql)->setField('zhifu',$Type);
+            ClearDataCache();
             return array(true,$Type);
         }else{
             return $isCheak;
@@ -716,6 +719,7 @@
         if(is_array($ClassData)){
             $DbData = M("account_class")->where($sql)->delete();
             if($DbData > 0){
+                ClearDataCache();
                 return array(true,'已成功删除【'.$ClassData['classname'].'】分类!',$ClassData['classtype']);
             }elseif($DbData === 0){
                 return array(false,'未找到你要删除的分类(@_@)',$ClassData['classtype']);
@@ -742,7 +746,9 @@
     function MoveClassAccount($ClassId1,$ClassId2,$uid) {
         $arrSQL = array('acclassid' => intval($ClassId1), 'jiid' => intval($uid));
         $arrUpdata = array('acclassid' => intval($ClassId2));
-        return M('account')->where($arrSQL)->setField($arrUpdata);
+        $ret = M('account')->where($arrSQL)->setField($arrUpdata);
+        ClearDataCache();
+        return $ret;
     }
 
     //获取月份收支数据（月份）
