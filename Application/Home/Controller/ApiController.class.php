@@ -115,6 +115,10 @@ class ApiController extends Controller {
                 $arrData['data'] = editClassName($data['classname'], $data['classid'], $data['classtype'], $uid);
                 break;
 
+            case 'change':
+                $arrData['data'] = ChangeClassType($data['classid'], $uid);
+                break;
+
             case 'del':
                 $arrData['data'] = GetClassIdData($data['classid'], $uid);
                 break;
