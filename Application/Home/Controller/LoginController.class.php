@@ -116,7 +116,7 @@ class LoginController extends Controller {
             session('submit',$submit);
             ClearAllCache(); //清除缓存
             if ($submit == "xxjzAUI") {
-                $arrData = array('uid'=>session('uid'),'uname'=>session('username'));
+                $arrData = array('uid'=>session('uid'),'uname'=>session('username'),'sessionid'=>session_id());
                 die(json_encode($arrData));
             } else {
                 $this -> redirect($refurl);
