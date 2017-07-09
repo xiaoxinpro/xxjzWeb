@@ -1,8 +1,8 @@
-#小歆记账WebApp项目(Web服务端)
+# 小歆记账WebApp项目(Web服务端)
 
 ![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-##1、简介
+## 1、简介
 
 
 小歆记账WebApp是一个面向移动端的记账工具，此项目为Web服务端；使用ThinkPHP+MySQL作为后台，AmazeUI作为前端。
@@ -13,12 +13,12 @@
 
 目前项目还在建设中，暂时无法提供演示账号，但可以自行搭建。
 
-##2、安装使用
+## 2、安装使用
 
 
 >环境要求PHP5.3以上，MySQl数据库，支持Windows和Linux服务器环境。
 
-###2.1、快速安装
+### 2.1、快速安装
 部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与管理员账号、密码和邮箱。提交后若配置信息无误则自动跳转到登陆页面。
 
 ![小歆记账Web安装向导.png](http://upload-images.jianshu.io/upload_images/1568014-b9284b83fef9b783.png?imageMogr2/auto-orient/strip%7CimageView2/2/h/576)
@@ -27,24 +27,24 @@
 
 > 如果你只是日常使用阅读到这里就可以了，如果你想进一步完善或优化请往下看。
 
-###2.2、使用优化
+### 2.2、使用优化
 
-####2.2.1、关闭调试模式
+#### 2.2.1、关闭调试模式
 
 该项目目前处于开发阶段，默认开启了调试模式。在实际使用中，为了提高运行效率，建议手动关闭调试模式。
 打开根目录下的/index.php文件，将第**18**行改为`define('APP_DEBUG',false);`
 
-####2.2.2、修改配置文件
+#### 2.2.2、修改配置文件
 配置文件只在/Application/Common/Conf/config.php文件中存放，在该文件中你可以修改数据库、邮箱系统、用户登录限制、列表分页等配置，配置文件注释详细这里不再展开赘述。
 
-####2.2.3、重新安装数据库
+#### 2.2.3、重新安装数据库
 为了防止重复安装破坏数据库，项目在安装完成后关闭了安装入口。可以手动删除项目根目录下的`_install.tmp`文件，再按照[2.1、快速安装](#21快速安装)流程安装即可。
 
 * 重复安装前请注意原数据库的备份。
 * 安装向导不会进行覆盖安装。
 
 
-##3、目录结构
+## 3、目录结构
 
 
     xxjzWeb  WEB部署目录（或者子目录）
@@ -99,9 +99,9 @@
       └─README.md                            README文件
 
 
-##4、数据结构
+## 4、数据结构
 
-###4.1、账目表 xxjz_account
+### 4.1、账目表 xxjz_account
 | 字段 | 类型 | 注释 |
 |:--------:|--------|--------|
 |acid|int(11) unsigned |账目ID|
@@ -112,7 +112,7 @@
 |jiid|int(11)|用户ID|
 |zhifu|int(1)|收入1/支出2|
 
-###4.2、分类表 xxjz_account_class
+### 4.2、分类表 xxjz_account_class
 | 字段 | 类型 | 注释 |
 |:--------:|--------|--------|
 |classid|int(8) |分类ID|
@@ -120,7 +120,7 @@
 |classtype|int(1)|收入1/支出2|
 |ufid|int(11)|所属用户ID|
 
-###4.3、用户表 xxjz_user
+### 4.3、用户表 xxjz_user
 | 字段 | 类型 | 注释 |
 |:--------:|--------|--------|
 |uid|int(11) 自动增量|用户ID|
@@ -129,12 +129,12 @@
 |email|varchar(255)|邮箱|
 |utime|int(11)|注册时间戳|
 
-##5、Bug 反馈及需求提交
+## 5、Bug 反馈及需求提交
 
 Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxinpro/xxjzWeb/issues)
 
 
-##6、参考
+## 6、参考
 
 * [ThinkPHP (Apache2 License)](https://github.com/top-think/thinkphp)
 * [Amaze UI (MIT License)](https://github.com/amazeui/amazeui)
