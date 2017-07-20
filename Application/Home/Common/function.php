@@ -421,7 +421,14 @@
     //获取指定时间段的记账结果(开始时间戳,结束时间戳,收支,用户id)
     function GetAccountStatistic($StartTime,$EndTime,$Type,$uid) {
         //收支 : 1收入 / 2支出
-        $StrSQL = "actime >= $StartTime and actime <= $EndTime and jiid = '$uid' and zhifu = '$Type'";
+        $StrSQL = "";
+        if ($StartTime) {
+            $StrSQL = $StrSQL . "actime >= $StartTime and ";
+        }
+        if ($EndTime) {
+            $StrSQL = $StrSQL . "actime <= $EndTime and ";
+        }
+        $StrSQL = $StrSQL."jiid = '$uid' and zhifu = '$Type'";
         return SumDbAccount($StrSQL);
     }
     
@@ -473,8 +480,8 @@
         //总结统计
         $StartTime = strtotime("2000-1-1 0:0:0");
         $EndTime = strtotime(date("Y-m-d")." 23:59:59");
-        $ArrData['SumInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
-        $ArrData['SumOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
+        $ArrData['SumInMoney']  = GetAccountStatistic(null,null,1,$uid);
+        $ArrData['SumOutMoney'] = GetAccountStatistic(null,null,2,$uid);
         
         S('account_tatistic_'.$uid,$ArrData);
         
