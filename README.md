@@ -11,7 +11,10 @@
 
 >Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
 
-目前项目还在建设中，暂时无法提供演示账号，但可以自行搭建。
+目前项目已基本完成，你可以使用Demo账号登陆体验，也可以自行搭建项目。
+
+    Demo账号：demo
+    Demo密码：xxgzs.org
 
 ## 2、安装使用
 
@@ -141,4 +144,3 @@ Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxi
 * [Font Awesome(SIL OFL 1.1 License)](https://github.com/FortAwesome/Font-Awesome)
 
 可能会有部分项目遗漏，后续会不断整理更新。
-
