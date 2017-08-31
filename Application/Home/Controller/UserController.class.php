@@ -6,6 +6,11 @@ class UserController extends BaseController {
         $uid = session('uid');
         $type = I('get.type',0);
         if(IS_POST) {
+            if(session('username') == C('APP_DEMO_USERNAME')){
+                ShowAlert('抱歉Demo账号无法进行账号信息修改！',U('Home/User/index/type/1'));
+                $this -> display('Public/base');
+                exit;
+            }
             $Submit = I('post.user_submit');
             if($Submit === '修改账号') {
                 $Username = I('post.user_name');
