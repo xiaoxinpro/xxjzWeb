@@ -146,17 +146,18 @@
     //Mail发送函数
     function SendMail($address,$subject,$body,$file){
         Vendor('PHPMailer.PHPMailerAutoload');    
-        $mail = new PHPMailer();                // 建立邮件发送类
-        $mail->CharSet  = "UTF-8";              // 编码格式UTF-8
-        $mail->IsSMTP();                        // 使用SMTP方式发送
-        $mail->Host     = C('MAIL_HOST');       // 您的企业邮局域名
-        $mail->SMTPAuth = true;                 // 启用SMTP验证功能
-        $mail->Username = C('MAIL_USERNAME');   // 邮局用户名(请填写完整的email地址)
-        $mail->Password = C('MAIL_PASSWORD');   // 邮局密码
-        $mail->Port     = 25;                   // 邮局端口
-        $mail->From     = C('MAIL_FROM');       // 邮件发送者email地址
-        $mail->FromName = C('MAIL_FROMNAME');   // 邮件发送者姓名
-        $mail->AddAddress("$address","");//收件人地址，可以替换成任何想要接收邮件的email信箱,格式是AddAddress("收件人email","收件人姓名")
+        $mail = new PHPMailer();                  // 建立邮件发送类
+        $mail->CharSet    = "UTF-8";              // 编码格式UTF-8
+        $mail->IsSMTP();                          // 使用SMTP方式发送
+        $mail->Host       = C('MAIL_HOST');       // 您的企业邮局域名
+        $mail->SMTPAuth   = true;                 // 启用SMTP验证功能
+        $mail->SMTPSecure = C('MAIL_SECURE');     // 安全协议（none、ssl、tls）
+        $mail->Port       = C('MAIL_PORT');       // 邮局SMTP端口
+        $mail->Username   = C('MAIL_USERNAME');   // 邮局用户名(请填写完整的email地址)
+        $mail->Password   = C('MAIL_PASSWORD');   // 邮局密码
+        $mail->From       = C('MAIL_FROM');       // 邮件发送者email地址
+        $mail->FromName   = C('MAIL_FROMNAME');   // 邮件发送者姓名
+        $mail->AddAddress("$address","");         // 收件人地址，可以替换成任何想要接收邮件的email信箱,格式是AddAddress("收件人email","收件人姓名")
         //$mail->AddReplyTo("", "");
         if(file_exists($file)){
             $mail->AddAttachment($file); // 添加附件
@@ -168,7 +169,7 @@
         
         if(!$mail->Send())
         {
-            //echo "邮件发送失败 -- 错误原因: " . $mail->ErrorInfo;
+            echo "邮件发送失败 -- 错误原因: " . $mail->ErrorInfo;
             return false;
         }else{
             return true;
@@ -988,24 +989,3 @@
 
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
