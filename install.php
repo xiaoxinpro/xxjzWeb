@@ -107,6 +107,8 @@
             $Data['db']['name'] = $_POST['db_name'];
             $Data['db']['prefix'] = $_POST['db_prefix'];
             $Data['mail']['smtp'] = $_POST['mail_smtp'];
+            $Data['mail']['secure'] = $_POST['mail_secure'];
+            $Data['mail']['port'] = $_POST['mail_port'];
             $Data['mail']['user'] = $_POST['mail_user'];
             $Data['mail']['psw'] = $_POST['mail_psw'];
             $Data['mail']['from'] = $_POST['mail_from'];
@@ -155,6 +157,14 @@
                 <div>
                     <label>邮箱SMTP主机</label>
                     <input type="text" name="mail_smtp" value="smtp.163.com">
+                </div>
+                <div>
+                    <label>邮箱安全认证</label>
+                    <input type="text" name="mail_secure" value="none">
+                </div>
+                <div>
+                    <label>邮箱端口号</label>
+                    <input type="text" name="mail_port" value="25">
                 </div>
                 <div>
                     <label>邮箱用户名</label>
@@ -345,6 +355,8 @@
         $txt = $txt."'USER_LOGIN_TIMES'  => 10,              // 用户登录次 \n";
         $txt = $txt."'PAGE_SIZE'         => 15,              // 表格分页数 \n";
         $txt = $txt."'MAIL_HOST'         => '".$EmailData['smtp']."',              // 邮箱SMTP主机 \n";
+        $txt = $txt."'MAIL_SECURE'       => '".$EmailData['secure']."',            // 邮箱安全认证（none、ssl、tls） \n";
+        $txt = $txt."'MAIL_PORT'         => '".$EmailData['port']."',              // 邮箱SMTP端口号（默认为25，SSL协议为465或994） \n";
         $txt = $txt."'MAIL_USERNAME'     => '".$EmailData['user']."',              // 邮箱用户名 \n";
         $txt = $txt."'MAIL_PASSWORD'     => '".$EmailData['psw'] ."',              // 邮箱密码 \n";
         $txt = $txt."'MAIL_FROM'         => '".$EmailData['from']."',              // 发件人邮箱 \n";
