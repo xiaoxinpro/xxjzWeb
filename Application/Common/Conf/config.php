@@ -22,6 +22,8 @@ return array(
     'USER_LOGIN_TIMES'  => 10,              // 用户登录次
     'PAGE_SIZE'         => 15,              // 表格分页数
     'MAIL_HOST'         => '',              // 邮箱SMTP主机
+    'MAIL_SECURE'       => 'ssl',           // 邮箱安全认证（none、ssl、tls）
+    'MAIL_PORT'         => '465',           // 邮箱SMTP端口号（默认为25，SSL协议为465或994）
     'MAIL_USERNAME'     => '',              // 邮箱用户名
     'MAIL_PASSWORD'     => '',              // 邮箱密码
     'MAIL_FROM'         => '',              // 发件人邮箱
