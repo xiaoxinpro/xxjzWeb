@@ -247,33 +247,33 @@
 
     //数据库是否存在
     function inDataBase($DbName,$Conn){
-        mysql_select_db("information_schema",$Conn);
+        mysqli_select_db($Conn, "information_schema");
         $sql="select * from SCHEMATA where SCHEMA_NAME='".$DbName."'";
-        $query=mysql_query($sql);
-        $indb=is_array($row=mysql_fetch_array($query));
+        $query=mysqli_query($Conn, $sql);
+        $indb=is_array($row=mysqli_fetch_array($query));
         return $indb;
     }
     //表是否存在
     function inTable($DbName,$TableName,$Conn){
-        mysql_select_db("information_schema",$Conn);
+        mysqli_select_db($Conn, "information_schema");
         $sql="select * from TABLE_CONSTRAINTS where TABLE_SCHEMA='".$DbName."' and TABLE_NAME='".$TableName."'";
-        $query=mysql_query($sql);
-        $intable=is_array($row=mysql_fetch_array($query));
-        mysql_select_db($DbName,$Conn);//重新关联账本数据库
+        $query=mysqli_query($Conn, $sql);
+        $intable=is_array($row=mysqli_fetch_array($query));
+        mysqli_select_db($Conn, $DbName);//重新关联账本数据库
         return $intable;
     }
 
     //安装数据库
     function InstallDB($DbData, $DbUser) {
         //连接数据库
-        $Conn = mysql_connect($DbData['host'],$DbData['user'],$DbData['psw']);
+        $Conn = mysqli_connect($DbData['host'],$DbData['user'],$DbData['psw']);
         if (!$Conn) {
             die(ShowAlert('请检查数据库主机地址、用户名和密码是否正确。','连接数据库失败'));
         } else {
             //创建数据库(已存在则跳过)
             if(!inDataBase($DbData['name'],$Conn)){
                 $sql = "create database ".$DbData['name']." default character SET utf8 COLLATE utf8_general_ci";
-                $query=mysql_query($sql);
+                $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert('请检查该用户是否有权限创建数据库。','创建数据库失败'));
                 }
@@ -285,7 +285,7 @@
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
                 $sql = "CREATE TABLE `$DbName`.`$TableName` (`acid` int(11) unsigned NOT NULL AUTO_INCREMENT,`acmoney` double(9,2) unsigned NOT NULL,`acclassid` int(8) NOT NULL,`actime` int(11) NOT NULL,`acremark` varchar(50) NOT NULL,`jiid` int(8) NOT NULL,`zhifu` int(8) NOT NULL,PRIMARY KEY (`acid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
-                $query=mysql_query($sql);
+                $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
                 }
@@ -296,7 +296,7 @@
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
                 $sql = "CREATE TABLE `$DbName`.`$TableName` (`classid` int(5) NOT NULL AUTO_INCREMENT,`classname` varchar(20) NOT NULL,`classtype` int(1) NOT NULL,`ufid` int(11) NOT NULL,PRIMARY KEY (`classid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
-                $query=mysql_query($sql);
+                $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
                 }
@@ -307,7 +307,7 @@
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
                 $sql = "CREATE TABLE `$DbName`.`$TableName` (`uid` int(11) NOT NULL AUTO_INCREMENT,`username` varchar(24) NOT NULL,`password` varchar(32) NOT NULL,`email` varchar(255) NOT NULL,`utime` int(11) NOT NULL,PRIMARY KEY (`uid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
-                $query=mysql_query($sql);
+                $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
                 }
@@ -318,12 +318,12 @@
             $email = $DbUser['email'];
             $utime = strtotime("now");
             $sql="select * from $TableName where username='$username'";
-            if(is_array(mysql_fetch_array(mysql_query($sql)))){
+            if(is_array(mysqli_fetch_array(mysqli_query($Conn, $sql)))){
                 die(ShowAlert('默认用户已存在！','创建管理员失败'));
             }else{
                 $utime=strtotime("now");
                 $sql="insert into $TableName (username, password,email,utime) values ('$username', '$password','$email','$utime')";
-                $query=mysql_query($sql);
+                $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert('请检查该用户是否有权限添加数据权限。','创建管理员失败'));
                 }
