@@ -41,8 +41,6 @@ class IndexController extends BaseController {
     }
     
     public function test(){
-        $message = M('account_class') -> select();
-        dump($message);
         die;
     }
 
