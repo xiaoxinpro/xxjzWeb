@@ -28,5 +28,10 @@ return array(
     'MAIL_PASSWORD'     => '',              // 邮箱密码
     'MAIL_FROM'         => '',              // 发件人邮箱
     'MAIL_FROMNAME'     => '小歆记账',      // 发件人名字
+
+    //微信小程序配置
+    'WX_ENABLE'         => false,            //使能微信小程序功能
+    'WX_OPENID'         => 'openid',        //微信小程序唯一标识
+    'WX_SECRET'         => 'secret',        //微信小程序的 app secret
     
 );
