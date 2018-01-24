@@ -312,6 +312,17 @@
                     die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
                 }
             }
+            //创建user_login表
+            $TableName = $DbData['prefix']."user_login";
+            if(intable($DbData['name'],$TableName,$Conn)){
+                die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
+            }else{
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`lid` int(11) NOT NULL AUTO_INCREMENT,`uid` int(11) NOT NULL,`login_name` varchar(16) COLLATE 'utf8_general_ci' NOT NULL,`login_id` varchar(16) COLLATE 'utf8_general_ci' NOT NULL,`login_key` varchar(16) COLLATE 'utf8_general_ci' NOT NULL,`login_token` varchar(16) COLLATE 'utf8_general_ci' NOT NULL) ENGINE='MyISAM' COLLATE 'utf8_general_ci';";
+                $query=mysqli_query($Conn, $sql);
+                if(!$query){
+                    die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
+                }
+            }
             //创建管理员账号
             $username = $DbUser['user'];
             $password = md5($DbUser['psw']);
@@ -361,6 +372,11 @@
         $txt = $txt."'MAIL_PASSWORD'     => '".$EmailData['psw'] ."',              // 邮箱密码 \n";
         $txt = $txt."'MAIL_FROM'         => '".$EmailData['from']."',              // 发件人邮箱 \n";
         $txt = $txt."'MAIL_FROMNAME'     => '小歆记账',      // 发件人名字 \n";
+
+        $txt = $txt."\n//微信小程序配置\n";
+        $txt = $txt."'WX_ENABLE'         => false,            //使能微信小程序功能 \n";
+        $txt = $txt."'WX_OPENID'         => 'openid',        //微信小程序唯一标识 \n";
+        $txt = $txt."'WX_SECRET'         => 'secret',        //微信小程序的 app secret \n";
 
         $txt = $txt."\n); \n";
         fwrite($cFile, $txt);
