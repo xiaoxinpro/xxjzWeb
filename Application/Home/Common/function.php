@@ -61,7 +61,7 @@
         if (session('uid') == $uid) {
             $loginData = array();
             $loginData['uid'] = $uid;
-            $loginData['login_name'] = Weixin;
+            $loginData['login_name'] = 'Weixin';
             $loginData['login_id'] = $openid;
             $loginData['login_key'] = $session_key;
             $loginData['login_token'] = $unionid;
