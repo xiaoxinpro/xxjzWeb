@@ -135,6 +135,53 @@ class LoginController extends Controller {
             }
         }
     }
+
+    public function login_weixin(){
+        if (!C('WX_ENABLE')) {
+            $arrData = array('uid'=>'0','uname'=>'功能未开启，请联系管理员。');
+            die(json_encode($arrData)); 
+        }
+        if(IS_POST){
+            $js_code = I('post.js_code','','htmlspecialchars');
+        }else{
+            $js_code = I('get.js_code','','htmlspecialchars');
+        }
+        session(null); //清空session
+        if ($js_code == '') {
+            $arrData = array('uid'=>'0','uname'=>'非法访问。');
+            die(json_encode($arrData));        
+        }
+        $str_data = post('https://api.weixin.qq.com/sns/jscode2session', array('appid' => C('WX_OPENID'), 'secret' => C('WX_SECRET'),'js_code' => $js_code, 'grant_type' => 'authorization_code'));
+        $str_data = substr($str_data, strpos($str_data, '{'));
+        $js_data = json_decode($str_data, true);
+        if ($js_data['openid']) {
+            $ret = WeixinUserLogin($js_data['openid'], $js_data['session_key'], $js_data['unionid']);
+            if ($ret[0] === true) {
+                if ($ret[1] === '-1') {
+                    $arrData = array('uid'=>'-1','uname'=>$ret[2],'sessionid'=>session_id());
+                    die(json_encode($arrData));
+                } else {
+                    session('submit', 'xxjzWeixin');
+                    ClearAllCache(); //清除缓存
+                    $arrData = array('uid'=>session('uid'),'uname'=>session('username'),'sessionid'=>session_id());
+                    die(json_encode($arrData));
+                }
+            } else {
+                $arrData = array('uid'=>'0','uname'=>$ret[2]);
+                die(json_encode($arrData));
+            }
+        }
+        else if ($js_data['errcode']) {
+            $arrData = array('uid'=>'0','uname'=>$str_data);
+            die(json_encode($arrData));        
+        }
+        else{
+            $arrData = array('uid'=>'0','uname'=>'无法连接到微信服务器。。。');
+            die(json_encode($arrData));   
+        }
+        $arrData = array('uid'=>'0','uname'=>'服务器出错，请重试！');
+        die(json_encode($arrData));   
+    }
     
     public function forget(){
         //用base64_decode解开$_GET['p']的值
