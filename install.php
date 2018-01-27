@@ -287,7 +287,7 @@
                 $sql = "CREATE TABLE `$DbName`.`$TableName` (`acid` int(11) unsigned NOT NULL AUTO_INCREMENT,`acmoney` double(9,2) unsigned NOT NULL,`acclassid` int(8) NOT NULL,`actime` int(11) NOT NULL,`acremark` varchar(50) NOT NULL,`jiid` int(8) NOT NULL,`zhifu` int(8) NOT NULL,PRIMARY KEY (`acid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
-                    die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
+                    die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
                 }
             }
             //创建account_class表(已存在则报错)
@@ -298,7 +298,18 @@
                 $sql = "CREATE TABLE `$DbName`.`$TableName` (`classid` int(5) NOT NULL AUTO_INCREMENT,`classname` varchar(20) NOT NULL,`classtype` int(1) NOT NULL,`ufid` int(11) NOT NULL,PRIMARY KEY (`classid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
-                    die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
+                    die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
+                }
+            }
+            //创建user_login表
+            $TableName = $DbData['prefix']."user_login";
+            if(intable($DbData['name'],$TableName,$Conn)){
+                die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
+            }else{
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`lid` int(11) NOT NULL AUTO_INCREMENT,`uid` int(11) NOT NULL,`login_name` varchar(32) NOT NULL,`login_id` varchar(32) NOT NULL,`login_key` varchar(32) NOT NULL,`login_token` varchar(32) NOT NULL,PRIMARY KEY (`lid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $query=mysqli_query($Conn, $sql);
+                if(!$query){
+                    die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
                 }
             }
             //创建user表
@@ -309,18 +320,7 @@
                 $sql = "CREATE TABLE `$DbName`.`$TableName` (`uid` int(11) NOT NULL AUTO_INCREMENT,`username` varchar(24) NOT NULL,`password` varchar(32) NOT NULL,`email` varchar(255) NOT NULL,`utime` int(11) NOT NULL,PRIMARY KEY (`uid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
-                    die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
-                }
-            }
-            //创建user_login表
-            $TableName = $DbData['prefix']."user_login";
-            if(intable($DbData['name'],$TableName,$Conn)){
-                die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
-            }else{
-                $sql = "CREATE TABLE `$DbName`.`$TableName` (`lid` int(11) NOT NULL AUTO_INCREMENT,`uid` int(11) NOT NULL,`login_name` varchar(16) COLLATE 'utf8_general_ci' NOT NULL,`login_id` varchar(16) COLLATE 'utf8_general_ci' NOT NULL,`login_key` varchar(16) COLLATE 'utf8_general_ci' NOT NULL,`login_token` varchar(16) COLLATE 'utf8_general_ci' NOT NULL) ENGINE='MyISAM' COLLATE 'utf8_general_ci';";
-                $query=mysqli_query($Conn, $sql);
-                if(!$query){
-                    die(ShowAlert('请检查该用户是否有权限创建表。','创建表失败'));
+                    die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
                 }
             }
             //创建管理员账号
