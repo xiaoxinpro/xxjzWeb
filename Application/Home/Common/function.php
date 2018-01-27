@@ -15,6 +15,15 @@
             return false;
         }
     }
+
+    // function UserLoginSuccess($data) {
+    //     if ($data['uid'] > 0) {
+    //         session('uid',$data['uid']);
+    //         session('username',$username);
+    //         session('user_shell',md5($data['username'].$data['password']));
+    //         S('user_key_'.$username, null); //清除登录验证缓存
+    //     }
+    // }
     
     function UserLogin($username,$password){
         // $StrUser = "username='$username'";
@@ -35,7 +44,7 @@
         }
     }
 
-    function WeixinUserLogin($openid, $session_key, $unionid) {
+    function WeixinUserLogin($openid, $session_key = 'null', $unionid = 'null') {
         session('wx_openid',$openid);
         session('wx_session_key',$session_key);
         session('wx_unionid',$unionid);
@@ -44,29 +53,32 @@
         if ($data['uid'] > 0) {
             //存在用户，直接登陆
             $userData = M("user")->where(array('uid' => $data['uid']))->find();
-            if(UserLogin($userData['username'], $userData['password'])){
-                //完成登陆
-                return array(true, $userData['uid'], $userData['username']);
-            }else{
-                //系统（数据库）错误
-                return array(false, '0', '用户系统（数据库）错误，请关闭微信重试。');
-            }
+            session('uid',$data['uid']);
+            session('username',$username);
+            session('user_shell',md5($data['username'].$data['password']));
+            S('user_key_'.$username, null); //清除登录验证缓存
+            return array(true, $userData['uid'], $userData['username']);
         } else {
             //不存在用户，转为注册或绑定
             return array(true, '-1', '新用户，请提交信息注册登陆。');
         }
     }
 
-    function WeixinUserBind($uid, $openid, $session_key, $unionid) {
+    function WeixinUserBind($uid, $openid, $session_key = 'null', $unionid = 'null') {
         if (session('uid') == $uid) {
-            $loginData = array();
-            $loginData['uid'] = $uid;
-            $loginData['login_name'] = 'Weixin';
-            $loginData['login_id'] = $openid;
-            $loginData['login_key'] = $session_key;
-            $loginData['login_token'] = $unionid;
-            $lid = M('user_login')->add($loginData);
-            return array(true, '绑定成功', $uid);
+            $data = array();
+            $data['login_name'] = 'Weixin';
+            $data['login_id'] = $openid;
+            $isCheak = intval(M('user_login')->where($data)->getField('uid'));
+            if ($isCheak <= 0) {
+                $data['uid'] = $uid;
+                $data['login_key'] = $session_key ? $session_key : 'null';
+                $data['login_token'] = $unionid ? $unionid : 'null';
+                $lid = M('user_login')->add($data);
+                return array(true, '绑定成功', $uid);
+            } else {
+                return array(false, '绑定出错，该微信已绑定。', $uid);
+            }
         } else {
             return array(false, '绑定失败，账号未登陆。', $uid);
         }
@@ -83,22 +95,20 @@
         if (!$session_key) {
             return array(false, '非法操作session_key。');
         }
+        if (intval(M('user_login')->where(array('login_name'=>'Weixin', 'login_id'=>$openid))->getField('uid')) > 0) {
+            return array(false, '绑定出错，该微信被已绑定。');
+        }
         $ret = RegistShell($Username, $Password, $Email);
         if ($ret[0] === true) {
             //注册成功，写入新注册表
-            $userData = M("user")->where(array('uid' => $ret[0]))->find();
-            if(UserLogin($userData['username'], $userData['password'])){
-                //完成登陆，开始绑定微信
-                $ret = WeixinUserBind($userData['uid'], $openid, $session_key, $unionid);
-                if($ret[0] === true) {
-                    //绑定成功
-                    return array(true, '注册并绑定成功。');
-                } else {
-                    return array(false, '注册登陆出错，' + $ret[1]);
-                }
-            }else{
-                //系统（数据库）错误
-                return array(false, '写入数据库出错，请重新提交。');
+            $userData = M("user")->where(array('uid' => $ret[2]))->find();
+            UserLoginSuccess($userData);
+            $ret = WeixinUserBind($userData['uid'], $openid, $session_key, $unionid);
+            if($ret[0] === true) {
+                //绑定成功
+                return array(true, '注册并绑定成功。', $ret[2]);
+            } else {
+                return $ret;
             }
         } else {
             //注册失败
