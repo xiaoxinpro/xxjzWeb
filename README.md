@@ -1,9 +1,10 @@
 # 小歆记账WebApp项目(Web服务端)
 
+[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)
+
 ![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 1、简介
-
 
 小歆记账WebApp是一个面向移动端的记账工具，此项目为Web服务端；使用ThinkPHP+MySQL作为后台，AmazeUI作为前端。
 
@@ -11,7 +12,9 @@
 
 >Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
 
-目前项目已基本完成，你可以使用Demo账号登陆体验，也可以自行搭建项目。
+目前项目正在进行二次开发，增加微信小程序后台适配，你可以使用Demo账号登陆体验，也可以自行搭建[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)项目。
+
+>基础版本：https://github.com/xiaoxinpro/xxjzWeb/tree/Base
 
     Demo账号：demo
     Demo密码：xxgzs.org
@@ -105,7 +108,7 @@
 ## 4、数据结构
 
 ### 4.1、账目表 xxjz_account
-| 字段 | 类型 | 注释 |
+| 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |acid|int(11) unsigned |账目ID|
 |acmoney|double(9,2) unsigned|金额|
@@ -116,7 +119,7 @@
 |zhifu|int(1)|收入1/支出2|
 
 ### 4.2、分类表 xxjz_account_class
-| 字段 | 类型 | 注释 |
+| 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |classid|int(8) |分类ID|
 |classname|varchar(24)|分类名称|
@@ -124,13 +127,23 @@
 |ufid|int(11)|所属用户ID|
 
 ### 4.3、用户表 xxjz_user
-| 字段 | 类型 | 注释 |
+| 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |uid|int(11) 自动增量|用户ID|
 |username|varchar(24)|账号/用户名|
 |password|varchar(32)|密码|
 |email|varchar(255)|邮箱|
 |utime|int(11)|注册时间戳|
+
+### 4.4、用户登陆表 xxjz_user_login
+| 字段 | 类型 | 备注 |
+|:--------:|--------|--------|
+|lid|int(11) 自动增量|登陆ID|
+|uid|int(11)|用户ID|
+|login_name|varchar(32)|登陆平台名称|
+|login_id|varchar(32)|平台openid|
+|login_key|varchar(32)|平台session_key|
+|login_token|varchar(32)|平台unionid|
 
 ## 5、Bug 反馈及需求提交
 
