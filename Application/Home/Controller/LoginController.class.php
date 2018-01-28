@@ -184,7 +184,7 @@ class LoginController extends Controller {
         die(json_encode($arrData));   
     }
 
-    public function regist_Weixin(){
+    public function regist_weixin(){
         if (!C('WX_ENABLE')) {
             $arrData = array('uid'=>'0','msg'=>'功能未开启，请联系管理员。');
             die(json_encode($arrData)); 
@@ -212,6 +212,19 @@ class LoginController extends Controller {
             $arrData['msg'] = $ret[1];
             die(json_encode($arrData));
         }
+    }
+
+    public function shell_weixin() {
+        if (!C('WX_ENABLE')) {
+            $arrData = array('uid'=>'0','uname'=>'功能未开启，请联系管理员。');
+        } else {
+            if (UserShell(session('username'),session('user_shell'))) {
+                $arrData = array('uid'=>session('uid'),'uname'=>session('username'));
+            } else {
+                $arrData = array('uid'=>'0','uname'=>'用户验证失败，请重新登陆。');
+            }
+        }
+        die(json_encode($arrData)); 
     }
     
     public function forget(){
