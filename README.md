@@ -10,11 +10,11 @@
 
 >GitHub：https://github.com/xiaoxinpro/xxjzWeb
 
->Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
-
 目前项目正在进行二次开发，增加微信小程序后台适配，你可以使用Demo账号登陆体验，也可以自行搭建[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)项目。
 
 >基础版本：https://github.com/xiaoxinpro/xxjzWeb/tree/Base
+
+>Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
 
     Demo账号：demo
     Demo密码：xxgzs.org
