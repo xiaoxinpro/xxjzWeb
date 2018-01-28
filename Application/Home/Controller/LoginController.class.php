@@ -158,6 +158,7 @@ class LoginController extends Controller {
             $ret = WeixinUserLogin($js_data['openid'], $js_data['session_key'], $js_data['unionid']);
             if ($ret[0] === true) {
                 if ($ret[1] === '-1') {
+                    session('wx_code', $js_code);
                     $arrData = array('uid'=>'-1','uname'=>$ret[2],'sessionid'=>session_id());
                     die(json_encode($arrData));
                 } else {
@@ -181,6 +182,36 @@ class LoginController extends Controller {
         }
         $arrData = array('uid'=>'0','uname'=>'服务器出错，请重试！');
         die(json_encode($arrData));   
+    }
+
+    public function regist_Weixin(){
+        if (!C('WX_ENABLE')) {
+            $arrData = array('uid'=>'0','msg'=>'功能未开启，请联系管理员。');
+            die(json_encode($arrData)); 
+        }
+        if(IS_POST){
+            $js_code = I('post.js_code','','htmlspecialchars');
+            $username = I('post.regist_username','','htmlspecialchars');
+            $password = I('post.regist_password','','htmlspecialchars');
+            $email = I('post.regist_email','','htmlspecialchars');
+        }else{
+            $js_code = I('get.js_code','','htmlspecialchars');
+            $username = I('get.regist_username','','htmlspecialchars');
+            $password = I('get.regist_password','','htmlspecialchars');
+            $email = I('get.regist_email','','htmlspecialchars');
+        }
+        if ($js_code != session('wx_code')) {
+            $arrData = array('uid'=>'0','msg'=>'微信登陆验证失败，请重新使用微信登陆。');
+            die(json_encode($arrData)); 
+        } else {
+            $ret = WeixinUserRegist($username, $password, $email);
+            if ($ret[0] === true) {
+                session('wx_code', null);
+            }
+            $arrData['uid'] = ($ret[0]) ? $ret[2] : 0 ;
+            $arrData['msg'] = $ret[1];
+            die(json_encode($arrData));
+        }
     }
     
     public function forget(){
