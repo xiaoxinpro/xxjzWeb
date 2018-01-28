@@ -53,10 +53,10 @@
         if ($data['uid'] > 0) {
             //存在用户，直接登陆
             $userData = M("user")->where(array('uid' => $data['uid']))->find();
-            session('uid',$data['uid']);
-            session('username',$username);
-            session('user_shell',md5($data['username'].$data['password']));
-            S('user_key_'.$username, null); //清除登录验证缓存
+            session('uid',$userData['uid']);
+            session('username',$userData['username']);
+            session('user_shell',md5($userData['username'].$userData['password']));
+            S('user_key_'.$userData['username'], null); //清除登录验证缓存
             return array(true, $userData['uid'], $userData['username']);
         } else {
             //不存在用户，转为注册或绑定
@@ -102,7 +102,10 @@
         if ($ret[0] === true) {
             //注册成功，写入新注册表
             $userData = M("user")->where(array('uid' => $ret[2]))->find();
-            UserLoginSuccess($userData);
+            session('uid',$userData['uid']);
+            session('username',$userData['username']);
+            session('user_shell',md5($userData['username'].$userData['password']));
+            S('user_key_'.$userData['username'], null); //清除登录验证缓存
             $ret = WeixinUserBind($userData['uid'], $openid, $session_key, $unionid);
             if($ret[0] === true) {
                 //绑定成功
