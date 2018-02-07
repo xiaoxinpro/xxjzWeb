@@ -105,6 +105,10 @@ class ApiController extends Controller {
             case 'getall':
                 $arrData['data'] = GetClassData($uid);
                 break;
+
+            case 'addall':
+                $arrData['data'] = FastAddNewClass($data, $uid);
+                break;
             
             case 'add':
                 $data['ufid'] = $uid;
