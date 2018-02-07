@@ -760,6 +760,45 @@
         }
     }
 
+    //快速新建分类（当前uid下无分类时可用，主要用于新用户）
+    function FastAddNewClass($data, $uid) {
+        //去除重复数据
+        $data = array2_unique($data);
+
+        if ((intval($uid) > 0) && (count($data) > 0)) {
+            $condition = array();
+            //判断用户分类是否为空
+            if(M("account_class")->where(array('ufid' => intval($uid)))->find()){
+                return array(false, '已经创建过分类，无法使用快速创建。', 0);
+            }
+            //检查分类名合法性
+            foreach ($data as $key => $value) {
+                if(!is_array($value)){
+                    return array(false, '非法操作233', $key);
+                }
+                if(strlen($value['classname']) < 1){
+                    return array(false, '分类名不得为空！', $key);
+                }
+                if($value['classtype'] == 0){
+                    return array(false, '非法操作223', $key);
+                }
+                if($value['classtype'] > 2){
+                    return array(false, '无效的分类类别{\/}', $key);
+                }
+                array_push($condition, array('classname'=>$value['classname'], 'classtype'=>$value['classtype'], 'ufid'=>$uid));
+            }
+            //判断缓存数组长度
+            if (count($condition) == 0) {
+                return array(false, '有效写入数据为空', 0);
+            }
+            //批量写入数据库
+            $DbData = M('account_class')->addAll($condition);
+            return array(true, '快速新建分类完成！', intval($DbData));
+        } else {
+            return array(false, '非法操作234', 0);
+        }
+    }
+
     //修改分类名
     function editClassName($ClassName, $ClassId, $ClassType, $uid) {
         $isCheak = CheakClassName($ClassName, $uid, $ClassType, $ClassId);
@@ -1069,6 +1108,32 @@
             }
         }
         return $NumTime;
+    }
+
+    //二维数组去掉重复值
+    function array2_unique($array2D,$stkeep=false,$ndformat=true){
+      $joinstr='+++++';
+      // 判断是否保留一级数组键 (一级数组键可以为非数字)
+      if($stkeep) $stArr = array_keys($array2D);
+      // 判断是否保留二级数组键 (所有二级数组键必须相同)
+      if($ndformat) $ndArr = array_keys(end($array2D));
+      //降维,也可以用implode,将一维数组转换为用逗号连接的字符串
+      foreach ($array2D as $v){
+        $v = join($joinstr,$v);
+        $temp[] = $v;
+      }
+      //去掉重复的字符串,也就是重复的一维数组
+      $temp = array_unique($temp);
+      //再将拆开的数组重新组装
+      foreach ($temp as $k => $v){
+        if($stkeep) $k = $stArr[$k];
+        if($ndformat){
+          $tempArr = explode($joinstr,$v);
+          foreach($tempArr as $ndkey => $ndval) $output[$k][$ndArr[$ndkey]] = $ndval;
+        }
+        else $output[$k] = explode($joinstr,$v);
+      }
+      return $output;
     }
 
     //发送post
