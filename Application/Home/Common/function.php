@@ -793,6 +793,7 @@
             }
             //批量写入数据库
             $DbData = M('account_class')->addAll($condition);
+            ClearDataCache();
             return array(true, '快速新建分类完成！', intval($DbData));
         } else {
             return array(false, '非法操作234', 0);
