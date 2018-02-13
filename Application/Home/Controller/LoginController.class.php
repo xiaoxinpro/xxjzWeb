@@ -136,6 +136,52 @@ class LoginController extends Controller {
         }
     }
 
+    public function bind_weixin(){
+        if (!C('WX_ENABLE')) {
+            $arrData = array('uid'=>'0','uname'=>'功能未开启，请联系管理员。');
+            die(json_encode($arrData)); 
+        }
+        if(IS_POST){
+            $username = I('post.username','','htmlspecialchars');
+            $password = I('post.password','','htmlspecialchars');
+            $js_code  = I('post.js_code','','htmlspecialchars');
+        }else{
+            $username = I('get.username','','htmlspecialchars');
+            $password = I('get.password','','htmlspecialchars');
+            $js_code  = I('get.js_code','','htmlspecialchars');
+        }
+        if (session('wx_code') != $js_code) {
+            $arrData = array('uid'=>'0','uname'=>'请先使用微信登陆后再绑定。');
+            die(json_encode($arrData)); 
+        }
+        $openid = session('wx_openid');
+        $session_key = session('wx_session_key');      
+        $unionid = session('wx_unionid');
+        session(null); //清空session
+        if(UserLogin($username,$password)){
+            ClearAllCache(); //清除缓存
+            $arrData = array('uid'=>session('uid'),'uname'=>session('username'),'sessionid'=>session_id());
+            if ($openid) {
+                $ret = WeixinUserBind(session('uid'), $openid, $session_key, $unionid);
+            }
+            die(json_encode($arrData));
+        } else if(intval(S('login_times_'.$username)) > C('USER_LOGIN_TIMES')) {
+            session('wx_code', $js_code);
+            session('wx_openid',$openid);
+            session('wx_session_key',$session_key);
+            session('wx_unionid',$unionid);
+            $arrData = array('uid'=>'0','uname'=>'你的账号已被锁定，请联系管理员解锁！');
+            die(json_encode($arrData));
+        } else {
+            session('wx_code', $js_code);
+            session('wx_openid',$openid);
+            session('wx_session_key',$session_key);
+            session('wx_unionid',$unionid);
+            $arrData = array('uid'=>'0','uname'=>'用户名或密码错误！');
+            die(json_encode($arrData));
+        }
+    }
+
     public function login_weixin(){
         if (!C('WX_ENABLE')) {
             $arrData = array('uid'=>'0','uname'=>'功能未开启，请联系管理员。');
