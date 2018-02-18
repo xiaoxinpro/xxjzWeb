@@ -378,6 +378,12 @@
         $txt = $txt."'WX_OPENID'         => 'openid',        //微信小程序唯一标识 \n";
         $txt = $txt."'WX_SECRET'         => 'secret',        //微信小程序的 app secret \n";
 
+        $txt = $txt."\n//自定义配置\n";
+        $txt = $txt."'XXJZ_TITLE'        => '小歆记账',       //网站名称\n";
+        $txt = $txt."'XXJZ_KEYWORDS'     => '',              //网站关键字\n";
+        $txt = $txt."'XXJZ_DESCRIPTION'  => '',              //网站描述\n";
+        $txt = $txt."'XXJZ_WELCOME'      => '欢迎使用小歆记账！',     //网站欢迎语\n";
+
         $txt = $txt."\n); \n";
         fwrite($cFile, $txt);
         fclose($cFile);
