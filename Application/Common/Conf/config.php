@@ -33,5 +33,10 @@ return array(
     'WX_ENABLE'         => false,            //使能微信小程序功能
     'WX_OPENID'         => 'openid',        //微信小程序唯一标识
     'WX_SECRET'         => 'secret',        //微信小程序的 app secret
-    
+
+    //自定义配置
+    'XXJZ_TITLE'        => '小歆记账App',    //网站名称
+    'XXJZ_KEYWORDS'     => '',              //网站关键字
+    'XXJZ_DESCRIPTION'  => '',              //网站描述
+    'XXJZ_WELCOME'      => '欢迎使用！',     //网站欢迎语
 );
