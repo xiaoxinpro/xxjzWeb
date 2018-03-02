@@ -58,6 +58,9 @@ class ApiController extends Controller {
         $uid = session('uid');
         $arrData = array();
         if ($uid > 0) {
+            if ($type == "retime") {
+                ClearAllCache(); //清除缓存
+            }
             $arrData['uid'] = $uid;
             $arrData['data'] = AccountStatisticProcess($uid);
         } else {
