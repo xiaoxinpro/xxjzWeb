@@ -518,14 +518,16 @@
     }
     
     function AccountStatisticProcess($uid) {
-        $ArrData = array();
+        $ArrData = S('account_tatistic_'.$uid);
         
-        if(S('account_tatistic_'.$uid)){
-            return S('account_tatistic_'.$uid);
+        if($ArrData && ($ArrData['TodayDate'] == date("Y-m-d"))){
+            return $ArrData;
         }
+        $ArrData = array();
         
         //今日收支统计
         $today = date("Y-m-d");
+        $ArrData['TodayDate'] = $today;
         $StartTime = strtotime($today." 0:0:0");
         $EndTime = strtotime($today." 23:59:59");
         $ArrData['TodayInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
