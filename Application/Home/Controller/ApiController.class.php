@@ -261,8 +261,34 @@ class ApiController extends Controller {
         }
     }
 
-    public function test()
-    {
+    //自动复制功能
+    public function autocopy(){
+        if (IS_POST) {
+            $type = I('post.type','get');
+            $data = I('post.data','');
+        } else {
+            $type = I('get.type','get');
+            $data = I('get.data','');
+        }
+        $uid = session('uid');
+        if (($uid == C('ADMIN_UID')) && ($type == 'updata')) {
+            $autoCopyArray['strData'] = $data;
+            $autoCopyFile = fopen('./autoCopy.json', 'w') or die("{}");
+            $str = json_encode($autoCopyArray);
+            fwrite($autoCopyFile, $str);
+            fclose($autoCopyFile);
+            die($str);
+        } else if ($uid > 0) {
+            $autoCopyFile = fopen('./autoCopy.json', 'r') or die("{}");
+            $str = fread($autoCopyFile, filesize("./autoCopy.json"));
+            fclose($autoCopyFile);
+            die($str);
+        } else {
+            die('非法操作autoCopy.');
+        }
+    }
+
+    public function test(){
         $uid = session('uid');
         //C('USER_LOGIN_TIMES', 15);
         dump(json_decode(getMonthData(2016, 1, $uid)));
