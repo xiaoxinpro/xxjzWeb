@@ -384,6 +384,9 @@
         $txt = $txt."'XXJZ_DESCRIPTION'  => '',              //网站描述\n";
         $txt = $txt."'XXJZ_WELCOME'      => '欢迎使用小歆记账！',     //网站欢迎语\n";
 
+        $txt = $txt."//管理员配置\n";
+        $txt = $txt."'ADMIN_UID'         => 1,               //管理员UID\n";
+
         $txt = $txt."\n); \n";
         fwrite($cFile, $txt);
         fclose($cFile);
