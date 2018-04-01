@@ -21,7 +21,7 @@
             
             <p><input type="submit" class="am-btn am-btn-secondary am-btn-block am-radius" name="login_submit" value="登录"></p>
             
-            <p><button type="button" class="am-btn am-btn-block am-btn-success am-radius" data-am-modal="{target: '#my-xxjz'}">客户端</button></p>
+            <p><button type="button" class="am-btn am-btn-block am-btn-success am-radius" data-am-modal="{target: '#my-xxjz'}">客户端 / 小程序</button></p>
 
             <p><button type="button" class="am-btn am-btn-block am-btn-default am-radius" data-am-modal="{target: '#my-popup'}">忘记密码</button></p>
             
@@ -32,6 +32,9 @@
     <div style="position:fixed; bottom:0; width:100%; line-height:200%; background-color: #fff; z-index: -1;">
       <div class="am-text-center am-text-secondary am-text-sm">
         <a href="__APP__/Home/Login/regist">注册账号</a>
+        &nbsp;|&nbsp;
+        <a href="#" data-am-modal="{target: '#my-popup-xxjzWeChat'}">小程序</a>
+        <span class="am-badge am-badge-danger am-round">Hot</span>
         &nbsp;|&nbsp;
         <a href="#" data-am-modal="{target: '#my-popup'}">关于我们</a>
       </div>
@@ -74,25 +77,39 @@
 <div class="am-popup" id="my-xxjz">
   <div class="am-popup-inner">
     <div class="am-popup-hd">
-        <h4 class="am-popup-title">APP下载</h4>
+        <h4 class="am-popup-title">客户端</h4>
         <span data-am-modal-close class="am-close">&times;</span>
     </div>
     <div class="am-container" >
+
+      <fieldset>
+        <legend>微信小程序</legend>
+        <figure data-am-widget="figure" class="am am-figure am-figure-default "   data-am-figure="{  pureview: 'false' }">
+          <img src="http://ol8zhns69.bkt.clouddn.com/xxjzWeChat.png?imageView2/2/w/172/h/172/interlace/1/q/100" data-rel="http://ol8zhns69.bkt.clouddn.com/xxjzWeChatW.png" alt="小歆记账 for 微信小程序"/>
+        </figure>
+        <div class="am-text-center">使用微信扫描此二维码，即可使用小歆记账。</div>
+        <hr />
+      </fieldset>
+
       <fieldset>
         <legend>小歆记账AUI</legend>
-
-          <!-- <img class="am-img-responsive" src="http://s.amazeui.org/media/i/demos/bing-1.jpg" alt=""/> -->
-          <a class="am-btn am-btn-success am-btn-block am-radius" href="{$app_ios_url}">
-            <i class="am-icon-apple"></i>&nbsp;苹果
-          </a>
-
-          <!-- <img class="am-img-responsive" src="http://s.amazeui.org/media/i/demos/bing-1.jpg" alt=""/> -->
-          <a class="am-btn am-btn-success am-btn-block am-radius" href="{$app_android_url}">
-            <i class="am-icon-android"></i>&nbsp;安卓
-          </a>
-          
-          <hr />
+        <a class="am-btn am-btn-success am-btn-block am-radius" href="{$app_ios_url}">
+          <i class="am-icon-apple"></i>&nbsp;苹果（停止使用）
+        </a>
+        <a class="am-btn am-btn-success am-btn-block am-radius" href="{$app_android_url}">
+          <i class="am-icon-android"></i>&nbsp;安卓（停止维护）
+        </a>
+        <hr />
       </fieldset>
+
+    </div>
+  </div>
+</div>
+
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="my-popup-xxjzWeChat">
+  <div class="am-modal-dialog">
+    <div class="am-modal-bd">
+      <img src="http://ol8zhns69.bkt.clouddn.com/xxjzWeChat.png?imageView2/2/w/172/h/172/interlace/1/q/100" alt="小歆记账 for 微信小程序"/>
     </div>
   </div>
 </div>
