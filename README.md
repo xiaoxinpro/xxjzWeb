@@ -1,6 +1,6 @@
 # 小歆记账WebApp项目(Web服务端)
 
-[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)
+[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base) | [微信小程序](https://github.com/xiaoxinpro/xxjzWeChat)
 
 ![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
