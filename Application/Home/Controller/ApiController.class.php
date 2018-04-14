@@ -33,14 +33,43 @@ class ApiController extends Controller {
     public function user() {
         if (IS_POST) {
             $uid = I('post.uid',0,'intval');
+            $type = I('post.type','get');
+            $data = json_decode(base64_decode(I('post.data',null)),true);
         } else {
             $uid = I('get.uid',0,'intval');
+            $type = I('get.type','get');
+            $data = json_decode(base64_decode(I('get.data',null)),true);
         }
         $arrData = array();
         if ($uid == session('uid')){
-            $arrData['uid'] = $uid;
-            $arrData['username'] = session('username');
-            $arrData['email'] = GetUserEmail($uid,true);
+            if ($type == 'get') {
+                $arrData['uid'] = $uid;
+                $arrData['username'] = session('username');
+                $arrData['email'] = GetUserEmail($uid,true);
+            } else if ($type == 'updataUsername') {
+                $ret = UpdataUserName($uid, $data['username'], $data['email'], $data['password']);
+                if ($ret[0]) {
+                    $arrData['uid'] = $uid;
+                    $arrData['username'] = $ret[1];
+                } else {
+                    $arrData['uid'] = 0;
+                    $arrData['username'] = $ret[1];
+                }
+            } else if ($type == 'updataPassword') {
+                $ret = UpdataPassword($uid, $data['old'], $data['new']);
+                if ($ret[0]) {
+                    $arrData['uid'] = $uid;
+                    $arrData['username'] = $ret[1];
+                } else {
+                    $arrData['uid'] = 0;
+                    $arrData['username'] = $ret[1];
+                }
+            } else if ($type == 'updataEmail') {
+                $arrData['uid'] = 0;
+                $arrData['username'] = '邮箱不可修改，请联系管理员！';
+            } else{
+                $arrData['uid'] = 0;
+            }
         } else {
             $arrData['uid'] = 0;
         }
