@@ -295,13 +295,23 @@ class ApiController extends Controller {
         if (IS_POST) {
             $type = I('post.type','get');
             $data = I('post.data','');
+            $enable = I('post.enable', false, 'boolean');
+            $enablePullDown = I('post.enablePullDown', false, 'boolean');
         } else {
             $type = I('get.type','get');
             $data = I('get.data','');
+            $enable = I('get.enable', false, 'boolean');
+            $enablePullDown = I('get.enablePullDown', false, 'boolean');
         }
         $uid = session('uid');
         if (($uid == C('ADMIN_UID')) && ($type == 'updata')) {
             $autoCopyArray['strData'] = $data;
+            if ($enable) {
+                $autoCopyArray['enable'] = $enable;
+            }
+            if ($enablePullDown) {
+                $autoCopyArray['enablePullDown'] = $enablePullDown;
+            }
             $autoCopyFile = fopen('./autoCopy.json', 'w') or die("{}");
             $str = json_encode($autoCopyArray);
             fwrite($autoCopyFile, $str);
