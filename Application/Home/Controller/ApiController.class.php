@@ -156,7 +156,12 @@ class ApiController extends Controller {
                 break;
 
             case 'del':
-                $arrData['data'] = GetClassIdData($data['classid'], $uid);
+                if (intval(GetClassAccountNum($data['classid'],$uid)) > 0) {
+                    $DbData = GetClassIdData($data['classid'],$uid);
+                    $arrData['data'] = array(false, '【'.$DbData[1]['classname'].'】分类数据不为空，请先处理记账数据！');
+                }else{
+                    $arrData['data'] = DelClass($data['classid'],$uid);
+                }
                 break;
 
             case 'move':
