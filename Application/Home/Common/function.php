@@ -694,6 +694,49 @@
         }
     }
 
+    //校验资金账户名
+    function CheakFundsName($FundsName, $uid, $FundsId=0) {
+        if(strlen($FundsName) < 1){
+            return array(false, '资金账户名不得为空！');
+        }
+
+        if ($FundsName == "默认") {
+            return array(false, '资金账户名不可为默认。');
+        }
+
+        $sql = array('fundsname' => $FundsName, 'uid' => $uid);
+        $FundsData = M("account_funds")->where($sql)->select();
+        if (is_array($FundsData) && count($FundsData) > 0) {
+            if ($FundsId > 0) {
+                foreach ($FundsData as $key => $FundsArr) {
+                    if (intval($FundsData[$key]['fundsid']) !== intval($FundsId)) {
+                        return array(false, '资金账户名已存在!');
+                    }
+                }
+            } else {
+                return array(false, '资金账户名已存在...');
+            }
+        }
+        return array(true, $FundsName);
+    }
+
+    //新建资金账户
+    function AddNewFunds($FundsName, $uid) {
+        $isCheak = CheakFundsName($FundsName, $uid);
+        if($isCheak[0]){
+            $data = array('fundsname'=>$isCheak[1],'uid'=>$uid);
+            $DbData = M('account_funds')->add($data);
+            ClearDataCache();
+            if($DbData > 0){
+                return array(true,'新建资金账户成功!');
+            }else{
+                return array(false,'写入数据库出错(&_&)');
+            }
+        }else{
+            return $isCheak;
+        }
+    }
+
     //校验分类名
     function CheakClassName($ClassName, $uid, $ClassType=0, $ClassId=0) {
         if(strlen($ClassName) < 1){
@@ -717,7 +760,7 @@
                 return array(false, '分类名已存在...');
             }
         }
-        return array(true, $ClassName);;
+        return array(true, $ClassName);
     }
     
     //校验新分类
