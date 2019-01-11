@@ -11,7 +11,7 @@ class FundsController extends BaseController {
             ClearDataCache(); //清除缓存
             ShowAlert($Updata[1]);
         }
-        
+        GetFundsData($uid);
         $default = array();
         $default['inmoney'] = 100;
         $default['outmoney'] = 200;

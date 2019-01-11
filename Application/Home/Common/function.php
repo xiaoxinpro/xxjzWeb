@@ -737,6 +737,15 @@
         }
     }
 
+    //获取资金账户数据
+    function GetFundsData($uid) {
+        $sql = array('uid' => $uid);
+        // $DbData = M('account_funds')->cache('account_funds_'.$uid)->where($sql)->select();
+        $DbData = M('account_funds')->where($sql)->select();
+        dump($DbData);
+        return;
+    }
+
     //校验分类名
     function CheakClassName($ClassName, $uid, $ClassType=0, $ClassId=0) {
         if(strlen($ClassName) < 1){
