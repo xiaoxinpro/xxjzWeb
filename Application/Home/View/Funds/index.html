@@ -1,0 +1,53 @@
+<extend name="Public:common"/>
+<block name="main">
+    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+        <fieldset id="accordion">
+            <legend>新建资金账户</legend>
+            <div class="am-input-group">
+                <span class="am-input-group-label"><b>名称</b></span>
+                <input type="text" class="am-form-field" id="text-class" name="class_name" placeholder="输入资金账户名称">
+            </div>
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="class_submit" value="新建"></p>
+        </fieldset>
+    </form>
+
+    <p></p>
+    <fieldset id="accordion">
+        <legend>管理资金账户</legend>
+        <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
+            <thead>
+                <tr>
+                    <th width='80' bgcolor="#FFFFFF">资金账户</th>
+                    <th width='80' bgcolor="#FFFFFF">收入金额</th>
+                    <th width='80' bgcolor="#FFFFFF">支出金额</th>
+                    <th width='80' bgcolor="#FFFFFF">记录数</th>
+                    <th width='80' bgcolor="#FFFFFF">操作</th>
+                </tr>
+            </thead>
+            <tbody class="">
+                <tr>
+                    <td class="am-text-middle">默认</td>
+                    <td class="am-text-middle">{$default.inmoney}</td>
+                    <td class="am-text-middle">{$default.outmoney}</td>
+                    <td class="am-text-middle">{$default.count}</td>
+                    <td class="am-text-middle"><a href="">编辑</a> <a href="">删除</a></td>
+                </tr>
+                <volist name="ShowData" id="data">
+                <tr>
+                    <td class="am-text-middle">{$data.funds}</td>
+                    <td class="am-text-middle">{$data.inmoney}</td>
+                    <td class="am-text-middle">{$data.outmoney}</td>
+                    <td class="am-text-middle">{$data.count}</td>
+                    <td class="am-text-middle">
+                        <php>
+                            echo "<a href=".U("Home/Edit/index?id=".$data['id']).">编辑</a>";
+                            echo " ";
+                            echo "<a href=\"javascript:void(0);\" onclick=\"isDelete('__APP__/Home/Edit/del/id/".$data['id']."')\" >删除</a>";
+                        </php>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </fieldset>
+</block>
