@@ -19,12 +19,19 @@ class IndexController extends BaseController {
         
         //获取指定页数据
         $DbAccount = GetAccountData($uid, $p);
+
+        //获取资金账户数据
+        $DbFunds = array();
+        $FundsData = GetFundsData($uid);
+        foreach ($FundsData as $key => $data) {
+            $DbFunds[$data[id]] = $data[name];
+        }
         
         //获取分类列表
         $DbClass = GetClassData($uid);
         
         //整合List表格数组
-        $ListData = OutListData($DbAccount,$DbClass);
+        $ListData = OutListData($DbAccount,$DbClass,$DbFunds);
         $this -> assign('Page', $ListData[0]);
         $this -> assign('PageMax', $ListData[1]);
         $this -> assign('ArrPage', $ListData[2]);
