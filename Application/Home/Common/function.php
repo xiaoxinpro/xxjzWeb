@@ -741,9 +741,25 @@
     function GetFundsData($uid) {
         $sql = array('uid' => $uid);
         // $DbData = M('account_funds')->cache('account_funds_'.$uid)->where($sql)->select();
+        $retData = array();
+        array_push($retData, array('name'=>'默认', 'id'=>0, 'money'=> GetFundsAccountSumData(0,$uid)));
         $DbData = M('account_funds')->where($sql)->select();
-        dump($DbData);
-        return;
+        foreach ($DbData as $key => $FundsArr) {
+            array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>$FundsArr['fundsid'], 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
+        }
+        return $retData;
+    }
+
+    //获取指定资金账户记账汇总
+    function GetFundsAccountSumData($FundsId, $uid) {
+        $sql = array('fid'=>$FundsId, 'jiid'=>$uid);
+        $FundsCount = intval(M('account')->where($sql)->count('acmoney'));
+        $sql['zhifu'] = 1; //收入
+        $InMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
+        $sql['zhifu'] = 2; //支出
+        $OutMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
+        $OverMoneySum = $InMoneySum - $OutMoneySum;
+        return array('over'=>$OverMoneySum, 'in'=>$InMoneySum, 'out'=>$OutMoneySum, 'count'=>$FundsCount);
     }
 
     //校验分类名
