@@ -21,6 +21,7 @@ class EditController extends BaseController {
             $data['actime']    = I('post.edit_time');
             $data['acremark']  = I('post.edit_mark');
             $data['zhifu']     = I('post.edit_type');
+            $data['fid']       = I('post.edit_funds');
             $Updata = UpdataAccountData($data);
             if($Updata[0]){
                 ClearDataCache(); //清除缓存
@@ -34,12 +35,16 @@ class EditController extends BaseController {
             }
         }else{
             $DbData = GetIdData($id);
+            $FundsData = GetFundsData($uid);
+            $DbFunds = $DbData['fid'];
             $MoneyClass[1] = GetClassData($uid,1);
             $MoneyClass[2] = GetClassData($uid,2);
             $DbClass = $MoneyClass[$DbData['zhifu']];
             $ShowData = ArrDataToShowData($DbData, $DbClass);
             if($DbData) {
                 $this -> assign('refURL',$refURL);
+                $this -> assign('DbFunds',$DbFunds);
+                $this -> assign('FundsData',$FundsData);
                 $this -> assign('DbClass',$DbClass);
                 $this -> assign('ShowData',$ShowData);
                 $this -> assign('MoneyClass',"'".htmlspecialchars(json_encode($MoneyClass))."'");

@@ -25,6 +25,20 @@
                 </div>
                 <div><p></p></div>
                 <div class="am-input-group">
+                    <span class="am-input-group-label"><b>账户</b></span>
+                    <select id="select-funds" class="am-form-field" name="edit_funds">
+                    <foreach name="FundsData" item="data">
+                        <if condition="$data['id'] eq $DbFunds">
+                            <option value="{$data.id}" selected>{$data.name}</option>
+                        <else/>
+                            <option value="{$data.id}">{$data.name}</option>
+                        </if>
+                    </foreach>
+                    </select>
+                    <span class="am-form-caret"></span>
+                </div>
+                <div><p></p></div>
+                <div class="am-input-group">
                     <span class="am-input-group-label"><b>分类</b></span>
                     <select id="select-class" class="am-form-field" name="edit_class">
                     <option value="{$ShowData.classid}">{$ShowData.class}</option>
