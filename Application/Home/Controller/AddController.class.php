@@ -13,6 +13,7 @@ class AddController extends BaseController {
             $data['actime']    = I('post.add_time');
             $data['acremark']  = I('post.add_mark');
             $data['zhifu']     = I('post.add_type');
+            $data['fid']       = I('post.add_funds');
             $data['jiid']      = $uid;
             $Updata = AddAccountData($data);
             
@@ -27,6 +28,7 @@ class AddController extends BaseController {
             // }
         }
         // SetRefURL(__SELF__);
+        $FundsData = GetFundsData($uid);
         $MoneyClass[1] = GetClassData($uid,1);
         $MoneyClass[2] = GetClassData($uid,2);
         if (!is_array($MoneyClass[2])) {
@@ -36,6 +38,7 @@ class AddController extends BaseController {
         }
         $this -> assign('type',$type);
         $this -> assign('refURL',$refURL);
+        $this -> assign('FundsData',$FundsData);
         $this -> assign('inMoneyClass',$MoneyClass[1]);
         $this -> assign('outMoneyClass',$MoneyClass[2]);
         $this -> assign('MoneyClass',"'".htmlspecialchars(json_encode($MoneyClass))."'");

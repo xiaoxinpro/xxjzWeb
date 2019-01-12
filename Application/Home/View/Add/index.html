@@ -26,6 +26,16 @@
                     </div>
                     <div><p></p></div>
                     <div class="am-input-group">
+                        <span class="am-input-group-label"><b>账户</b></span>
+                        <select id="select-funds" class="am-form-field" name="add_funds">
+                        <foreach name="FundsData" item="data">
+                            <option value="{$data.id}">{$data.name}</option>
+                        </foreach>
+                        </select>
+                        <span class="am-form-caret"></span>
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
                         <span class="am-input-group-label"><b>分类</b></span>
                         <select id="select-class" class="am-form-field" name="add_class">
                         <foreach name="outMoneyClass" item="ClassName">
@@ -64,6 +74,16 @@
                         <span class="am-input-group-label"><b>金额</b></span>
                         <input type="number" class="am-form-field" id="text-money" name="add_money" step=0.01 placeholder="输入收入金额">
                         <p></p>
+                    </div>
+                    <div><p></p></div>
+                    <div class="am-input-group">
+                        <span class="am-input-group-label"><b>账户</b></span>
+                        <select id="select-funds" class="am-form-field" name="add_funds">
+                        <foreach name="FundsData" item="data">
+                            <option value="{$data.id}">{$data.name}</option>
+                        </foreach>
+                        </select>
+                        <span class="am-form-caret"></span>
                     </div>
                     <div><p></p></div>
                     <div class="am-input-group">
