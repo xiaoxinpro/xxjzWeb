@@ -458,19 +458,27 @@
     }
     
     //数据库数组数据 转 显示数据
-    function ArrDataToShowData($ArrData, $ArrClass) {
+    function ArrDataToShowData($ArrData, $ArrClass, $ArrFunds) {
         $retShowData = array();
         if($ArrData['zhifu'] == 1){
             $classType = '收入';
         }else{
             $classType = '支出';
         }
+
+        if (is_array($ArrFunds)) {
+            $fundsId = $ArrData['fid'];
+            $fundsName = $ArrFunds[$fundsId];
+        }
+
         $classId = $ArrData['acclassid'];
         $className = $ArrClass[$classId];
         
         $retShowData['id']      = $ArrData['acid'];
         $retShowData['money']   = $ArrData['acmoney'];
-        $retShowData['classid'] = $ArrData['acclassid'];
+        $retShowData['fundsid'] = $fundsId;
+        $retShowData['funds']   = $fundsName;
+        $retShowData['classid'] = $classId;
         $retShowData['class']   = $className;
         $retShowData['type']    = $classType;
         $retShowData['time']    = $ArrData['actime'];
@@ -481,7 +489,7 @@
     }
     
     //整合List表格数组
-    function OutListData($ArrAccount, $ArrClass) {
+    function OutListData($ArrAccount, $ArrClass, $ArrFunds = null) {
         $Page = $ArrAccount['page'];
         $PageMax = $ArrAccount['pagemax'];
         $ArrPage = array();
@@ -490,7 +498,7 @@
         }
         $retShowData = array();
         foreach($ArrAccount['data'] as $key => $ArrData) {
-            $retShowData[$key] = ArrDataToShowData($ArrData, $ArrClass);
+            $retShowData[$key] = ArrDataToShowData($ArrData, $ArrClass, $ArrFunds);
         }
         return array($Page,$PageMax,$ArrPage,$retShowData);
     }
