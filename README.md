@@ -26,6 +26,8 @@
 
 ### 2.1、安装
 
+部署项目请选择[Releases](https://github.com/xiaoxinpro/xxjzWeb/releases)版本，master分支属于开发分支，可能存在一些BUG无法正常使用。
+
 #### 2.1.1、快速安装
 部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与管理员账号、密码和邮箱。提交后若配置信息无误则自动跳转到登陆页面。
 
