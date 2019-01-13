@@ -41,7 +41,7 @@
 
 > 如果你只是日常使用阅读到这里就可以了，如果你想进一步完善或优化请往下看。
 
-#### 2.1.2、手动安装
+#### 2.1.2、手动安装（不推荐）
 部署项目文件到网站目录
 
 将根目录下的 `xxjz.sql` 文件导入到数据库中，
@@ -134,21 +134,29 @@
 |:--------:|--------|--------|
 |acid|int(11) unsigned |账目ID|
 |acmoney|double(9,2) unsigned|金额|
-|acclassid|int(8)|分类ID|
+|acclassid|int(11)|分类ID|
 |actime|int(11)|时间戳|
-|acremark|varchar(50)|备注|
+|acremark|varchar(64)|备注|
 |jiid|int(11)|用户ID|
 |zhifu|int(1)|收入1/支出2|
+|fid|int(11)[0]|资金账户ID|
 
 ### 4.2、分类表 xxjz_account_class
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
-|classid|int(8) |分类ID|
+|classid|int(11) |分类ID|
 |classname|varchar(24)|分类名称|
 |classtype|int(1)|收入1/支出2|
 |ufid|int(11)|所属用户ID|
 
-### 4.3、用户表 xxjz_user
+### 4.3、分类表 xxjz_account_funds
+| 字段 | 类型 | 备注 |
+|:--------:|--------|--------|
+|fundsid|int(11)|资金账户ID|
+|fundsname|varchar(24)|资金账户名称|
+|ufid|int(11)|所属用户ID|
+
+### 4.4、用户表 xxjz_user
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |uid|int(11) 自动增量|用户ID|
@@ -157,7 +165,7 @@
 |email|varchar(255)|邮箱|
 |utime|int(11)|注册时间戳|
 
-### 4.4、用户登陆表 xxjz_user_login
+### 4.5、用户登陆表 xxjz_user_login
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |lid|int(11) 自动增量|登陆ID|
