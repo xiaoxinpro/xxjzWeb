@@ -9,6 +9,17 @@
             <div id="do-not-say-1" class="am-collapse">
         </if>
         <div class="am-input-group">
+            <span class="am-input-group-label"><b>资金账户</b></span>
+            <select id="select-funds" class="am-form-field" name="find_funds">
+            <option value="">全部账户</option>
+            <foreach name="FundsData" item="data">
+                <option value="{$data.id}">{$data.name}</option>
+            </foreach>
+            </select>
+            <span class="am-form-caret"></span>
+        </div>
+        <div><p></p></div>
+        <div class="am-input-group">
             <span class="am-input-group-label"><b>选择分类</b></span>
             <select id="select-type" class="am-form-field" name="find_class" value="{$FindDataClass}">
                 <option value="all">全部分类</option>

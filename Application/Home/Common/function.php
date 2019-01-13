@@ -313,6 +313,9 @@
     function GetFindSqlArr($data)
     {
         $arrSQL = array();
+        if ($data['fid'] !== "") {
+            $arrSQL['fid'] = intval($data['fid']);
+        }
         if($data['acid']){
             $arrSQL['acid'] = $data['acid'];
         }

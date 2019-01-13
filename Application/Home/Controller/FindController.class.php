@@ -23,6 +23,7 @@ class FindController extends BaseController {
             $data['starttime'] = I('post.find_start_time');
             $data['endtime']   = I('post.find_end_time');
             $data['acremark']  = I('post.find_mark');
+            $data['fid']       = I('post.find_funds');
             $data['jiid']      = $uid;
             
             //更新缓存
@@ -72,6 +73,7 @@ class FindController extends BaseController {
         
         $this -> assign('inClassData',GetClassData($uid,1));
         $this -> assign('outClassData',GetClassData($uid,2));
+        $this -> assign('FundsData',GetFundsData($uid));
         $this -> assign('ShowFind',$ShowFind);
         $this -> display();
     }
