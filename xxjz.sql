@@ -9,22 +9,32 @@ DROP TABLE IF EXISTS `xxjz_account`;
 CREATE TABLE `xxjz_account` (
   `acid` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `acmoney` double(9,2) unsigned NOT NULL,
-  `acclassid` int(8) NOT NULL,
+  `acclassid` int(11) NOT NULL,
   `actime` int(11) NOT NULL,
-  `acremark` varchar(50) NOT NULL,
-  `jiid` int(8) NOT NULL,
-  `zhifu` int(8) NOT NULL,
+  `acremark` varchar(64) NOT NULL,
+  `jiid` int(11) NOT NULL,
+  `zhifu` int(1) NOT NULL,
+  `fid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`acid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `xxjz_account_class`;
 CREATE TABLE `xxjz_account_class` (
-  `classid` int(5) NOT NULL AUTO_INCREMENT,
-  `classname` varchar(20) NOT NULL,
+  `classid` int(11) NOT NULL AUTO_INCREMENT,
+  `classname` varchar(24) NOT NULL,
   `classtype` int(1) NOT NULL,
   `ufid` int(11) NOT NULL,
   PRIMARY KEY (`classid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `xxjz_account_funds`;
+CREATE TABLE `xxjz_account_funds` (
+  `fundsid` int(11) NOT NULL AUTO_INCREMENT,
+  `fundsname` varchar(24) NOT NULL,
+  `uid` int(11) NOT NULL,
+  PRIMARY KEY (`fundsid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -53,4 +63,4 @@ CREATE TABLE `xxjz_user_login` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- 2018-12-28 10:50:50
+-- 2019-01-13 11:11:02
