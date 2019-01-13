@@ -1,6 +1,6 @@
 # 小歆记账WebApp项目(Web服务端)
 
-[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base) | [微信小程序](https://github.com/xiaoxinpro/xxjzWeChat)
+[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base) | [V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x) | [微信小程序](https://github.com/xiaoxinpro/xxjzWeChat)
 
 ![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -10,7 +10,11 @@
 
 >GitHub：https://github.com/xiaoxinpro/xxjzWeb
 
-目前项目正在进行二次开发，增加微信小程序后台适配，你可以使用Demo账号登陆体验，也可以自行搭建[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)项目。
+项目[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x)已经完成功能开发，后续若有BUG还会进行升级，功能将不会再增加了。
+
+目前正在进行V2.x版本开发，主要增加资金账户功能；现在尚不成熟，建议部署上使用相对成熟的[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x)。
+
+你可以使用Demo账号登陆体验V1.x版本，也可以自行搭建[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)项目。
 
 >基础版本：https://github.com/xiaoxinpro/xxjzWeb/tree/Base
 
