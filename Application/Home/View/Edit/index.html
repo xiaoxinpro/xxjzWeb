@@ -12,19 +12,6 @@
                 </div>
                 <div><p></p></div>
                 <div class="am-input-group">
-                    <span class="am-input-group-label"><b>类别</b></span>
-                    <select id="select-type" class="am-form-field" name="edit_type" onchange="ChangClass({$MoneyClass},'select-type','select-class')">
-                        <if condition="$ShowData['type'] eq '收入'">
-                            <option value="1">收入</option>
-                            <option value="2">支出</option>
-                        <else/>
-                            <option value="2">支出</option>
-                            <option value="1">收入</option>
-                        </if>
-                    </select>
-                </div>
-                <div><p></p></div>
-                <div class="am-input-group">
                     <span class="am-input-group-label"><b>账户</b></span>
                     <select id="select-funds" class="am-form-field" name="edit_funds">
                     <foreach name="FundsData" item="data">
@@ -36,6 +23,19 @@
                     </foreach>
                     </select>
                     <span class="am-form-caret"></span>
+                </div>
+                <div><p></p></div>
+                <div class="am-input-group">
+                    <span class="am-input-group-label"><b>类别</b></span>
+                    <select id="select-type" class="am-form-field" name="edit_type" onchange="ChangClass({$MoneyClass},'select-type','select-class')">
+                        <if condition="$ShowData['type'] eq '收入'">
+                            <option value="1">收入</option>
+                            <option value="2">支出</option>
+                        <else/>
+                            <option value="2">支出</option>
+                            <option value="1">收入</option>
+                        </if>
+                    </select>
                 </div>
                 <div><p></p></div>
                 <div class="am-input-group">
