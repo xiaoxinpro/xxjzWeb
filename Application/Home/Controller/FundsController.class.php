@@ -26,8 +26,9 @@ class FundsController extends BaseController {
                 $fundsSubmit = I('post.funds_submit','');
                 if ($fundsSubmit === '编辑') {
                     $fundsName = I('post.funds_name','');
-                    dump($fundsName);
-                    die();
+                    $ret = EditFundsName($fundsid, $fundsName, $uid);
+                    ShowAlert($ret[1],U('Home/Funds/index'));
+                    $this -> display('Public/base');
                 } elseif ($fundsSubmit === '删除') {
                     $fundsChange = I('post.funds_change','',int);
                     dump($fundsChange);
