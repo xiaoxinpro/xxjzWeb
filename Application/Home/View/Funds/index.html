@@ -22,7 +22,7 @@
                     <th width='80' bgcolor="#FFFFFF">支出金额</th>
                     <th width='80' bgcolor="#FFFFFF">剩余金额</th>
                     <th width='80' bgcolor="#FFFFFF">记录数</th>
-                    <th width='80' bgcolor="#FFFFFF">操作</th>
+                    <th width='80' bgcolor="#FFFFFF">编辑</th>
                 </tr>
             </thead>
             <tbody class="">
@@ -35,12 +35,10 @@
                     <td class="am-text-middle">{$data.money.count}</td>
                     <td class="am-text-middle">
                         <if condition="$data.id eq 0 ">
-                            <a href="javascript:void(0);" onclick="alert('默认资金账户无法编辑。');">编辑</a> <a href="javascript:void(0);" onclick="alert('默认资金账户无法删除。');">删除</a> 
+                            <a href="javascript:void(0);" onclick="alert('默认资金账户无法编辑。');">编辑</a> 
                         <else />
                             <php>
                                 echo "<a href=".U("Home/Funds/edit?id=".$data['id']).">编辑</a>";
-                                echo " ";
-                                echo "<a href=\"javascript:void(0);\" onclick=\"isDelete('__APP__/Home/Funds/del/id/".$data['id']."')\" >删除</a>";
                             </php>
                         </if>
                     </td>
