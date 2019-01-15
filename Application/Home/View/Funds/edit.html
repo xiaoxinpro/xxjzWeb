@@ -1,0 +1,37 @@
+<extend name="Public:common"/>
+<block name="main">
+    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+        <fieldset>
+            <legend>编辑资金账户名</legend>
+            <div class="am-input-group">
+                <span class="am-input-group-label"><b>资金账户名称</b></span>
+                <input type="text" class="am-form-field" id="text-funds" name="funds_name" value="{$FundsName}">
+            </div>
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="funds_submit" value="编辑"></p>
+            <p><a href="__APP__/Home/Funds/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
+        </fieldset>
+    </form>
+
+    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+        <fieldset>
+            <legend>删除资金账户</legend>
+            <div class="am-input-group">
+                <span class="am-input-group-label"><b>将数据转移到</b></span>
+                <select id="select-funds" class="am-form-field" name="funds_change">
+                    <foreach name="FundsData" item="data">
+                        <if condition="$data['id'] neq $FundsId">
+                            <option value="{$data.id}">{$data.name}</option>
+                        </if>
+                    </foreach>
+                </select>
+                <span class="am-form-caret"></span>
+            </div>
+            <p><input type="submit" class="am-btn am-btn-block am-btn-danger" name="funds_submit" value="删除"></p>
+            <p><a href="__APP__/Home/Funds/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
+        </fieldset>
+    </form>
+
+    <fieldset>
+        
+    </fieldset>
+</block>
