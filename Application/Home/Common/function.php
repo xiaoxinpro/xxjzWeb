@@ -797,6 +797,16 @@
         }
     }
 
+    //删除资金账户并转移记账数据
+    function DeleteFunds($oldFundsId, $uid, $newFundsId = 0) {
+        if (($newFundsId === 0)||(M("account_funds")->where(array('fundsid' => $newFundsId, 'uid' => $uid))->find())) {
+            $retCount = M('account')->where(array('fid' => $oldFundsId, 'uid' => $uid))->setField('fid', $newFundsId);
+            return array(true, $retCount);
+        } else {
+            return array(false,'待转移的资金账户不存在!');
+        }
+    }
+
     //校验分类名
     function CheakClassName($ClassName, $uid, $ClassType=0, $ClassId=0) {
         if(strlen($ClassName) < 1){
