@@ -775,12 +775,25 @@
 
     //获取资金账户ID数据
     function GetFundsIdData($FundsId,$uid) {
-        $sql = 'fundsid = '.intval($FundsId).' and uid = '.$uid;
+        $sql = array('fundsid' => intval($FundsId), 'uid' => $uid);
         $FundsData = M("account_funds")->where($sql)->find();
         if(is_array($FundsData)){
             return array(true,$FundsData);
         }else{
             return array(false,'资金账户id不存在~');
+        }
+    }
+
+    //编辑资金账户名称
+    function EditFundsName($FundsId, $FundsName, $uid) {
+        $isCheak = CheakFundsName($FundsName, $uid, $FundsId);
+        if($isCheak[0]){
+            $sql = array('fundsid' => intval($FundsId), 'uid' => intval($uid));
+            $ret = M("account_funds")->where($sql)->setField('fundsname',$FundsName);
+            ClearDataCache();
+            return array(true,'资金账户名称修改成功!');
+        }else{
+            return $isCheak;
         }
     }
 
