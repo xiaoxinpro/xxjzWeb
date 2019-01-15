@@ -773,6 +773,17 @@
         return array('over'=>$OverMoneySum, 'in'=>$InMoneySum, 'out'=>$OutMoneySum, 'count'=>$FundsCount);
     }
 
+    //获取资金账户ID数据
+    function GetFundsIdData($FundsId,$uid) {
+        $sql = 'fundsid = '.intval($FundsId).' and uid = '.$uid;
+        $FundsData = M("account_funds")->where($sql)->find();
+        if(is_array($FundsData)){
+            return array(true,$FundsData);
+        }else{
+            return array(false,'资金账户id不存在~');
+        }
+    }
+
     //校验分类名
     function CheakClassName($ClassName, $uid, $ClassType=0, $ClassId=0) {
         if(strlen($ClassName) < 1){
