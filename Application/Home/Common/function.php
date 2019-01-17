@@ -801,7 +801,15 @@
     function DeleteFunds($oldFundsId, $uid, $newFundsId = 0) {
         if (($newFundsId === 0)||(M("account_funds")->where(array('fundsid' => $newFundsId, 'uid' => $uid))->find())) {
             $retCount = M('account')->where(array('fid' => $oldFundsId, 'uid' => $uid))->setField('fid', $newFundsId);
-            return array(true, $retCount);
+            $retDelete = M('account_funds')->where(array('fundsid' => $oldFundsId, 'uid' => $uid))->delete();
+            ClearDataCache();
+            if ($retCount==0 && $retDelete==1) {
+                return array(true, "资金账户删除成功。");
+            } elseif ($retCount>0 && $retDelete==1) {
+                return array(true, "记账数据转移". $retCount ."条，资金账户删除成功。");
+            } else {
+                return array(false,'资金账户删除失败，请返回重试。'. $retCount);
+            }
         } else {
             return array(false,'待转移的资金账户不存在!');
         }

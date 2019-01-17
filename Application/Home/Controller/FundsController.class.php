@@ -32,7 +32,8 @@ class FundsController extends BaseController {
                 } elseif ($fundsSubmit === '删除') {
                     $fundsChange = I('post.funds_change','',int);
                     $ret = DeleteFunds($fundsid, $uid, $fundsChange);
-                    dump($ret);
+                    ShowAlert($ret[1],U('Home/Funds/index'));
+                    $this -> display('Public/base');
                 } else {
                     $this -> error('非法操作...');
                 }
