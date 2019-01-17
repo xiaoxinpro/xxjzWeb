@@ -288,6 +288,8 @@
     function ClearDataCache() {
         $uid = session('uid');
         if($uid){
+            S('account_funds_'.$uid,null);
+            S('account_funds_data_'.$uid,null);
             S('account_class_0_'.$uid,null);
             S('account_class_1_'.$uid,null);
             S('account_class_2_'.$uid,null);
@@ -750,27 +752,41 @@
 
     //获取资金账户数据
     function GetFundsData($uid) {
-        $sql = array('uid' => $uid);
-        // $DbData = M('account_funds')->cache('account_funds_'.$uid)->where($sql)->select();
-        $retData = array();
-        array_push($retData, array('name'=>'默认', 'id'=>0, 'money'=> GetFundsAccountSumData(0,$uid)));
-        $DbData = M('account_funds')->where($sql)->select();
-        foreach ($DbData as $key => $FundsArr) {
-            array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>$FundsArr['fundsid'], 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
+        $CacheData = S('account_funds_'.$uid);
+        if ($CacheData) {
+            return $CacheData;
+        } else {
+            $sql = array('uid' => $uid);
+            $retData = array();
+            array_push($retData, array('name'=>'默认', 'id'=>0, 'money'=> GetFundsAccountSumData(0,$uid)));
+            $DbData = M('account_funds')->where($sql)->select();
+            foreach ($DbData as $key => $FundsArr) {
+                array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>$FundsArr['fundsid'], 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
+            }
+            S('account_funds_'.$uid, $retData);
+            return $retData;            
         }
-        return $retData;
     }
 
     //获取指定资金账户记账汇总
     function GetFundsAccountSumData($FundsId, $uid) {
-        $sql = array('fid'=>$FundsId, 'jiid'=>$uid);
-        $FundsCount = intval(M('account')->where($sql)->count('acmoney'));
-        $sql['zhifu'] = 1; //收入
-        $InMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
-        $sql['zhifu'] = 2; //支出
-        $OutMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
-        $OverMoneySum = $InMoneySum - $OutMoneySum;
-        return array('over'=>$OverMoneySum, 'in'=>$InMoneySum, 'out'=>$OutMoneySum, 'count'=>$FundsCount);
+        $CacheData = S('account_funds_data_'.$uid);
+        if($CacheData[$FundsId]) {
+            return $CacheData[$FundsId];
+        } else {
+            $sql = array('fid'=>$FundsId, 'jiid'=>$uid);
+            $FundsCount = intval(M('account')->where($sql)->count('acmoney'));
+            $sql['zhifu'] = 1; //收入
+            $InMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
+            $sql['zhifu'] = 2; //支出
+            $OutMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
+            $OverMoneySum = $InMoneySum - $OutMoneySum;
+            $retData = array('over'=>$OverMoneySum, 'in'=>$InMoneySum, 'out'=>$OutMoneySum, 'count'=>$FundsCount);
+            $CacheData[$FundsId] = $retData;
+            S('account_funds_data_'.$uid, $CacheData);
+            return $retData;
+        }
+
     }
 
     //获取资金账户ID数据
