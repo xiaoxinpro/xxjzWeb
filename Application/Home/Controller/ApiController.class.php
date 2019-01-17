@@ -99,6 +99,49 @@ class ApiController extends Controller {
         die(json_encode($arrData));
     }
 
+    //资金账户API
+    public function funds() {
+        if (IS_POST) {
+            $type = I('post.type','get');
+            $data = json_decode(base64_decode(I('post.data',null)),true);
+        } else {
+            $type = I('get.type','get');
+            $data = json_decode(base64_decode(I('get.data',null)),true);
+        }
+
+        $arrData = array();
+        $uid = session('uid');
+        if ($uid > 0) {
+            $arrData['uid'] = $uid;
+        } else {
+            $arrData['uid'] = 0;
+            $arrData['data'] = "用户未登录，请重新登录！";
+            die(json_encode($arrData));
+        }
+
+        switch ($type) {
+            case 'get':
+                $arrData['data'] = GetFundsData($uid);
+                break;
+            case 'get_id':
+                $arrData['data'] = GetFundsIdData($data['fundsid'], $uid);
+                break;
+            case 'add':
+                $arrData['data'] = AddNewFunds($data['fundsname'], $uid);
+                break;
+            case 'edit':
+                $arrData['data'] = EditFundsName($data['fundsid'], $data['fundsname'], $uid);
+                break;
+            case 'del':
+                $arrData['data'] = DeleteFunds($data['fundsid_old'], $uid, $data['fundsid_new']);
+                break;
+            default:
+                $arrData['data'] = '非法操作！';
+                break;
+        }
+        die(json_encode($arrData));
+    }
+
     //分类Api
     public function aclass() {
         if (IS_POST) {
@@ -334,8 +377,20 @@ class ApiController extends Controller {
 
     public function test(){
         $uid = session('uid');
+        if (IS_POST) {
+            $type = I('post.type','get');
+            $data = I('post.data',null);
+        } else {
+            $type = I('get.type','get');
+            $data = I('get.data',null);
+        }
+        dump($uid);
+        dump($type);
+        dump($data);
+        dump(base64_decode($data),true);
+        dump(json_decode(base64_decode($data),true));
         //C('USER_LOGIN_TIMES', 15);
-        dump(json_decode(getMonthData(2016, 1, $uid)));
+        // dump(json_decode(getMonthData(2016, 1, $uid)));
         // $data['gettype'] = 'day';
         // $data['year'] = 2016;
         // $data['month'] = 08;
