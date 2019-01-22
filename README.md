@@ -10,13 +10,13 @@
 
 >GitHub：https://github.com/xiaoxinpro/xxjzWeb
 
-项目[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x)已经完成功能开发，后续若有BUG还会进行升级，功能将不会再增加了。
+* 项目[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)已经完成框架开发，后续版本在此版本框架上升级而来。
 
-目前正在进行V2.x版本开发，主要增加资金账户功能；现在尚不成熟，建议部署上使用相对成熟的[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x)。
+* 项目[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x)已经完成功能开发，后续若有BUG还会进行升级，功能将不会再增加了。
 
-你可以使用Demo账号登陆体验V1.x版本，也可以自行搭建[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)项目。
+* 项目[V2.x版本](https://github.com/xiaoxinpro/xxjzWeb)目前正在添加更多功能，数据结构与功能随时变动，稳定性不如以上几个版本。
 
->基础版本：https://github.com/xiaoxinpro/xxjzWeb/tree/Base
+你可以使用Demo账号登陆体验V2.x版本，也可以自行搭建更加稳定的[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/releases/tag/V1.0.0)项目。
 
 >Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
 
@@ -25,12 +25,11 @@
 
 ## 2、安装使用
 
-
 >环境要求PHP5.3以上（含PHP7以上版本），MySQl数据库，支持Windows和Linux服务器环境。
 
 ### 2.1、安装
 
-部署项目请选择[Releases](https://github.com/xiaoxinpro/xxjzWeb/releases)版本，master分支属于开发分支，可能存在一些BUG无法正常使用。
+部署项目建议选择[Releases](https://github.com/xiaoxinpro/xxjzWeb/releases)版本，master分支属于开发分支，可能存在一些BUG无法正常使用。
 
 #### 2.1.1、快速安装
 部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与管理员账号、密码和邮箱。提交后若配置信息无误则自动跳转到登陆页面。
