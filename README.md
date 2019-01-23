@@ -205,5 +205,5 @@ Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxi
 
 如果您觉得小歆记账对你有帮助，欢迎给予我们一定的捐助来维持项目的长期发展。
 
-###支付宝扫码捐赠
+### 支付宝扫码捐赠
 ![支付宝扫码捐赠](https://upload-images.jianshu.io/upload_images/1568014-492059e22c036757.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
