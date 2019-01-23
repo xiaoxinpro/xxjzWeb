@@ -102,7 +102,9 @@
         } elseif (!is_array($config)) {
             ShowAlert('获取配置文件有误，请检查项目文件读写权限，或重新安装。','无法升级');
         } elseif (isset($_POST['submit'])) {
-            UpdataDB($config);
+            $username = htmlspecialchars($_POST['admin_user']);
+            $password = htmlspecialchars($_POST['admin_psw']);
+            UpdataDB($config,$username,$password);
             $jsonData = base64_encode(json_encode($config));
             $dbFile = fopen("install.tmp", "w") or die(ShowAlert("请手动删除根目录下的updata_2.0.php文件。","升级完成"));
             fwrite($dbFile, $jsonData);
@@ -120,6 +122,21 @@
                     &emsp;&emsp;1、在升级前请务必备份好数据库中全部数据，如发生数据丢失将无法恢复。<br/>
                     &emsp;&emsp;2、若已经升级过请勿二次使用本向导进行升级操作。<br/>
                     确认无误后请删除根目录下的“install.tmp”文件，并点击“升级”按钮。<br/>
+                </div>
+            </fieldset>
+            <br/>
+            <fieldset>
+                <legend>权限验证</legend>
+                <div>
+                    请输入安装时注册的管理员账号和密码：<br/>
+                </div>
+                <div>
+                    <label>管理员账号</label>
+                    <input type="text" name="admin_user" value="">
+                </div>
+                <div>
+                    <label>管理员密码</label>
+                    <input type="password" name="admin_psw" value="">
                 </div>
             </fieldset>
             <br/>
@@ -172,6 +189,13 @@
         }
     }
 
+    //获取管理员账号信息
+    function GetUserData($uid,$DbName,$TableName,$Conn) {
+        $sql="select * from `$DbName`.`$TableName` where uid='".$uid."'";
+        $query=mysqli_query($Conn, $sql);
+        return (mysqli_fetch_array($query));
+    }
+
     //数据库是否存在
     function inDataBase($DbName,$Conn){
         mysqli_select_db($Conn, "information_schema");
@@ -191,7 +215,7 @@
     }
 
     //升级数据库
-    function UpdataDB($config) {
+    function UpdataDB($config,$username,$password) {
         //连接数据库
         $Conn = mysqli_connect($config['DB_HOST'],$config['DB_USER'],$config['DB_PWD']);
         if (!$Conn) {
@@ -200,6 +224,12 @@
             if(!inDataBase($config['DB_NAME'],$Conn)){
                 die(ShowAlert('数据库不存在，请重新安装。','连接数据库失败'));
             } else {
+                //检验管理员账号
+                $UserData = GetUserData($config['ADMIN_UID'], $config['DB_NAME'], $config['DB_PREFIX'] . "user", $Conn);
+                if ($UserData['username'] != $username || $UserData['password'] != md5($password)) {
+                    die(ShowAlert('请检查管理员账号或密码是否正确！','权限验证失败'));
+                }
+
                 //升级account表(不存在则报错)
                 $DbName = $config['DB_NAME'];
                 $TableName = $config['DB_PREFIX']."account";
