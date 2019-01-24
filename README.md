@@ -62,9 +62,9 @@
 
 下载本项目源码，将 `/Application/Home` 文件夹复制并覆盖到部署目录下的 `/Application` 文件夹中，将 `updata_2.0.php` 复制到部署根目录下，删除部署目录下的 `install.tmp` 文件（没用请忽略）。
 
-使用浏览器访问`/updata_2.0.php`文件。
+使用浏览器访问`/updata_2.0.php`文件，阅读升级说明并填写管理员账号和密码。
 
-![](https://upload-images.jianshu.io/upload_images/1568014-59d776672bb89df4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://upload-images.jianshu.io/upload_images/1568014-1e3a42eb2f667d7c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 点击 `升级` 按钮完成升级，升级结束后请务必删除`/updata_2.0.php`文件，防止二次升级破坏数据库文件。
 
