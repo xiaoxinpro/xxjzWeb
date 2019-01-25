@@ -11,21 +11,21 @@
     <tbody>
         <tr class="am-danger">
             <td>支出</td>
-            <td>{$AccountStatistic['TodayOutMoney']}</td>
-            <td>{$AccountStatistic['MonthOutMoney']}</td>
-            <td>{$AccountStatistic['YearOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['TodayOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['MonthOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['YearOutMoney']}</td>
         </tr>
         <tr class="am-success">
             <td>收入</td>
-            <td>{$AccountStatistic['TodayInMoney']}</td>
-            <td>{$AccountStatistic['MonthInMoney']}</td>
-            <td>{$AccountStatistic['YearInMoney']}</td>
+            <td class="money-format">{$AccountStatistic['TodayInMoney']}</td>
+            <td class="money-format">{$AccountStatistic['MonthInMoney']}</td>
+            <td class="money-format">{$AccountStatistic['YearInMoney']}</td>
         </tr>
         <tr class="am-primary"><!--class="am-active"-->
             <td>剩余</td>
-            <td>{$AccountStatistic['TodayInMoney']-$AccountStatistic['TodayOutMoney']}</td>
-            <td>{$AccountStatistic['MonthInMoney']-$AccountStatistic['MonthOutMoney']}</td>
-            <td>{$AccountStatistic['YearInMoney']-$AccountStatistic['YearOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['TodayInMoney']-$AccountStatistic['TodayOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['MonthInMoney']-$AccountStatistic['MonthOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['YearInMoney']-$AccountStatistic['YearOutMoney']}</td>
         </tr>
     </tbody>
 </table>
@@ -43,21 +43,21 @@
     <tbody>
         <tr class="am-danger">
             <td>支出</td>
-            <td>{$AccountStatistic['LastTodayOutMoney']}</td>
-            <td>{$AccountStatistic['LastMonthOutMoney']}</td>
-            <td>{$AccountStatistic['LastYearOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastTodayOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastMonthOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastYearOutMoney']}</td>
         </tr>
         <tr class="am-success">
             <td>收入</td>
-            <td>{$AccountStatistic['LastTodayInMoney']}</td>
-            <td>{$AccountStatistic['LastMonthInMoney']}</td>
-            <td>{$AccountStatistic['LastYearInMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastTodayInMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastMonthInMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastYearInMoney']}</td>
         </tr>
         <tr class="am-primary"><!--class="am-active"-->
             <td>剩余</td>
-            <td>{$AccountStatistic['LastTodayInMoney']-$AccountStatistic['LastTodayOutMoney']}</td>
-            <td>{$AccountStatistic['LastMonthInMoney']-$AccountStatistic['LastMonthOutMoney']}</td>
-            <td>{$AccountStatistic['LastYearInMoney']-$AccountStatistic['LastYearOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastTodayInMoney']-$AccountStatistic['LastTodayOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastMonthInMoney']-$AccountStatistic['LastMonthOutMoney']}</td>
+            <td class="money-format">{$AccountStatistic['LastYearInMoney']-$AccountStatistic['LastYearOutMoney']}</td>
         </tr>
     </tbody>
 </table>

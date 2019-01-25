@@ -14,7 +14,7 @@
         <volist name="ShowData" id="data">
         <tr>
             <td class="am-text-middle">{$data.class}</td>
-            <td class="am-text-middle">{$data.money}</td>
+            <td class="am-text-middle money-format">{$data.money}</td>
             <td class="am-text-middle">{$data.funds} {$data.type}</td>
             <td class="am-text-middle am-text-xs"><php>echo date("Y-m-d",$data['time']);</php></td>
             <td class="am-text-middle">{$data.mark}</td>
