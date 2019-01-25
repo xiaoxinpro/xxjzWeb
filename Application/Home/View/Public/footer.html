@@ -20,5 +20,15 @@
 <!--<![endif]-->
 <script src="__PUBLIC__/Home/js/amazeui.min.js"></script>
 
+<script type="text/javascript">
+window.onload = function() {
+    var div_money_arr = document.getElementsByClassName('money-format');
+    console.dirxml(div_money_arr);
+    for (var i = 0; i < div_money_arr.length; i++) {
+        div_money_arr[i].innerText= number_format(div_money_arr[i].innerText,2,'.',',');
+    }
+}
+</script>
+
 </body>
 </html>
