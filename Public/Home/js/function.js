@@ -1,11 +1,14 @@
 
 function WebApp_Login(str,u,p){
-    //alert(str);
-    window.webkit.messageHandlers.webAppLogin.postMessage({body:str,user:u,pass:p});
+    if (window.hasOwnProperty('webkit')) {
+        window.webkit.messageHandlers.webAppLogin.postMessage({body:str,user:u,pass:p});
+    }
 }
 
 function WebApp_Logout(u){
-    window.webkit.messageHandlers.webAppLogout.postMessage({user:u});
+    if (window.hasOwnProperty('webkit')) {
+        window.webkit.messageHandlers.webAppLogout.postMessage({user:u});
+    }
 }
 
 function SelectChange(){ 
@@ -59,4 +62,3 @@ function ChangClass(s,sid,oid){
     obj.click();
 }
 
-// alert("你好！");
