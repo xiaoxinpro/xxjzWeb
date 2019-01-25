@@ -29,9 +29,9 @@
                 <volist name="ShowData" id="data">
                 <tr>
                     <td class="am-text-middle">{$data.name}</td>
-                    <td class="am-text-middle">{$data.money.in}</td>
-                    <td class="am-text-middle">{$data.money.out}</td>
-                    <td class="am-text-middle">{$data.money.over}</td>
+                    <td class="am-text-middle money-format">{$data.money.in}</td>
+                    <td class="am-text-middle money-format">{$data.money.out}</td>
+                    <td class="am-text-middle money-format">{$data.money.over}</td>
                     <td class="am-text-middle">{$data.money.count}</td>
                     <td class="am-text-middle">
                         <if condition="$data.id eq 0 ">
