@@ -100,7 +100,9 @@
       │  │  ├─Common                         公共函数目录
       │  │  │  ├─function.php                全局函数文件
       │  │  │  └─index.html                  index文件
-      │  │  ├─Conf                           未使用
+      │  │  ├─Conf                           功能配置目录
+      │  │  │  ├─config.php                  功能配置文件
+      │  │  │  └─index.html                  index文件
       │  │  ├─Controller                     控制器目录
       │  │  │  ├─AddController.class.php     记账控制器文件
       │  │  │  ├─ApiController.class.php     API控制器文件
@@ -109,6 +111,7 @@
       │  │  │  ├─ClassController.class.php   分类控制器文件
       │  │  │  ├─EditController.class.php    编辑账目控制器文件
       │  │  │  ├─FindController.class.php    搜索账目控制器文件
+      │  │  │  ├─FundsController.class.php   资金账户控制器文件
       │  │  │  ├─IndexController.class.php   主页控制器文件
       │  │  │  ├─ListController.class.php    列表控制器文件
       │  │  │  ├─LoginController.class.php   登录控制器文件
@@ -121,6 +124,7 @@
       │  │     ├─Class                       分类视图目录
       │  │     ├─Edit                        编辑视图目录
       │  │     ├─Find                        搜索账目视图目录
+      │  │     ├─Funds                       资金账户视图目录
       │  │     ├─Index                       主页视图目录
       │  │     ├─List                        列表视图目录
       │  │     ├─Login                       登录视图目录
