@@ -23,9 +23,8 @@
 <script type="text/javascript">
 window.onload = function() {
     var div_money_arr = document.getElementsByClassName('money-format');
-    console.dirxml(div_money_arr);
     for (var i = 0; i < div_money_arr.length; i++) {
-        div_money_arr[i].innerText= number_format(div_money_arr[i].innerText,2,'.',',');
+        div_money_arr[i].innerText= number_format(div_money_arr[i].innerText,{$Think.config.MONEY_FORMAT_DECIMALS},'{$Think.config.MONEY_FORMAT_POINT}','{$Think.config.MONEY_FORMAT_THOUSANDS}');
     }
 }
 </script>
