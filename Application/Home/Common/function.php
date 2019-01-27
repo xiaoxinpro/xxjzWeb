@@ -649,8 +649,8 @@
         if($isID && !(is_numeric($data['acid'])&&($data['acid'] > 0))){
             return array(false,'操作的id无效...');
         }
-        if(!(is_numeric($data['acmoney'])&&($data['acmoney'] > 0))){
-            return array(false,'输入的金额无效!');
+        if(!(is_numeric($data['acmoney'])&&($data['acmoney'] >= 0.01)&&($data['acmoney'] <= C('MAX_MONEY_VALUE')))){
+            return array(false,'输入的金额无效，请输入0.01到' . C('MAX_MONEY_VALUE') . '范围内的有效数字。');
         }
         if(!is_numeric($data['acclassid'])){
             $data['acclassid'] = GetClassId($data['acclassid']);
@@ -666,7 +666,9 @@
         if($DbClass['classtype'] != $data['zhifu']){
             return array(false,'选择的分类与收支类别不匹配~');
         }
-        
+        if (strlen($data['acremark']) > C('MAX_MARK_VALUE')) {
+            return array(false,'备注信息太长，请把长度控制在' . C('MAX_MARK_VALUE') . '个字符以内。');
+        }
         if(!is_int($data['actime'])){
             $data['actime'] = strtotime($data['actime']);
         }
@@ -711,6 +713,10 @@
     function CheakFundsName($FundsName, $uid, $FundsId=0) {
         if(strlen($FundsName) < 1){
             return array(false, '资金账户名不得为空！');
+        }
+
+        if(strlen($FundsName) > C('MAX_FUNDS_NAME')){
+            return array(false, '资金账户名太长，请控制在' . C('MAX_FUNDS_NAME') . '个字符以内。');
         }
 
         if ($FundsName == "默认") {
@@ -837,6 +843,10 @@
             return array(false, '分类名不得为空！');
         }
 
+        if(strlen($ClassName) > C('MAX_CLASS_NAME')){
+            return array(false, '分类名太长，请控制在' . C('MAX_CLASS_NAME') . '个字符以内。');
+        }
+
         $sql = array('classname' => $ClassName, 'ufid' => $uid);
         if(intval($ClassType) > 0) {
             $sql['classtype'] = intval($ClassType);
@@ -864,6 +874,9 @@
         }
         if(strlen($data['classname']) < 1){
             return array(false,'分类名不得为空！');
+        }
+        if(strlen($data['classname']) > C('MAX_CLASS_NAME')){
+            return array(false, '分类名太长，请控制在' . C('MAX_CLASS_NAME') . '个字符以内。');
         }
         if($data['classtype'] == 0){
             return array(false,'非法操作223');
@@ -917,6 +930,9 @@
                 }
                 if(strlen($value['classname']) < 1){
                     return array(false, '分类名不得为空！', $key);
+                }
+                if(strlen($value['classname']) > C('MAX_CLASS_NAME')){
+                    return array(false, '分类名太长，请控制在' . C('MAX_CLASS_NAME') . '个字符以内。', $key);
                 }
                 if($value['classtype'] == 0){
                     return array(false, '非法操作223', $key);
