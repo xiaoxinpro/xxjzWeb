@@ -315,7 +315,7 @@
     function GetFindSqlArr($data)
     {
         $arrSQL = array();
-        if ($data['fid'] !== "") {
+        if ($data['fid']) {
             $arrSQL['fid'] = intval($data['fid']);
         }
         if($data['acid']){
@@ -767,7 +767,7 @@
             array_push($retData, array('name'=>'默认', 'id'=>0, 'money'=> GetFundsAccountSumData(0,$uid)));
             $DbData = M('account_funds')->where($sql)->select();
             foreach ($DbData as $key => $FundsArr) {
-                array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>$FundsArr['fundsid'], 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
+                array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>intval($FundsArr['fundsid']), 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
             }
             S('account_funds_'.$uid, $retData);
             return $retData;            
@@ -783,9 +783,9 @@
             $sql = array('fid'=>$FundsId, 'jiid'=>$uid);
             $FundsCount = intval(M('account')->where($sql)->count('acmoney'));
             $sql['zhifu'] = 1; //收入
-            $InMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
+            $InMoneySum = floatval(M('account')->where($sql)->sum('acmoney'));
             $sql['zhifu'] = 2; //支出
-            $OutMoneySum = intval(M('account')->where($sql)->sum('acmoney'));
+            $OutMoneySum = floatval(M('account')->where($sql)->sum('acmoney'));
             $OverMoneySum = $InMoneySum - $OutMoneySum;
             $retData = array('over'=>$OverMoneySum, 'in'=>$InMoneySum, 'out'=>$OutMoneySum, 'count'=>$FundsCount);
             $CacheData[$FundsId] = $retData;
