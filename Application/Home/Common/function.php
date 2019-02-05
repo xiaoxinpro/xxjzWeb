@@ -710,7 +710,7 @@
     }
 
     //校验资金账户名
-    function CheakFundsName($FundsName, $uid, $FundsId=0) {
+    function CheakFundsName($FundsName, $uid, $FundsId = -1) {
         if(strlen($FundsName) < 1){
             return array(false, '资金账户名不得为空！');
         }
@@ -764,7 +764,7 @@
         } else {
             $sql = array('uid' => $uid);
             $retData = array();
-            array_push($retData, array('name'=>'默认', 'id'=>0, 'money'=> GetFundsAccountSumData(0,$uid)));
+            array_push($retData, array('name'=>'默认', 'id'=> -1, 'money'=> GetFundsAccountSumData(-1,$uid)));
             $DbData = M('account_funds')->where($sql)->select();
             foreach ($DbData as $key => $FundsArr) {
                 array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>intval($FundsArr['fundsid']), 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
@@ -820,8 +820,8 @@
     }
 
     //删除资金账户并转移记账数据
-    function DeleteFunds($oldFundsId, $uid, $newFundsId = 0) {
-        if (($newFundsId === 0)||(M("account_funds")->where(array('fundsid' => $newFundsId, 'uid' => $uid))->find())) {
+    function DeleteFunds($oldFundsId, $uid, $newFundsId = -1) {
+        if (($newFundsId === -1)||(M("account_funds")->where(array('fundsid' => $newFundsId, 'uid' => $uid))->find())) {
             $retCount = M('account')->where(array('fid' => $oldFundsId, 'uid' => $uid))->setField('fid', $newFundsId);
             $retDelete = M('account_funds')->where(array('fundsid' => $oldFundsId, 'uid' => $uid))->delete();
             ClearDataCache();

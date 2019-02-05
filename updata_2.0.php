@@ -236,11 +236,13 @@
                 if(!intable($DbName,$TableName,$Conn)){
                     die(ShowAlert($TableName.'数据表不存在，请重新安装！','数据表不存在'));
                 }else{
-                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `acclassid` `acclassid` int(11) NOT NULL AFTER `acmoney`, CHANGE `acremark` `acremark` varchar(64) COLLATE 'utf8_general_ci' NOT NULL AFTER `actime`, CHANGE `jiid` `jiid` int(11) NOT NULL AFTER `acremark`, CHANGE `zhifu` `zhifu` int(11) NOT NULL AFTER `jiid`, ADD `fid` int(11) NOT NULL DEFAULT '0';";
+                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `acclassid` `acclassid` int(11) NOT NULL AFTER `acmoney`, CHANGE `acremark` `acremark` varchar(64) COLLATE 'utf8_general_ci' NOT NULL AFTER `actime`, CHANGE `jiid` `jiid` int(11) NOT NULL AFTER `acremark`, CHANGE `zhifu` `zhifu` int(11) NOT NULL AFTER `jiid`, ADD `fid` int(11) NOT NULL DEFAULT '-1';";
                     $query=mysqli_query($Conn, $sql);
                     if(!$query){
                         echo "警告： $TableName 未修改。";
                     }
+                    $sql = "UPDATE `$DbName`.`$TableName` SET `fid` = '-1' WHERE `fid` = '0'"
+                    $query=mysqli_query($Conn, $sql);
                 }
 
                 //升级account_class表(不存在则报错)
@@ -270,7 +272,7 @@
                 //创建account_funds表(已存在则报错)
                 $TableName = $config['DB_PREFIX']."account_funds";
                 if(intable($DbName,$TableName,$Conn)){
-                    die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
+                    // die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
                 }else{
                     $sql = "CREATE TABLE `$DbName`.`$TableName` ( `fundsid` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `fundsname` varchar(24) COLLATE 'utf8_general_ci' NOT NULL, `uid` int(11) NOT NULL ) ENGINE='MyISAM' COLLATE 'utf8_general_ci';";
                     $query=mysqli_query($Conn, $sql);

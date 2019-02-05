@@ -14,7 +14,7 @@ CREATE TABLE `xxjz_account` (
   `acremark` varchar(64) NOT NULL,
   `jiid` int(11) NOT NULL,
   `zhifu` int(1) NOT NULL,
-  `fid` int(11) NOT NULL DEFAULT '0',
+  `fid` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`acid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -34,7 +34,7 @@
                     <td class="am-text-middle money-format">{$data.money.over}</td>
                     <td class="am-text-middle">{$data.money.count}</td>
                     <td class="am-text-middle">
-                        <if condition="$data.id eq 0 ">
+                        <if condition="$data.id eq -1 ">
                             <a href="javascript:void(0);" onclick="alert('默认资金账户无法编辑。');">编辑</a> 
                         <else />
                             <php>
