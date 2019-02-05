@@ -20,15 +20,14 @@ class AddController extends BaseController {
             ClearDataCache(); //清除缓存
             $type = $data['zhifu'];
             ShowAlert($Updata[1]);
-            // if($Updata[0]){
-            //     ClearDataCache(); //清除缓存
-            //     $this -> success($Updata[1],U('Home/Add/index/type/'.$data['zhifu']));
-            // }else{
-            //     $this -> error($Updata[1],U('Home/Add/index/type/'.$data['zhifu']));
-            // }
         }
-        // SetRefURL(__SELF__);
+        //获取资金账户数据
+        $DbFunds = array();
         $FundsData = GetFundsData($uid);
+        foreach ($FundsData as $key => $data) {
+            $DbFunds[$data[id]] = $data[name];
+        }
+
         $MoneyClass[1] = GetClassData($uid,1);
         $MoneyClass[2] = GetClassData($uid,2);
         if (!is_array($MoneyClass[2])) {
@@ -44,7 +43,7 @@ class AddController extends BaseController {
         $this -> assign('MoneyClass',"'".htmlspecialchars(json_encode($MoneyClass))."'");
         
         //整合List表格数组
-        $ListData = OutListData(GetAccountData($uid, 1),GetClassData($uid));
+        $ListData = OutListData(GetAccountData($uid, 1),GetClassData($uid),$DbFunds);
         $this -> assign('Page', 1);
         $this -> assign('PageMax', 1);
         $this -> assign('ArrPage', $ListData[2]);
