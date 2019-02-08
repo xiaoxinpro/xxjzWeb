@@ -241,7 +241,9 @@
                     if(!$query){
                         echo "警告： $TableName 未修改。";
                     }
-                    $sql = "UPDATE `$DbName`.`$TableName` SET `fid` = '-1' WHERE `fid` = '0'"
+                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `fid` `fid` int(11) NOT NULL DEFAULT '-1' AFTER `zhifu`;";
+                    $query=mysqli_query($Conn, $sql);
+                    $sql = "UPDATE `$DbName`.`$TableName` SET `fid` = '-1' WHERE `fid` = '0';";
                     $query=mysqli_query($Conn, $sql);
                 }
 
