@@ -13,7 +13,7 @@ CREATE TABLE `xxjz_account` (
   `actime` int(11) NOT NULL,
   `acremark` varchar(64) NOT NULL,
   `jiid` int(11) NOT NULL,
-  `zhifu` int(1) NOT NULL,
+  `zhifu` int(11) NOT NULL,
   `fid` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`acid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -49,7 +49,7 @@ CREATE TABLE `xxjz_user` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `xxjz_user` (`uid`, `username`, `password`, `email`, `utime`) VALUES
-(1,	'admin',	'7fef6171469e80d32c0559f88b377245',	'xxjz@xxgzs.org',	1545994150);
+(1,	'admin',	'7fef6171469e80d32c0559f88b377245',	'xxjz@xxgzs.org',	1550554411);
 
 DROP TABLE IF EXISTS `xxjz_user_login`;
 CREATE TABLE `xxjz_user_login` (
@@ -63,4 +63,4 @@ CREATE TABLE `xxjz_user_login` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- 2019-01-13 11:11:02
+-- 2019-02-19 05:35:32

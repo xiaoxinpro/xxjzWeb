@@ -171,7 +171,7 @@
 |:--------:|--------|--------|
 |fundsid|int(11)|资金账户ID|
 |fundsname|varchar(24)|资金账户名称|
-|ufid|int(11)|所属用户ID|
+|uid|int(11)|所属用户ID|
 
 ### 4.4、用户表 xxjz_user
 | 字段 | 类型 | 备注 |
