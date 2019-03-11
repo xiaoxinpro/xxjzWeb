@@ -37,16 +37,17 @@ class LoginController extends Controller {
                 $DbUser = M("user") -> where("email='$email'") -> find();
                 
                 if(is_array($DbUser)){
+                    $endtime = time() + 7200;
                     $username = $DbUser['username'];
                     $user_pass = $DbUser['password'];
                     $from = $DbUser['email'];
-                    $x = md5($username.'+'.$user_pass);
-                    $String = base64_encode($username.".".$x);
+                    $x = md5($username.'+'.$user_pass.'+'.$endtime);
+                    $String = base64_encode($username.".".$x.".".$endtime);
                     $StrHtml = U('Home/Login/forget','p='.$String,'',true);
                     //发送邮件
                     $address = $from;
                     $subject = "找回密码 - 小歆记账APP";
-                    $body    = "<br>".$username."：<br />请点击下面的链接，按流程进行密码重设。<br><a href=\"".$StrHtml."\">确认密码找回</a><p><pre>".$StrHtml."</pre></br>";   
+                    $body    = "<br>".$username."：<br />请点击下面的链接，按流程进行密码重设。（两小时内有效）<br><a href=\"".$StrHtml."\">确认密码找回</a></br><pre>".$StrHtml."</pre></br>";   
                     $file    = null;
                     if (!SendMail($address,$subject,$body,$file)) {
                         if (I('post.forget_submit') == 'xxjzAUI') {
@@ -278,12 +279,19 @@ class LoginController extends Controller {
         $array = explode('.',base64_decode($_GET['p']));
         // * $array[0] 为用户名
         // * $array[1] 为我们生成的字符串
+        // * $array[2] 为终止时间戳
         $username = trim($array['0']);
+        $endtime = intval(trim($array['2']));
+        $nowtime = time();
+        if ($nowtime > $endtime) {
+            $this -> error('找回密码链接已过期，请重新获取！', U('/Home/Login/index'));
+            return;
+        }
         $StrUser = "username='$username'";
         $DbUser = M("user");  //实例化jizhang_user
         $password = $DbUser -> where($StrUser)->getField('password');
         //产生配置码 
-        $checkCode = md5($array['0'].'+'.$password);
+        $checkCode = md5($username.'+'.$password.'+'.$endtime);
         //进行配置验证
         if( $array['1'] === $checkCode ){
             if($_POST["forget_submit"]){   
@@ -306,7 +314,7 @@ class LoginController extends Controller {
                 $this -> display();
             }
         }else{
-            $this -> error('非法操作！', U('/Home/Login/index'));
+            $this -> error('找回密码链接错误，请重新获取链接或联系管理员！', U('/Home/Login/index'));
         }
     }
     
