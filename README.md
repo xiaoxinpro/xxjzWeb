@@ -2,7 +2,7 @@
 
 [V2.x版本](https://github.com/xiaoxinpro/xxjzWeb) | [V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x) | [基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base) | [微信小程序](https://github.com/xiaoxinpro/xxjzWeChat)
 
-![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/logo.png)
 
 ## 1、简介
 
@@ -34,7 +34,7 @@
 #### 2.1.1、快速安装
 部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与管理员账号、密码和邮箱。提交后若配置信息无误则自动跳转到登陆页面。
 
-![小歆记账Web安装向导.png](http://upload-images.jianshu.io/upload_images/1568014-d370ca30a08a8b2e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![小歆记账Web安装向导.png](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/install.png)
 
 点击安装后若配置信息无误则自动跳转到登陆页面，使用刚刚填写的管理员账号和密码就可以登陆使用了。
 
