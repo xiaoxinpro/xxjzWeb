@@ -463,7 +463,7 @@
     }
     
     //数据库数组数据 转 显示数据
-    function ArrDataToShowData($ArrData, $ArrClass, $ArrFunds) {
+    function ArrDataToShowData($ArrData, $ArrClass, $ArrFunds = null) {
         $retShowData = array();
         if($ArrData['zhifu'] == 1){
             $classType = '收入';
