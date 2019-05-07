@@ -64,7 +64,7 @@
 
 使用浏览器访问`/updata_2.0.php`文件，阅读升级说明并填写管理员账号和密码。
 
-![](https://upload-images.jianshu.io/upload_images/1568014-1e3a42eb2f667d7c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/updata.png)
 
 点击 `升级` 按钮完成升级，升级结束后请务必删除`/updata_2.0.php`文件，防止二次升级破坏数据库文件。
 
@@ -211,10 +211,10 @@ Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxi
 
 ### 支付宝扫码捐赠
 
-![支付宝扫码捐赠](https://upload-images.jianshu.io/upload_images/1568014-92c19d81f22e396b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![支付宝扫码捐赠](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/alipay.png)
 
 ### 微信扫描捐赠
 
-![微信扫描捐赠](https://upload-images.jianshu.io/upload_images/1568014-b63ed144369aff8e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![微信扫描捐赠](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/wechat.png)
 
 
