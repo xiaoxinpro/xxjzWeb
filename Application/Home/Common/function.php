@@ -1189,6 +1189,16 @@
                 $ret['DateMin'] = date('Y-m-d', $TimeMin);
                 S('account_time_between_'.$uid, $ret);
                 return $ret;
+            } else {
+                $TimeMax = time();
+                $TimeMin = time();
+                $ret['TimeMax'] = $TimeMax;
+                $ret['TimeMin'] = $TimeMin;
+                $ret['YearMax'] = intval(date('Y', $TimeMax));
+                $ret['YearMin'] = intval(date('Y', $TimeMin));
+                $ret['DateMax'] = date('Y-m-d', $TimeMax);
+                $ret['DateMin'] = date('Y-m-d', $TimeMin);
+                return $ret;
             }
         }
     }
