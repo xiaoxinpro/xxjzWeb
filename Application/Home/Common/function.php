@@ -594,24 +594,6 @@
         $StartTime = strtotime(date("Y-m-d",mktime(0,0,0,1,1,date("Y",time())-1)));
         $ArrData['LastYearInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
         $ArrData['LastYearOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
-
-        //最近7天收支统计
-        $StartTime = strtotime(date("Y-m-d",strtotime('-7 day'))." 0:0:0");
-        $EndTime = strtotime(date("Y-m-d",strtotime('-7 day'))." 23:59:59");
-        $ArrData['Recent7DayInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
-        $ArrData['Recent7DayOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
-
-        //最近30天收支统计
-        $StartTime = strtotime(date("Y-m-d",strtotime('-30 day'))." 0:0:0");
-        $EndTime = strtotime(date("Y-m-d",strtotime('-30 day'))." 23:59:59");
-        $ArrData['Recent30DayInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
-        $ArrData['Recent30DayOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
-
-        //最近365天收支统计
-        $StartTime = strtotime(date("Y-m-d",strtotime('-365 day'))." 0:0:0");
-        $EndTime = strtotime(date("Y-m-d",strtotime('-365 day'))." 23:59:59");
-        $ArrData['Recent30DayInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
-        $ArrData['Recent30DayOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
         
         //总结统计
         $StartTime = strtotime("2000-1-1 0:0:0");
