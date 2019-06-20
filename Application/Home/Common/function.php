@@ -558,6 +558,24 @@
         $ArrData['YearInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
         $ArrData['YearOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
         
+        //最近7天收支统计
+        $StartTime = strtotime(date("Y-m-d",strtotime('-7 day'))." 0:0:0");
+        $EndTime = strtotime($today." 23:59:59");
+        $ArrData['Recent7DayInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
+        $ArrData['Recent7DayOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
+
+        //最近30天收支统计
+        $StartTime = strtotime(date("Y-m-d",strtotime('-30 day'))." 0:0:0");
+        $EndTime = strtotime($today." 23:59:59");
+        $ArrData['Recent30DayInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
+        $ArrData['Recent30DayOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
+
+        //最近365天收支统计
+        $StartTime = strtotime(date("Y-m-d",strtotime('-365 day'))." 0:0:0");
+        $EndTime = strtotime($today." 23:59:59");
+        $ArrData['Recent365DayInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
+        $ArrData['Recent365DayOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
+        
         //昨日收支统计
         $today = date("Y-m-d",strtotime('-1 day'));
         $StartTime = strtotime($today." 0:0:0");
@@ -1188,6 +1206,16 @@
                 $ret['DateMax'] = date('Y-m-d', $TimeMax);
                 $ret['DateMin'] = date('Y-m-d', $TimeMin);
                 S('account_time_between_'.$uid, $ret);
+                return $ret;
+            } else {
+                $TimeMax = time();
+                $TimeMin = time();
+                $ret['TimeMax'] = $TimeMax;
+                $ret['TimeMin'] = $TimeMin;
+                $ret['YearMax'] = intval(date('Y', $TimeMax));
+                $ret['YearMin'] = intval(date('Y', $TimeMin));
+                $ret['DateMax'] = date('Y-m-d', $TimeMax);
+                $ret['DateMin'] = date('Y-m-d', $TimeMin);
                 return $ret;
             }
         }
