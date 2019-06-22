@@ -290,6 +290,7 @@
         if($uid){
             S('account_funds_'.$uid,null);
             S('account_funds_data_'.$uid,null);
+            S('account_class_data_'.$uid,null);
             S('account_class_0_'.$uid,null);
             S('account_class_1_'.$uid,null);
             S('account_class_2_'.$uid,null);
@@ -1055,6 +1056,47 @@
         ClearDataCache();
         return $ret;
     }
+
+    //获取分类所有数据(用户id,1=收入 2=支出) -- GetClassData函数的加强版
+    function GetClassAllData($uid,$type=0) {
+        $CacheData = S('account_class_data_'.$uid);
+        if($CacheData) {
+            return $CacheData;
+        }
+        $strSQL = array();
+        $strSQL['ufid'] = $uid;
+        if($type) {
+            $strSQL['classtype'] = $type;
+        }
+        $DbClass = M('account_class')->where($strSQL)->select();
+        $CacheData = array();
+        foreach($DbClass as $key => $Data) {
+            $classId = $Data['classid'];
+            $className = $Data['classname'];
+            $sql = array('acclassid'=>$classId, 'jiid'=>$uid);
+            $classCount = intval(M('account')->where($sql)->count('acmoney'));
+            $classMoney = floatval(M('account')->where($sql)->sum('acmoney'));
+            array_push($CacheData, array('id'=>$classId, 'name'=>$className, 'count'=>$classCount, 'money'=>$classMoney));
+        }
+        S('account_class_data_'.$uid, $CacheData);
+        return $CacheData;
+    }
+
+    // //获取分类记账数据汇总
+    // function GetClassAccountSumData($ClassId, $uid) {
+    //     $CacheData = S('account_class_data_'.$uid);
+    //     if($CacheData[$ClassId]) {
+    //         return $CacheData[$ClassId];
+    //     } else {
+    //         $sql = array('acclassid'=>$ClassId, 'jiid'=>$uid);
+    //         $ClassCount = intval(M('account')->where($sql)->count('acmoney'));
+    //         $ClassMoney = floatval(M('account')->where($sql)->sum('acmoney'));
+    //         $retData = array('sum'=>$ClassMoney, 'count'=>$ClassCount);
+    //         $CacheData[$ClassId] = $retData;
+    //         S('account_class_data_'.$uid, $CacheData);
+    //         return $retData;
+    //     }
+    // }
 
     //获取月份收支数据（月份）
     function getMonthData($y, $m, $uid) {
