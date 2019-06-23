@@ -181,6 +181,18 @@ class ApiController extends Controller {
                 $arrData['data'] = GetClassData($uid);
                 break;
 
+            case 'getindata':
+                $arrData['data'] = GetClassAllData($uid, 1);
+                break;
+            
+            case 'getoutdata':
+                $arrData['data'] = GetClassAllData($uid, 2);
+                break;
+
+            case 'getalldata':
+                $arrData['data'] = GetClassAllData($uid);
+                break;
+
             case 'addall':
                 $arrData['data'] = FastAddNewClass($data, $uid);
                 break;
@@ -389,6 +401,7 @@ class ApiController extends Controller {
         dump($data);
         dump(base64_decode($data),true);
         dump(json_decode(base64_decode($data),true));
+        dump(GetClassAllData($uid));
         //C('USER_LOGIN_TIMES', 15);
         // dump(json_decode(getMonthData(2016, 1, $uid)));
         // $data['gettype'] = 'day';
