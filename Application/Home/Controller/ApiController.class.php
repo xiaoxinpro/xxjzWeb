@@ -396,6 +396,7 @@ class ApiController extends Controller {
             $type = I('get.type','get');
             $data = I('get.data',null);
         }
+        dump("版本号：".GetVersion());
         dump($uid);
         dump($type);
         dump($data);
