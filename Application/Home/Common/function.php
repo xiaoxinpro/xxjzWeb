@@ -16,14 +16,13 @@
         }
     }
 
-    // function UserLoginSuccess($data) {
-    //     if ($data['uid'] > 0) {
-    //         session('uid',$data['uid']);
-    //         session('username',$username);
-    //         session('user_shell',md5($data['username'].$data['password']));
-    //         S('user_key_'.$username, null); //清除登录验证缓存
-    //     }
-    // }
+    function GetVersion() {
+        if (defined('APP_VERSION')) {
+            return APP_VERSION;
+        } else {
+            return '2.0.0';
+        }
+    }
     
     function UserLogin($username,$password){
         // $StrUser = "username='$username'";
@@ -1071,7 +1070,7 @@
         $DbClass = M('account_class')->where($strSQL)->select();
         $CacheData = array();
         foreach($DbClass as $key => $Data) {
-            $classId = $Data['classid'];
+            $classId = intval($Data['classid']);
             $className = $Data['classname'];
             $classType = intval($Data['classtype']);
             $sql = array('acclassid'=>$classId, 'jiid'=>$uid);
