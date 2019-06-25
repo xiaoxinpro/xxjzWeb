@@ -387,6 +387,16 @@ class ApiController extends Controller {
         }
     }
 
+    //获取版本号
+    public function version() {
+        die(json_encode(array(
+            'title' => C('XXJZ_TITLE'),
+            'message' => C('XXJZ_WELCOME'),
+            'version' => GetVersion(),
+            'wechat' => C('WX_ENABLE'),
+        )));
+    }
+
     public function test(){
         $uid = session('uid');
         if (IS_POST) {
