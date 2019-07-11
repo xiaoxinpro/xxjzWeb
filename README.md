@@ -14,7 +14,7 @@
 
 >基础版本：https://github.com/xiaoxinpro/xxjzWeb/tree/Base
 
->Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
+>Demo  ：http://jz.xiaoxin.pro/xxjzApp/index.php
 
     Demo账号：demo
     Demo密码：xxgzs.org
