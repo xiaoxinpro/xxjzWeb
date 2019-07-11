@@ -9,7 +9,7 @@
 
 >GitHub：https://github.com/xiaoxinpro/xxjzWeb
 
->Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
+>Demo  ：http://jz.xiaoxin.pro/xxjzApp/index.php
 
 目前项目已基本完成，你可以使用Demo账号登陆体验，也可以自行搭建项目。
 
