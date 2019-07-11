@@ -18,7 +18,7 @@
 
 你可以使用Demo账号登陆体验V2.x版本，也可以自行搭建更加稳定的[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/releases/tag/V1.0.0)项目。
 
->Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
+>Demo  ：http://jz.xiaoxin.pro/xxjzApp/index.php
 
     Demo账号：demo
     Demo密码：xxgzs.org
