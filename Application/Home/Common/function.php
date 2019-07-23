@@ -141,6 +141,9 @@
 
     function UpdataUserName($uid, $Username, $Email ,$Password) {
         $user = session('username');
+        if($user == C('APP_DEMO_USERNAME')) {
+            return array(false, '抱歉Demo账号无法进行用户名修改！');
+        }
         $isShell = UserShell($user, md5($user.md5($Password)));
         //dump($user.$Password);
         if(!$isShell) {
@@ -163,6 +166,9 @@
 
     function UpdataPassword($uid, $old, $new) {
         $user = session('username');
+        if($user == C('APP_DEMO_USERNAME')) {
+            return array(false, '抱歉Demo账号无法进行密码修改！');
+        }
         $isShell = UserShell($user, md5($user.md5($old)));
         if(!$isShell) {
             return array(false, '验证密码失败，请重新输入登录密码！');
