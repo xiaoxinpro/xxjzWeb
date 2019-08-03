@@ -119,6 +119,10 @@ class ApiController extends Controller {
             die(json_encode($arrData));
         }
 
+        if (isset($data['formId'])) {
+            D('UserPush')->addPush($data['formId'], 'Weixin', "funds." . $type);
+        }
+
         switch ($type) {
             case 'get':
                 $arrData['data'] = GetFundsData($uid);
@@ -160,6 +164,10 @@ class ApiController extends Controller {
             $arrData['uid'] = 0;
             $arrData['data'] = "用户未登录，请重新登录！";
             die(json_encode($arrData));
+        }
+
+        if (isset($data['formId'])) {
+            D('UserPush')->addPush($data['formId'], 'Weixin', "class." . $type);
         }
 
         switch ($type) {
@@ -249,6 +257,10 @@ class ApiController extends Controller {
             $arrData['uid'] = 0;
             $arrData['data'] = "用户未登录，请重新登录！";
             die(json_encode($arrData));
+        }
+        
+        if (isset($data['formId'])) {
+            D('UserPush')->addPush($data['formId'], 'Weixin', "account." . $type);
         }
 
         switch ($type) {
@@ -398,30 +410,22 @@ class ApiController extends Controller {
     }
 
     public function test(){
-        $uid = session('uid');
-        if (IS_POST) {
-            $type = I('post.type','get');
-            $data = I('post.data',null);
-        } else {
-            $type = I('get.type','get');
-            $data = I('get.data',null);
-        }
-        dump("版本号：".GetVersion());
-        dump($uid);
-        dump($type);
-        dump($data);
-        dump(base64_decode($data),true);
-        dump(json_decode(base64_decode($data),true));
-        dump(GetClassAllData($uid));
-        //C('USER_LOGIN_TIMES', 15);
-        // dump(json_decode(getMonthData(2016, 1, $uid)));
-        // $data['gettype'] = 'day';
-        // $data['year'] = 2016;
-        // $data['month'] = 08;
-        // $data['day'] = 14;
-        // $data['p'] = 0;
-        // dump(GetDateAccountData($uid, $data));
-        // dump(NumTimeToStrTime("1470240000"));
+        // $uid = session('uid');
+        // if (IS_POST) {
+        //     $type = I('post.type','get');
+        //     $data = I('post.data',null);
+        // } else {
+        //     $type = I('get.type','get');
+        //     $data = I('get.data',null);
+        // }
+        // dump("版本号：".GetVersion());
+        // dump($uid);
+        // dump($type);
+        // dump($data);
+        // dump(base64_decode($data),true);
+        // dump(json_decode(base64_decode($data),true));
+        // dump(GetClassAllData($uid));
+        dump(D('UserPush')->sendWeixinPush(D('UserPush')->getWeixinTemplateId(),3,"month",array("123","500","本月共记录32笔","2019年7月")));
     }
 
 /***************************************************************************************************/
