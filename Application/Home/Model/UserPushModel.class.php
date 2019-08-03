@@ -137,8 +137,23 @@ class UserPushModel extends Model {
         }
     }
 
+    // 获取可用UID列表
+    public function getUidList() {
+        $this->clearPushFormid(); //清除不可用数据记录
+        $uidList = $this->distinct(true)->field('uid')->select();
+        if ($uidList && count($uidList) > 0) {
+            $ret = array();
+            foreach ($uidList as $key => $item) {
+                array_push($ret, $item['uid']);
+            }
+            return $ret;
+        } else {
+            return false;
+        }
+    }
+
     // 发送微信推送（推送ID，用户ID，小程序跳转页面，推送内容数组）
-    public function sendWeixinPush($template_id, $uid=null, $page="index", $arrData = null) {
+    public function sendWeixinPush($template_id, $uid=null, $page="main", $arrData = null) {
         $token = $this->getWeixinToken();
         $loginId = $this->getLoginId($uid);
         $formId = $this->getPushFormid($uid);
