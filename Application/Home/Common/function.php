@@ -1388,6 +1388,28 @@
         curl_close($httph);
         return $rst;
     }
+    
+    //参数1：访问的URL，参数2：post数据(不填则为GET)，参数3：json
+    //json $_POST=json_decode(file_get_contents('php://input'), TRUE);
+    function request($url, $data, $type){
+         if($type=='json'){
+             $headers = array("Content-type: application/json;charset=UTF-8","Accept: application/json","Cache-Control: no-cache", "Pragma: no-cache");
+             $data=json_encode($data);
+         }
+         $curl = curl_init();
+         curl_setopt($curl, CURLOPT_URL, $url);
+         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+         if (!empty($data)){
+             curl_setopt($curl, CURLOPT_POST, 1);
+             curl_setopt($curl, CURLOPT_POSTFIELDS,$data);
+         }
+         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+         curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers ); 
+         $output = curl_exec($curl);
+         curl_close($curl);
+         return $output;
+    }
 
     /**
      * 修改config的函数
