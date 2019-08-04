@@ -115,9 +115,12 @@
       │  │  │  ├─IndexController.class.php   主页控制器文件
       │  │  │  ├─ListController.class.php    列表控制器文件
       │  │  │  ├─LoginController.class.php   登录控制器文件
+      │  │  │  ├─PushController.class.php    信息推送控制器文件
       │  │  │  ├─UserController.class.php    用户控制器文件
       │  │  │  └─index.html                  index文件
-      │  │  ├─Model                          未使用
+      │  │  ├─Model                          模型目录
+      │  │  │  ├─UserPushModel.class.php     信息推送模型文件
+      │  │  │  └─index.html                  index文件
       │  │  └─View                           视图目录
       │  │     ├─Add                         记账视图目录
       │  │     ├─Chart                       图表视图目录
