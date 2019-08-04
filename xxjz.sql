@@ -49,7 +49,7 @@ CREATE TABLE `xxjz_user` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `xxjz_user` (`uid`, `username`, `password`, `email`, `utime`) VALUES
-(1,	'admin',	'7fef6171469e80d32c0559f88b377245',	'xxjz@xxgzs.org',	1550554411);
+(1,	'admin',	'7fef6171469e80d32c0559f88b377245',	'xxjz@xxgzs.org',	1564901873);
 
 DROP TABLE IF EXISTS `xxjz_user_login`;
 CREATE TABLE `xxjz_user_login` (
@@ -63,4 +63,16 @@ CREATE TABLE `xxjz_user_login` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- 2019-02-19 05:35:32
+DROP TABLE IF EXISTS `xxjz_user_push`;
+CREATE TABLE `xxjz_user_push` (
+  `pid` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `push_name` varchar(32) NOT NULL DEFAULT 'Weixin',
+  `push_id` varchar(64) NOT NULL,
+  `push_mark` varchar(32) DEFAULT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- 2019-08-04 06:59:17
