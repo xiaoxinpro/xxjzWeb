@@ -195,6 +195,16 @@
 |login_key|varchar(32)|平台session_key|
 |login_token|varchar(32)|平台unionid|
 
+### 4.6、信息推送表 xxjz_user_push
+| 字段 | 类型 | 备注 |
+|:--------:|--------|--------|
+|pid|int(11) 自动增量|推送ID|
+|uid|int(11)|用户ID|
+|push_name|varchar(32)|推送平台名称|
+|push_id|varchar(64)|推送平台formid|
+|push_mark|varchar(32)|推送源备注|
+|time|int(11)|推送源时间戳|
+
 ## 5、Bug 反馈及需求提交
 
 Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxinpro/xxjzWeb/issues)
