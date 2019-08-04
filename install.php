@@ -323,6 +323,17 @@
                     die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
                 }
             }
+            //创建user_push表
+            $TableName = $DbData['prefix']."user_push";
+            if(intable($DbData['name'],$TableName,$Conn)){
+                die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
+            }else{
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`pid` int(11) NOT NULL AUTO_INCREMENT, `uid` int(11) NOT NULL, `push_name` varchar(32) NOT NULL DEFAULT 'Weixin', `push_id` varchar(64) NOT NULL, `push_mark` varchar(32) DEFAULT NULL, `time` int(11) NOT NULL, PRIMARY KEY (`pid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $query=mysqli_query($Conn, $sql);
+                if(!$query){
+                    die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
+                }
+            }
             //创建user表
             $TableName = $DbData['prefix']."user";
             if(intable($DbData['name'],$TableName,$Conn)){
