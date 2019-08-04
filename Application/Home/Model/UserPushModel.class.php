@@ -12,6 +12,9 @@ class UserPushModel extends Model {
     // 添加推送信息
     public function addPush($formId, $name="Weixin", $mark=null) {
         $uid = session('uid');
+        if (session('username') == C('APP_DEMO_USERNAME')) {
+            return false;
+        }
         if ($uid && $uid > 0) {
             $pushData['uid'] = $uid;
             $pushData['push_name'] = $name;
