@@ -1,11 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <title>小歆记账Web升级向导</title>
+    <style type="text/css">
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size:12px;
+        color:#666666;
+        background:#fff;
+        text-align:center;
+
+    }
+
+    * {
+        margin:0;
+        padding:0;
+    }
+
+    a {
+        color:#1E7ACE;
+        text-decoration:none;    
+    }
+
+    a:hover {
+        color:#000;
+        text-decoration:underline;
+    }
+    h3 {
+        font-size:14px;
+        font-weight:bold;
+    }
+
+    pre,p {
+        color:#1E7ACE;
+        margin:4px;
+    }
+    input, select,textarea {
+        padding:1px;
+        margin:2px;
+        font-size:11px;
+    }
+    .buttom{
+        padding:1px 10px;
+        font-size:12px;
+        border:1px #1E7ACE solid;
+        background:#D0F0FF;
+    }
+    #formwrapper {
+        width:500px;
+        margin:15px auto;
+        padding:20px;
+        text-align:left;
+        border:1px #1E7ACE solid;
+    }
+
+    fieldset {
+        padding:10px;
+        margin-top:5px;
+        border:1px solid #1E7ACE;
+        background:#fff;
+    }
+
+    fieldset legend {
+        color:#1E7ACE;
+        font-weight:bold;
+        padding:3px 20px 3px 20px;
+        border:1px solid #1E7ACE;    
+        background:#fff;
+    }
+
+    fieldset label {
+        float:left;
+        width:120px;
+        text-align:right;
+        padding:4px;
+        margin:1px;
+    }
+
+    fieldset div {
+        clear:left;
+        margin-bottom:2px;
+    }
+
+    .enter{ text-align:center;}
+    .clear {
+        clear:both;
+    }
+
+    </style>
+  </head>
+  <body>
+
 <?php
     $xxjz = include './sql.php';
     $config = include './Application/Common/Conf/config.php';
     
-    $config['DB_PREFIX'] = 'test2_';
+    $config['DB_PREFIX'] = 'xxjz_';
     
-    UpdataDB($xxjz, $config);
-    
+    // 验证配置文件是否存在
+    if (!($config && isset($config['DB_HOST']) && isset($config['DB_USER']) && isset($config['DB_PWD']))) {
+        ShowAlert('请先运行安装程序，这是用于升级的程序。','尚未安装');
+    } elseif (file_exists('install.tmp')) {
+        ShowAlert('升级前请删除根目录下的“install.tmp”文件!','无法升级');
+    } elseif (version_compare(PHP_VERSION,'5.3.0','<')) {
+        ShowAlert('PHP版本过低，请使用5.3及其以上版本！','无法升级');
+    } else {
+        UpdataDB($xxjz, $config);
+    }
+
     // 主函数（升级数据库）
     function UpdataDB($xxjz, $config) {
         //连接数据库
@@ -23,8 +127,20 @@
         
         // 比较数据结构并生成升级SQL命令
         $sql = CompTableData($tableDb, $xxjz);
+        $sql_md5 = md5($sql);
+        
+        if ($sql == "") {
+            // var_dump("最新数据库无需升级。");
+            die(ShowAlert('当前数据库为最新版本，无需升级。','无需升级'));
+        } elseif (stripos($sql, "ALTER TABLE") !== false) {
+            var_dump("升级数据库。");
+            
+        } else {
+            var_dump("创建新数据库。");
+        }
         
         var_dump($sql);
+        return $sql;
     }
     
     // 获取数据库中的表结构
@@ -150,8 +266,13 @@
         echo '<h3>'.$Str.'</h3><br/>';
         if ($Title === "升级完成") {
             echo '<a href="index.php">跳转到主页</a>';    
+        } elseif($Title === "尚未安装") {
+            echo '<a href="install.php">跳转到安装</a>';  
         } else {
-            echo '<a href="updata_2.0.php">返回</a>';            
+            echo '<a href="updata.php">返回</a>';            
         }
         echo '</div></fieldset></div>';
     }
+?>
+  </body>
+</html>
