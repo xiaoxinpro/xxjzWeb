@@ -97,7 +97,7 @@
     $xxjz = include './sql.php';
     $config = include './Application/Common/Conf/config.php';
     
-    $config['DB_PREFIX'] = 'xxjz_';
+    // $config['DB_PREFIX'] = 'test_';
     
     // 验证配置文件是否存在
     if (!($config && isset($config['DB_HOST']) && isset($config['DB_USER']) && isset($config['DB_PWD']))) {
@@ -130,17 +130,32 @@
         $sql_md5 = md5($sql);
         
         if ($sql == "") {
-            // var_dump("最新数据库无需升级。");
             die(ShowAlert('当前数据库为最新版本，无需升级。','无需升级'));
         } elseif (stripos($sql, "ALTER TABLE") !== false) {
-            var_dump("升级数据库。");
-            
+            // var_dump("升级数据库。");
+            if (isset($_POST['submit']) && $_POST['submit'] == "升级") {
+                $username = htmlspecialchars(trim($_POST['admin_user']));
+                $password = md5(trim($_POST['admin_psw']));
+                CheckUserShell($Conn, $config, $username, $password);
+                // var_dump('验证通过，开始升级数据库。');
+                if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
+                    ShowAlert("升级已经完成，请点击下面跳转到登陆页！","升级完成");
+                } else {
+                    ShowAlert("升级因未知原因被中断，建议重新进行数据库安装。","未知错误");
+                }
+            } else {
+                ShowForm();
+            }
         } else {
-            var_dump("创建新数据库。");
+            // var_dump("创建新数据库。");
+            if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
+                ShowAlert("安装已经完成，请点击下面跳转到登陆页！","安装完成");
+            } else {
+                ShowAlert("安装因未知原因被中断，建议重新进行数据库安装。","未知错误");
+            }
         }
         
-        var_dump($sql);
-        return $sql;
+        // var_dump($sql);
     }
     
     // 获取数据库中的表结构
@@ -259,20 +274,95 @@
         return $sql;
     }
     
+    // 检查管理员权限与密码
+    function CheckUserShell($Conn, $config, $username, $password) {
+        //检验管理员账号
+        $dbName = $config['DB_NAME'];
+        $tableName =  $config['DB_PREFIX'] . "user";
+        $sql = "select * from `$dbName`.`$tableName` where uid='".$config['ADMIN_UID']."'";
+        $UserData = mysqli_fetch_array(mysqli_query($Conn, $sql));
+        if ($UserData['username'] != $username || $UserData['password'] != $password) {
+            die(ShowAlert('请检查管理员账号或密码是否正确！','权限验证失败'));
+        }
+    }
+    
+    // 执行多条数据库命令
+    function RunSqlQuery($Conn, $sql, $xxjz, $config) {
+        mysqli_select_db($Conn, $config['DB_NAME']);
+        if (mysqli_multi_query($Conn, $sql)) {
+            $dbFile = fopen("install.tmp", "w");
+            fwrite($dbFile, base64_encode(json_encode($config)));
+            fclose($dbFile);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     // 输出提示信息
     function ShowAlert($Str,$Title="提示") {
         echo '<div id="formwrapper"><fieldset>';
         echo '<legend>'.$Title.'</legend><div style="text-align:center;">';
         echo '<h3>'.$Str.'</h3><br/>';
-        if ($Title === "升级完成") {
-            echo '<a href="index.php">跳转到主页</a>';    
-        } elseif($Title === "尚未安装") {
-            echo '<a href="install.php">跳转到安装</a>';  
-        } else {
-            echo '<a href="updata.php">返回</a>';            
+        switch ($Title) {
+            case '升级完成':
+            case '安装完成':
+            case '无需升级':
+                echo '<a href="index.php">跳转到主页</a>';   
+                break;
+            case '尚未安装':
+            case '未知错误':
+                echo '<a href="install.php">跳转到安装</a>';  
+                break;
+            case '无法升级':
+                echo '<a href="updata.php">刷新</a>'; 
+                break;
+            default:
+                echo '<a href="updata.php">返回</a>';   
+                break;
         }
         echo '</div></fieldset></div>';
     }
+    
+    // 显示升级表单
+    function ShowForm() {
+        echo <<<___
+    <div id="formwrapper">
+        <h3 class="enter"><p>小歆记账Web升级向导</p></h3><br/>
+        <form action="updata.php" method="post">   
+            <fieldset>
+                <legend>升级说明</legend>
+                <div>
+                    本向导将1.x数据库升级到2.x数据库，升级前请确认一下内容：<br/>
+                    &emsp;&emsp;1、在升级前请务必备份好数据库中全部数据，如发生数据丢失将无法恢复。<br/>
+                    &emsp;&emsp;2、升级前请先填写管理员账号密码，若没有则无法进行升级。<br/>
+                    确认无误后请删除根目录下的“install.tmp”文件，并点击“升级”按钮。<br/>
+                </div>
+            </fieldset>
+            <br/>
+            <fieldset>
+                <legend>权限验证</legend>
+                <div>
+                    请输入安装时注册的管理员账号和密码：<br/>
+                </div>
+                <div>
+                    <label>管理员账号</label>
+                    <input type="text" name="admin_user" value="">
+                </div>
+                <div>
+                    <label>管理员密码</label>
+                    <input type="password" name="admin_psw" value="">
+                </div>
+            </fieldset>
+            <br/>
+            <span style="display:block; text-align:center;">
+                <input type="submit" class="buttom" name="submit" value="升级" />   
+            </span>
+        </form> 
+    </div>
+___;
+    }
+
 ?>
   </body>
 </html>
