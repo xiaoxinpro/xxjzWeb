@@ -5,9 +5,6 @@ class UserPushModel extends Model {
     protected $fields = array('pid', 'uid', 'push_name', 'push_id', 'push_mark', 'time',
         '_type'=>array('pid'=>'int', 'uid'=>'int', 'push_name'=>'varchar', 'push_id'=>'varchar', 'push_mark'=>'varchar', 'time'=>'int')
     );
-    protected $_validate = array(
-        array('push_id','','push_id已经存在！',0,'unique',1),
-    );
 
     // 添加推送信息
     public function addPush($formId, $name="Weixin", $mark=null) {
@@ -21,6 +18,9 @@ class UserPushModel extends Model {
             $pushData['push_id'] = $formId;
             if ($mark) {
                 $pushData['push_mark'] = "Model.".$mark;
+            }
+            if ($this->where($pushData)->find()) {
+                return false;
             }
             $pushData['time'] = time();
             return $this->add($pushData);
