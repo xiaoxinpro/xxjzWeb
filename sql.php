@@ -59,6 +59,20 @@ return array(
 		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
 	),
 
+	'user_config' => array(
+		'tableName'  => "user_config",
+		'tableField' => array(
+			"cid" => array('COLUMN_NAME'=>"cid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL",'EXTRA'=>"AUTO_INCREMENT"),
+			"uid" => array('COLUMN_NAME'=>"uid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
+			"config_name" => array('COLUMN_NAME'=>"config_name",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"config_key" => array('COLUMN_NAME'=>"config_key",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"config_value" => array('COLUMN_NAME'=>"config_value",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"time" => array('COLUMN_NAME'=>"time",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
+		),
+		'tableKey' => "cid",
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+	),
+
 	'user_login' => array(
 		'tableName'  => "user_login",
 		'tableField' => array(
