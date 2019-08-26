@@ -1,97 +1,104 @@
 <!DOCTYPE html>
 <html>
-  <head>
+    <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
     <title>小歆记账Web升级向导</title>
     <style type="text/css">
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size:12px;
-        color:#666666;
-        background:#fff;
-        text-align:center;
-
-    }
-
-    * {
-        margin:0;
-        padding:0;
-    }
-
-    a {
-        color:#1E7ACE;
-        text-decoration:none;    
-    }
-
-    a:hover {
-        color:#000;
-        text-decoration:underline;
-    }
-    h3 {
-        font-size:14px;
-        font-weight:bold;
-    }
-
-    pre,p {
-        color:#1E7ACE;
-        margin:4px;
-    }
-    input, select,textarea {
-        padding:1px;
-        margin:2px;
-        font-size:11px;
-    }
-    .buttom{
-        padding:1px 10px;
-        font-size:12px;
-        border:1px #1E7ACE solid;
-        background:#D0F0FF;
-    }
-    #formwrapper {
-        width:500px;
-        margin:15px auto;
-        padding:20px;
-        text-align:left;
-        border:1px #1E7ACE solid;
-    }
-
-    fieldset {
-        padding:10px;
-        margin-top:5px;
-        border:1px solid #1E7ACE;
-        background:#fff;
-    }
-
-    fieldset legend {
-        color:#1E7ACE;
-        font-weight:bold;
-        padding:3px 20px 3px 20px;
-        border:1px solid #1E7ACE;    
-        background:#fff;
-    }
-
-    fieldset label {
-        float:left;
-        width:120px;
-        text-align:right;
-        padding:4px;
-        margin:1px;
-    }
-
-    fieldset div {
-        clear:left;
-        margin-bottom:2px;
-    }
-
-    .enter{ text-align:center;}
-    .clear {
-        clear:both;
-    }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size:12px;
+            color:#666666;
+            background:#fff;
+            text-align:center;
+    
+        }
+    
+        * {
+            margin:0;
+            padding:0;
+        }
+    
+        a {
+            color:#1E7ACE;
+            text-decoration:none;
+        }
+    
+        a:hover {
+            color:#000;
+            text-decoration:underline;
+        }
+        h3 {
+            font-size:14px;
+            font-weight:bold;
+        }
+    
+        pre,p {
+            color:#1E7ACE;
+            margin:4px;
+        }
+        input, select,textarea {
+            padding:1px;
+            margin:2px;
+            font-size:11px;
+        }
+        .buttom{
+            padding:1px 10px;
+            font-size:12px;
+            border:1px #1E7ACE solid;
+            background:#D0F0FF;
+        }
+        #formwrapper {
+            width:500px;
+            margin:15px auto;
+            padding:20px;
+            text-align:left;
+            border:1px #1E7ACE solid;
+        }
+    
+        fieldset {
+            padding:10px;
+            margin-top:5px;
+            border:1px solid #1E7ACE;
+            background:#fff;
+        }
+    
+        fieldset legend {
+            color:#1E7ACE;
+            font-weight:bold;
+            padding:3px 20px 3px 20px;
+            border:1px solid #1E7ACE;
+            background:#fff;
+        }
+    
+        fieldset label {
+            float:left;
+            width:120px;
+            text-align:right;
+            padding:4px;
+            margin:1px;
+        }
+    
+        fieldset div {
+            clear:left;
+            margin-bottom:2px;
+        }
+    
+        .enter{ text-align:center;}
+        .clear {
+            clear:both;
+        }
 
     </style>
-  </head>
-  <body>
+    <script>
+        //防止页面后退
+        history.pushState(null,null, document.URL);
+        window.addEventListener('popstate',function(){
+            history.pushState(null,null, document.URL);
+        });
+    </script>
+    </head>
+    <body>
 
 <?php
     $xxjz = include './sql.php';
@@ -131,7 +138,7 @@
         
         if ($sql == "") {
             die(ShowAlert('当前数据库为最新版本，无需升级。','无需升级'));
-        } elseif (stripos($sql, "ALTER TABLE") !== false) {
+        } elseif ((substr_count($sql, 'CREATE TABLE') !== count($xxjz)) || (stripos($sql, "ALTER TABLE") !== false && substr_count($sql, 'CREATE TABLE') === count($xxjz))) {
             // var_dump("升级数据库。");
             if (isset($_POST['submit']) && $_POST['submit'] == "升级") {
                 $username = htmlspecialchars(trim($_POST['admin_user']));
@@ -147,12 +154,12 @@
                 ShowForm();
             }
         } else {
-            // var_dump("创建新数据库。");
-            if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
-                ShowAlert("安装已经完成，请点击下面跳转到登陆页！","安装完成");
-            } else {
-                ShowAlert("安装因未知原因被中断，建议重新进行数据库安装。","未知错误");
-            }
+            var_dump("创建新数据库。");
+            // if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
+            //     ShowAlert("安装已经完成，请点击下面跳转到登陆页！","安装完成");
+            // } else {
+            //     ShowAlert("安装因未知原因被中断，建议重新进行数据库安装。","未知错误");
+            // }
         }
         
         // var_dump($sql);
@@ -308,17 +315,17 @@
             case '升级完成':
             case '安装完成':
             case '无需升级':
-                echo '<a href="index.php">跳转到主页</a>';   
+                echo '<a href="index.php">跳转到主页</a>';
                 break;
             case '尚未安装':
             case '未知错误':
-                echo '<a href="install.php">跳转到安装</a>';  
+                echo '<a href="install.php">跳转到安装</a>';
                 break;
             case '无法升级':
-                echo '<a href="updata.php">刷新</a>'; 
+                echo '<a href="updata.php">刷新</a>';
                 break;
             default:
-                echo '<a href="updata.php">返回</a>';   
+                echo '<a href="updata.php">返回</a>';
                 break;
         }
         echo '</div></fieldset></div>';
@@ -329,7 +336,7 @@
         echo <<<___
     <div id="formwrapper">
         <h3 class="enter"><p>小歆记账Web升级向导</p></h3><br/>
-        <form action="updata.php" method="post">   
+        <form action="updata.php" method="post">
             <fieldset>
                 <legend>升级说明</legend>
                 <div>
@@ -356,13 +363,13 @@
             </fieldset>
             <br/>
             <span style="display:block; text-align:center;">
-                <input type="submit" class="buttom" name="submit" value="升级" />   
+                <input type="submit" class="buttom" name="submit" value="升级" />
             </span>
-        </form> 
+        </form>
     </div>
 ___;
     }
 
 ?>
-  </body>
+    </body>
 </html>
