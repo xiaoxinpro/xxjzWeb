@@ -13,34 +13,34 @@ class PushController extends Controller {
         //接口token = md5(key + time)
         //https://ide.xiaoxin.pro/xxjzApp/index.php/Home/Push/test.html?token=b708f9b4ed6b94f03a2d5d204b5e6648&time=123
 
-        $token = I('get.token', 'null');
-        $times = I('get.time', 0, 'int');
-        //验证time有效性
-        if ($times <= S('push_time')) {
-            die(json_encode(array('err'=>'10001','msg'=>'访问已超过其时效性'), true));
-        }
-        //验证管理员权限
-        if (md5(md5(C('WX_OPENID')).''.$times) == $token) {
-            $this->token_auth = 255;
-        } else {
-            $key = D('UserConfig')->getConfig('push_key', 'Weixin', 0);
-            if ($key && md5($key.''.$times) == $token) {
-                $this->token_auth = 1;
-            } else {
-                die(json_encode(array('err'=>'10010','msg'=>'权限验证失败'), true));
-            }
-        }
-        S('push_time', $times);
+        // $token = I('get.token', 'null');
+        // $times = I('get.time', 0, 'int');
+        // //验证time有效性
+        // if ($times <= S('push_time')) {
+        //     die(json_encode(array('err'=>'10001','msg'=>'访问已超过其时效性'), true));
+        // }
+        // //验证管理员权限
+        // if (md5(md5(C('WX_OPENID')).''.$times) == $token) {
+        //     $this->token_auth = 255;
+        // } else {
+        //     $key = D('UserConfig')->getConfig('push_key', 'Weixin', 0);
+        //     if ($key && md5($key.''.$times) == $token) {
+        //         $this->token_auth = 1;
+        //     } else {
+        //         die(json_encode(array('err'=>'10010','msg'=>'权限验证失败'), true));
+        //     }
+        // }
+        // S('push_time', $times);
     }
 
-    public function test() {
-        dump('test page');
-        dump($this->token_auth);
-    }
-
+    // 月账单推送
     public function month() {
         $month = (date('m') == 12) ? 1 : intval(date('m')) - 1;
         $year = ($month == 12) ? intval(date('Y')) - 1 : intval(date('Y'));
+        $template_id = D('UserPush')->getWeixinTemplateId('本月记账成功通知');
+        if ($template_id == false) {
+            die("Error weixin template id not found.");
+        }
 
         //获取uid列表
         $uidList = D('UserPush')->getUidList();
@@ -61,7 +61,6 @@ class PushController extends Controller {
             $outMoney = number_format($data['SumOutMoney'], 2);
             $countData = number_format($data['count'], 0);
             //发送推送
-            $template_id = D('UserPush')->getWeixinTemplateId('本月记账成功通知');
             $arrData = array();
             $arrData[0] = $outMoney . "元";
             $arrData[1] = $inMoney . "元";
@@ -72,5 +71,11 @@ class PushController extends Controller {
             $push = D('UserPush')->sendWeixinPush($template_id, $uid, 'month', $arrData);
             dump($push);
         }
+    }
+
+    // 测试接口
+    public function test() {
+        dump('test page');
+        dump($this->token_auth);
     }
 }
