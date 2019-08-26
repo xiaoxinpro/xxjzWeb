@@ -51,6 +51,17 @@ CREATE TABLE `xxjz_user` (
 INSERT INTO `xxjz_user` (`uid`, `username`, `password`, `email`, `utime`) VALUES
 (1,	'admin',	'7fef6171469e80d32c0559f88b377245',	'xxjz@xxgzs.org',	1564901873);
 
+DROP TABLE IF EXISTS `xxjz_user_config`;
+CREATE TABLE `xxjz_user_config` (
+  `cid` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `config_name` varchar(32) NOT NULL,
+  `config_key` varchar(32) NOT NULL,
+  `config_value` varchar(32) NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`cid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `xxjz_user_login`;
 CREATE TABLE `xxjz_user_login` (
   `lid` int(11) NOT NULL AUTO_INCREMENT,
@@ -75,4 +86,4 @@ CREATE TABLE `xxjz_user_push` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- 2019-08-04 06:59:17
+-- 2019-08-17 08:24:06
