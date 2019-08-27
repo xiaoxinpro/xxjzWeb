@@ -13,24 +13,24 @@ class PushController extends Controller {
         //接口token = md5(key + time)
         //https://ide.xiaoxin.pro/xxjzApp/index.php/Home/Push/test.html?token=b708f9b4ed6b94f03a2d5d204b5e6648&time=123
 
-        // $token = I('get.token', 'null');
-        // $times = I('get.time', 0, 'int');
-        // //验证time有效性
-        // if ($times <= S('push_time')) {
-        //     die(json_encode(array('err'=>'10001','msg'=>'访问已超过其时效性'), true));
-        // }
-        // //验证管理员权限
-        // if (md5(md5(C('WX_OPENID')).''.$times) == $token) {
-        //     $this->token_auth = 255;
-        // } else {
-        //     $key = D('UserConfig')->getConfig('push_key', 'Weixin', 0);
-        //     if ($key && md5($key.''.$times) == $token) {
-        //         $this->token_auth = 1;
-        //     } else {
-        //         die(json_encode(array('err'=>'10010','msg'=>'权限验证失败'), true));
-        //     }
-        // }
-        // S('push_time', $times);
+        $token = I('get.token', 'null');
+        $times = I('get.time', 0, 'int');
+        //验证time有效性
+        if ($times <= S('push_time')) {
+            die(json_encode(array('err'=>'10001','msg'=>'访问已超过其时效性'), true));
+        }
+        //验证管理员权限
+        if (md5(md5(C('WX_OPENID')).''.$times) == $token) {
+            $this->token_auth = 255;
+        } else {
+            $key = D('UserConfig')->getConfig('push_key', 'Weixin', 0);
+            if ($key && md5($key.''.$times) == $token) {
+                $this->token_auth = 1;
+            } else {
+                die(json_encode(array('err'=>'10010','msg'=>'权限验证失败'), true));
+            }
+        }
+        S('push_time', $times);
     }
 
     // 月账单推送
@@ -70,6 +70,53 @@ class PushController extends Controller {
             dump($arrData);
             $push = D('UserPush')->sendWeixinPush($template_id, $uid, 'month', $arrData);
             dump($push);
+        }
+    }
+
+    // 打卡提醒
+    public function punch() {
+        $template_id = D('UserPush')->getWeixinTemplateId('打卡提醒');
+        if ($template_id == false) {
+            die("Error weixin template id not found.");
+        }
+
+        //获取uid列表
+        $uidList = D('UserPush')->getUidList();
+        foreach ($uidList as $key => $uid) {
+            //获取用户打卡推送配置
+            $punchNum = intval(D('UserConfig')->getConfig('push_punch', 'Weixin', $uid));
+            if ($punchNum <= 0) {
+                dump('uid='.$uid.'未开启推送，跳过推送。');
+                continue;
+            }
+            $punchDay = date("Y-m-d",strtotime('-'.$punchNum.' day'));
+            $startTime = strtotime($punchDay." 00:00:00");
+            $endTime = strtotime($punchDay." 23:59:59");
+
+            //获取推送数据
+            $arrSql = array(
+                "uid" => $uid,
+                "push_name" => "Weixin",
+                "push_mark" => "Model.account.add",
+                "time" => array(array('egt',$startTime),array('elt',$endTime)),
+            );
+            $dbData = M('UserPush')->where($arrSql)->order('time desc')->find();
+            if ($dbData == null) {
+                dump('uid='.$uid.'没有可推送的数据，跳过推送。');
+                continue;
+            }
+            $dbData['time'] = date("Y-m-d H:i:s", $dbData['time']);
+            // dump($dbData);
+
+            //发送推送
+            $arrData = array();
+            $arrData[0] = "小歆记账打卡"; //打卡名称
+            $arrData[1] = "记账"; //打卡方式
+            $arrData[2] = $dbData['time']; //打卡时间
+            $arrData[3] = "您已经".$punchNum."天没有记账了，赶紧“进入小程序”开始记账吧。"; //完成情况
+            dump('uid='.$uid.'触发推送。');
+            dump($arrData);
+            $push = D('UserPush')->sendWeixinPush($template_id, $uid, 'add', $arrData);
         }
     }
 
