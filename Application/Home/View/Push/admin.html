@@ -1,0 +1,31 @@
+<extend name="Public:common"/>
+<block name="main">
+  <!-- 默认配置表单 -->{$message}
+  <form class="am-form" method="post">
+    <fieldset>
+      <legend>默认用户配置</legend>
+      <div class="am-form-group">
+        <label for="doc-select-2">月账单推送</label>
+        <select name="default_push_month" id="doc-select-2">
+          <option value="0">关闭</option>
+          <option value="1">开启</option>
+        </select>
+      </div>
+      <div class="am-form-group">
+        <label for="doc-select-2">打卡推送提醒（天）</label>
+        <select name="default_push_punch" id="doc-select-2">
+          <option value="0">关闭</option>
+          <option value="1">1天</option>
+          <option value="2">2天</option>
+          <option value="3">3天</option>
+          <option value="4">4天</option>
+          <option value="5">5天</option>
+          <option value="6">6天</option>
+          <option value="7">7天</option>
+        </select>
+      </div>
+      <input type="text" name="form" value="default" hidden />
+      <p><button type="submit" class="am-btn am-btn-success am-btn-block">提交</button></p>
+    </fieldset>
+  </form>
+</block>
