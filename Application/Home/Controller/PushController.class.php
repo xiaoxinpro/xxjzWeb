@@ -33,6 +33,26 @@ class PushController extends Controller {
         S('push_time', $times);
     }
 
+    // 推送管理，必须使用管理权限登录
+    public function admin() {
+        if ($this->token_auth < 255) {
+            die(json_encode(array('err'=>'10011','msg'=>'权限不足，请使用管理员权限登录。'), true));
+        }
+        S('push_time', null);
+        // die(json_encode(array('err'=>'0','msg'=>'登录成功。'), true));
+
+        //登录成功
+        $this -> assign('message', '登录成功');
+
+        //POST
+        if (IS_POST) {
+            dump(I('post.'));
+        }
+        
+        //实例化显示
+        $this -> display();
+    }
+
     // 月账单推送
     public function month() {
         $month = (date('m') == 12) ? 1 : intval(date('m')) - 1;
