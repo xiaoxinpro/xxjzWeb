@@ -16,6 +16,13 @@ class IndexController extends BaseController {
             session('webAppUser',null);
             session('webAppPass',null);
         }
+
+        //管理员权限
+        if ($uid == C('ADMIN_UID')) {
+            $tokenTime = time();
+            $token = md5(md5(C('WX_OPENID')).''.$tokenTime);
+            $this -> assign('PushAdminUrl', '/Home/Push/admin?token='.$token.'&time='.$tokenTime);
+        }
         
         //获取指定页数据
         $DbAccount = GetAccountData($uid, $p);
