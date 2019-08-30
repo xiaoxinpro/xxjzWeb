@@ -28,6 +28,10 @@
             <li class="am-divider"></li>
             <li class=""><a href="__APP__/Home/User/index" class="am-icon-cog" > &nbsp;设置选项</a></li>
             <li class="am-divider"></li>
+            <if condition="$PushAdminUrl">
+              <li class=""><a href="__APP__{$PushAdminUrl}" class="am-icon-chain" > &nbsp;推送管理</a></li>
+              <li class="am-divider"></li>
+            </if>
             <li class=""><a href="__APP__/Home/Login/logout" class="am-icon-sign-out"> &nbsp;退出登录</a></li>
         </ul>
       </div>
