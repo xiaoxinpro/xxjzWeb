@@ -98,6 +98,8 @@
             ShowAlert('你已经安装过小歆记账，如需重装请删除根目录下的“install.tmp”文件!','无法安装');
         } elseif (version_compare(PHP_VERSION,'5.3.0','<')) {
             ShowAlert('PHP版本过低，请使用5.3及其以上版本！','无法安装');
+        } elseif (checkPath('./Application/Common/Conf/config.php') == false) {
+            ShowAlert('Application文件夹及其子文件权限不足，请设置755权限后再试。','无法安装');
         } elseif (isset($_POST['submit'])) {
             echo $_POST['submit'];
             $Data = array();
@@ -208,6 +210,7 @@
 </html>
 
 <?php
+    //显示提示框
     function ShowAlert($Str,$Title="提示") {
         echo '<div id="formwrapper"><fieldset>';
         echo '<legend>'.$Title.'</legend><div style="text-align:center;">';
@@ -218,6 +221,12 @@
             echo '<a href="install.php">返回</a>';            
         }
         echo '</div></fieldset></div>';
+    }
+
+    //获取权限
+    function checkPath($file_path)
+    {
+        return is_writable($file_path);
     }
 
     //验证数据
