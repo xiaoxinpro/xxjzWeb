@@ -21,7 +21,7 @@ class IndexController extends BaseController {
         if ($uid == C('ADMIN_UID')) {
             $tokenTime = time();
             $token = md5(md5(C('WX_OPENID')).''.$tokenTime);
-            $this -> assign('PushAdminUrl', '/Home/Push/admin?token='.$token.'&time='.$tokenTime);
+            $this -> assign('PushAdminUrl', '/Home/Push/admin/token/'.$token.'/time/'.$tokenTime);
         }
         
         //获取指定页数据
