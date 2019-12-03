@@ -29,4 +29,26 @@ class UserConfigModel extends Model {
             return null;
         }
     }
+
+    // 添加配置信息到数据库
+    public function setConfig($config_key, $config_value, $config_name, $uid = 0) {
+        $configData = array();
+        $configData['uid'] = $uid;
+        $configData['config_name'] = $config_name;
+        $configData['config_key'] = $config_key;
+        $dbData = $this->where($configData)->find();
+        if ($dbData && isset($dbData['cid'])) {
+            if ($dbData['config_value'] != $config_value) {
+                $dbData['config_value'] = $config_value;
+                $dbData['time'] = time();
+                return $this->where('cid='.$dbData['cid'])->data($dbData)->save();
+            } else {
+                return false;
+            }
+        } else {
+            $configData['config_value'] = $config_value;
+            $configData['time'] = time();
+            return $this->data($configData)->add();
+        }
+    }
 }
