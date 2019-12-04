@@ -15,6 +15,7 @@ class PushController extends Controller {
 
         $token = I('get.token', 'null');
         $times = I('get.time', 0, 'int');
+
         //验证time有效性
         if ($times <= S('push_time')) {
             die(json_encode(array('err'=>'10001','msg'=>'访问已超过其时效性'), true));
@@ -41,13 +42,27 @@ class PushController extends Controller {
         S('push_time', null);
         // die(json_encode(array('err'=>'0','msg'=>'登录成功。'), true));
 
-        //登录成功
-        $this -> assign('message', '登录成功');
-
         //POST
         if (IS_POST) {
-            dump(I('post.'));
+            switch (I('post.form')) {
+                case 'default':
+                    D('UserConfig')->setConfig('push_month', I('post.default_push_month', '0'), 'Weixin', 0);
+                    D('UserConfig')->setConfig('push_punch', I('post.default_push_punch', '0'), 'Weixin', 0);
+                    break;
+                case 'add_key':
+                    D('UserConfig')->setConfig('push_key', I('post.push_key', '0'), 'Weixin', 0);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            $this -> assign('message', '表单提交完成。');
         }
+
+        //同步显示数据
+        $this -> assign('push_month', D('UserConfig')->getConfig('push_month', 'Weixin', 0));
+        $this -> assign('push_punch', D('UserConfig')->getConfig('push_punch', 'Weixin', 0));
+        $this -> assign('push_key', D('UserConfig')->getConfig('push_key', 'Weixin', 0));
         
         //实例化显示
         $this -> display();
@@ -55,8 +70,8 @@ class PushController extends Controller {
 
     // 月账单推送
     public function month() {
-        $month = (date('m') == 12) ? 1 : intval(date('m')) - 1;
-        $year = ($month == 12) ? intval(date('Y')) - 1 : intval(date('Y'));
+        $month = (date('m') == 1) ? 12 : intval(date('m')) - 1;
+        $year = ($month == 1) ? intval(date('Y')) - 1 : intval(date('Y'));
         $template_id = D('UserPush')->getWeixinTemplateId('本月记账成功通知');
         if ($template_id == false) {
             die("Error weixin template id not found.");
@@ -143,6 +158,6 @@ class PushController extends Controller {
     // 测试接口
     public function test() {
         dump('test page');
-        dump($this->token_auth);
+        dump(date('m'));
     }
 }
