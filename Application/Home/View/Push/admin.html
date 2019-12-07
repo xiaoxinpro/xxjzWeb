@@ -1,49 +1,70 @@
 <extend name="Public:common"/>
 <block name="main">
-  <!-- 默认配置表单 -->{$message}
+  <!-- 文本提示框 -->
+  <neq name="message" value="">
+    <div class="am-alert am-alert-success" id="am-alert" data-am-alert>
+      <button type="button" class="am-close">&times;</button>
+      <p>{$message}</p>
+    </div>
+  </neq>
+
+  <!-- 默认配置表单 -->
   <form class="am-form" method="post">
     <fieldset>
-      <legend>默认用户配置</legend>
+      <legend>默认推送配置</legend>
       <div class="am-form-group">
         <label for="doc-select-2">月账单推送</label>
-        <select name="default_push_month" id="doc-select-2">
-          <option value="0">关闭</option>
-          <option value="1">开启</option>
+        <select name="default_push_month" id="doc-select-2" value="">
+          <option value="0" <eq name='push_month' value='0'>selected</eq>>关闭</option>
+          <option value="1" <eq name='push_month' value='1'>selected</eq>>开启</option>
         </select>
       </div>
       <div class="am-form-group">
         <label for="doc-select-2">打卡推送提醒（天）</label>
         <select name="default_push_punch" id="doc-select-2">
-          <option value="0">关闭</option>
-          <option value="1">1天</option>
-          <option value="2">2天</option>
-          <option value="3">3天</option>
-          <option value="4">4天</option>
-          <option value="5">5天</option>
-          <option value="6">6天</option>
-          <option value="7">7天</option>
+          <option value="0" <eq name='push_punch' value='0'>selected</eq>>关闭</option>
+          <option value="1" <eq name='push_punch' value='1'>selected</eq>>1天</option>
+          <option value="2" <eq name='push_punch' value='2'>selected</eq>>2天</option>
+          <option value="3" <eq name='push_punch' value='3'>selected</eq>>3天</option>
+          <option value="4" <eq name='push_punch' value='4'>selected</eq>>4天</option>
+          <option value="5" <eq name='push_punch' value='5'>selected</eq>>5天</option>
+          <option value="6" <eq name='push_punch' value='6'>selected</eq>>6天</option>
+          <option value="7" <eq name='push_punch' value='7'>selected</eq>>7天</option>
         </select>
       </div>
-      <input type="text" name="form" value="default" hidden />
+      <input type="hidden" name="form" value="default" >
       <p><button type="submit" class="am-btn am-btn-success am-btn-block">提交</button></p>
     </fieldset>
   </form>
 
   <!-- 授权管理 -->
-  <div class="am-form" method="post">
+  <div class="am-form">
     <fieldset>
       <legend>授权管理</legend>
-      <form class="am-form-inline" role="form">
-        <div class="am-form-group">
-          <select name="push_name" id="doc-select-2">
-            <option value="Weixin">微信</option>
-          </select>
+      <form class="am-form-inline" role="form" method="post">
+        <div class="am-form-group am-form-select">
+          <label class="am-form-field" style="border-width: 0;">微信密钥：</label>
+          <input type="hidden" name="push_name" value="Weixin" >
         </div>
         <div class="am-form-group">
-          <input type="text" name="push_value" class="am-form-field" placeholder="密钥">
+          <input type="text" name="push_key" class="am-form-field" placeholder="密钥" value="{$push_key}">
+          <input type="hidden" name="form" value="add_key" >
         </div>
-        <button type="submit" class="am-btn am-btn-success">添加</button>
+        <button type="submit" class="am-btn am-btn-success">修改</button>
       </form>
     </fieldset>
   </div>
+</block>
+
+<block name="javascript">
+  <neq name="message" value="">
+    <!-- 文本提示框自动关闭 -->
+    <script type="text/javascript">
+      $(function(){
+        setTimeout(function(){
+          $('#am-alert').alert('close');
+        },1000);
+      });
+    </script>
+  </neq>
 </block>
