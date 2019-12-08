@@ -51,6 +51,8 @@
           <input type="hidden" name="form" value="add_key" >
         </div>
         <button type="submit" class="am-btn am-btn-success">修改</button>
+        <a href="__APP__/Home/Push/month/token/{$tokenObj['token']}/time/{$tokenObj['time']}" class="am-btn am-btn-secondary" target="_blank">执行月账单推送</a>
+        <a href="__APP__/Home/Push/punch/token/{$tokenObj['token']}/time/{$tokenObj['time']}" class="am-btn am-btn-secondary" target="_blank">执行提醒推送</a>
       </form>
     </fieldset>
   </div>
