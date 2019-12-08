@@ -74,7 +74,7 @@ class PushController extends Controller {
 
     // 月账单推送
     public function month() {
-        $month = (date('m') == 12) ? 1 : intval(date('m')) - 1;
+        $month = (date('m') == 1) ? 12 : intval(date('m')) - 1;
         $year = ($month == 12) ? intval(date('Y')) - 1 : intval(date('Y'));
         $template_id = D('UserPush')->getWeixinTemplateId('本月记账成功通知');
         if ($template_id == false) {
