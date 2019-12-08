@@ -16,6 +16,17 @@
         }
     }
 
+    function PushApiToken($tokenKey, $tokenTime=null)
+    {
+        if ($tokenTime == null) {
+            $tokenTime = time();
+        }
+        return array(
+            'token' => md5($tokenKey.''.$tokenTime), 
+            'time' => $tokenTime,
+        );
+    }
+
     function GetVersion() {
         if (defined('APP_VERSION')) {
             return APP_VERSION;
@@ -1391,7 +1402,7 @@
     
     //参数1：访问的URL，参数2：post数据(不填则为GET)，参数3：json
     //json $_POST=json_decode(file_get_contents('php://input'), TRUE);
-    function request($url, $data, $type){
+    function request($url, $data='', $type=''){
          if($type=='json'){
              $headers = array("Content-type: application/json;charset=UTF-8","Accept: application/json","Cache-Control: no-cache", "Pragma: no-cache");
              $data=json_encode($data);
