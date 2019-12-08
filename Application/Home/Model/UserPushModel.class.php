@@ -78,7 +78,7 @@ class UserPushModel extends Model {
     // 获取微信access_token，官方有效期7200秒
     public function getWeixinToken() {
         $token = S('weixin_access_token');
-        if (!$token) {
+        if (!is_string($token)) {
             $data = request("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".C('WX_OPENID')."&secret=".C('WX_SECRET'));
             $data = json_decode($data, true);
             if(isset($data['access_token'])) {
@@ -94,7 +94,7 @@ class UserPushModel extends Model {
     // 获取推送列表
     public function getWeixinTemplateList() {
         $ret = S('weixin_template_list');
-        if ($ret) {
+        if (is_array($ret) && count($ret) > 0) {
             return $ret;
         }
         $token = $this->getWeixinToken();
