@@ -18,14 +18,16 @@ class PushController extends Controller {
 
         //验证time有效性
         if ($times <= S('push_time')) {
-            die(json_encode(array('err'=>'10001','msg'=>'访问已超过其时效性'), true));
+            // die(json_encode(array('err'=>'10001','msg'=>'访问已超过其时效性'), true));
         }
         //验证管理员权限
-        if (md5(md5(C('WX_OPENID')).''.$times) == $token) {
+        if (PushApiToken(md5(C('WX_OPENID')), $times)['token'] == $token) {
+            $this->token_key = md5(C('WX_OPENID'));
             $this->token_auth = 255;
         } else {
             $key = D('UserConfig')->getConfig('push_key', 'Weixin', 0);
-            if ($key && md5($key.''.$times) == $token) {
+            if ($key && PushApiToken($key, $times)['token'] == $token) {
+                $this->token_key = $key;
                 $this->token_auth = 1;
             } else {
                 die(json_encode(array('err'=>'10010','msg'=>'权限验证失败'), true));
@@ -40,7 +42,6 @@ class PushController extends Controller {
             die(json_encode(array('err'=>'10011','msg'=>'权限不足，请使用管理员权限登录。'), true));
         }
         S('push_time', null);
-        // die(json_encode(array('err'=>'0','msg'=>'登录成功。'), true));
 
         //POST
         if (IS_POST) {
@@ -58,6 +59,9 @@ class PushController extends Controller {
             }
             $this -> assign('message', '表单提交完成。');
         }
+        // 更新Token密钥
+        $tokenObj = PushApiToken($this->token_key);
+        $this -> assign('tokenObj', $tokenObj);
 
         //同步显示数据
         $this -> assign('push_month', D('UserConfig')->getConfig('push_month', 'Weixin', 0));
@@ -70,8 +74,8 @@ class PushController extends Controller {
 
     // 月账单推送
     public function month() {
-        $month = (date('m') == 1) ? 12 : intval(date('m')) - 1;
-        $year = ($month == 1) ? intval(date('Y')) - 1 : intval(date('Y'));
+        $month = (date('m') == 12) ? 1 : intval(date('m')) - 1;
+        $year = ($month == 12) ? intval(date('Y')) - 1 : intval(date('Y'));
         $template_id = D('UserPush')->getWeixinTemplateId('本月记账成功通知');
         if ($template_id == false) {
             die("Error weixin template id not found.");
