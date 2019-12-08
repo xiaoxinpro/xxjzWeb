@@ -19,9 +19,8 @@ class IndexController extends BaseController {
 
         //管理员权限
         if ($uid == C('ADMIN_UID')) {
-            $tokenTime = time();
-            $token = md5(md5(C('WX_OPENID')).''.$tokenTime);
-            $this -> assign('PushAdminUrl', '/Home/Push/admin/token/'.$token.'/time/'.$tokenTime);
+            $tokenObj = PushApiToken(md5(C('WX_OPENID')));
+            $this -> assign('PushAdminUrl', '/Home/Push/admin/token/'.$tokenObj['token'].'/time/'.$tokenObj['time']);
         }
         
         //获取指定页数据
