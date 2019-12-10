@@ -19,15 +19,6 @@
             padding:0;
         }
     
-        a {
-            color:#1E7ACE;
-            text-decoration:none;
-        }
-    
-        a:hover {
-            color:#000;
-            text-decoration:underline;
-        }
         h3 {
             font-size:14px;
             font-weight:bold;
@@ -47,6 +38,9 @@
             font-size:12px;
             border:1px #1E7ACE solid;
             background:#D0F0FF;
+            display: inline-block;
+            color: black;
+            text-decoration: none;
         }
         #formwrapper {
             width:500px;
@@ -155,6 +149,14 @@
             }
         } else {
             var_dump("创建新数据库。");
+            if (isset($_POST['submit']) && $_POST['submit'] == "安装") {
+                $username = htmlspecialchars(trim($_POST['admin_user']));
+                $password = md5(trim($_POST['admin_psw']));
+                var_dump($username);
+                var_dump($password);
+            } else {
+                ShowAdminForm();
+            }
             // if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
             //     ShowAlert("安装已经完成，请点击下面跳转到登陆页！","安装完成");
             // } else {
@@ -364,6 +366,38 @@
             <br/>
             <span style="display:block; text-align:center;">
                 <input type="submit" class="buttom" name="submit" value="升级" />
+            </span>
+        </form>
+    </div>
+___;
+    }
+
+    // 显示管理员注册表单
+    function ShowAdminForm()
+    {
+        echo <<<___
+    <div id="formwrapper">
+        <h3 class="enter"><p>小歆记账Web安装向导</p></h3><br/>
+        <form action="updata.php" method="post">
+            <fieldset>
+                <legend>管理员信息</legend>
+                <div>
+                    <label>管理员账号</label>
+                    <input type="text" name="admin_user" value="admin">
+                </div>
+                <div>
+                    <label>管理员密码</label>
+                    <input type="password" name="admin_psw" value="">
+                </div>
+                <div>
+                    <label>管理员邮箱</label>
+                    <input type="email" name="admin_email" value="xxjz@xxgzs.org">
+                </div>
+            </fieldset>
+            <br/>
+            <span style="display:block; text-align:center;">
+                <a href="install.php" class="buttom">返回</a>
+                <input type="submit" class="buttom" name="submit" value="安装" />
             </span>
         </form>
     </div>
