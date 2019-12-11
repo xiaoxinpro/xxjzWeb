@@ -161,7 +161,7 @@
 |acremark|varchar(64)|备注|
 |jiid|int(11)|用户ID|
 |zhifu|int(1)|收入1/支出2|
-|fid|int(11)[0]|资金账户ID|
+|fid|int(11)[-1]|资金账户ID|
 
 ### 4.2、分类表 xxjz_account_class
 | 字段 | 类型 | 备注 |
@@ -187,7 +187,17 @@
 |email|varchar(255)|邮箱|
 |utime|int(11)|注册时间戳|
 
-### 4.5、用户登陆表 xxjz_user_login
+### 4.5、用户表 xxjz_user_config
+| 字段 | 类型 | 备注 |
+|:--------:|--------|--------|
+|cid|int(11) 自动增量|配置ID|
+|uid|int(11)|用户ID|
+|config_name|varchar(32)|配置名称|
+|config_key|varchar(32)|配置键|
+|config_value|varchar(32)|配置值|
+|time|int(11)|创建时间戳|
+
+### 4.6、用户登陆表 xxjz_user_login
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |lid|int(11) 自动增量|登陆ID|
@@ -197,7 +207,7 @@
 |login_key|varchar(32)|平台session_key|
 |login_token|varchar(32)|平台unionid|
 
-### 4.6、信息推送表 xxjz_user_push
+### 4.7、信息推送表 xxjz_user_push
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |pid|int(11) 自动增量|推送ID|
