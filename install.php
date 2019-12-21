@@ -114,17 +114,16 @@
             $Data['mail']['user'] = $_POST['mail_user'];
             $Data['mail']['psw'] = $_POST['mail_psw'];
             $Data['mail']['from'] = $_POST['mail_from'];
-            $Data['admin']['user'] = $_POST['admin_user'];
-            $Data['admin']['psw'] = $_POST['admin_psw'];
-            $Data['admin']['email'] = $_POST['admin_email'];
             CheakData($Data);
-            InstallDB($Data['db'],$Data['admin']);
+            // InstallDB($Data['db'],$Data['admin']);
             WriteConfig($Data['db'],$Data['mail']);
-            $jsonData = base64_encode(json_encode($Data));
-            $dbFile = fopen("install.tmp", "w") or die(ShowAlert("请手动删除根目录下的install.php文件。","安装完成"));
-            fwrite($dbFile, $jsonData);
-            fclose($dbFile);
-            ShowAlert($Data['admin']['user']."安装已经完成，请点击下面跳转到登陆页！","安装完成");
+            // $jsonData = base64_encode(json_encode($Data));
+            // $dbFile = fopen("install.tmp", "w") or die(ShowAlert("请手动删除根目录下的install.php文件。","安装完成"));
+            // fwrite($dbFile, $jsonData);
+            // fclose($dbFile);
+            // ShowAlert($Data['admin']['user']."安装已经完成，请点击下面跳转到登陆页！","安装完成");
+            header("Location: updata.php");
+            return;
         } else {
     ?>
     <div id="formwrapper">
@@ -181,25 +180,9 @@
                     <input type="email" name="mail_from" value="xxjz@163.com">
                 </div>
             </fieldset>
-
-            <fieldset>
-                <legend>管理员信息</legend>
-                <div>
-                    <label>管理员账号</label>
-                    <input type="text" name="admin_user" value="admin">
-                </div>
-                <div>
-                    <label>管理员密码</label>
-                    <input type="password" name="admin_psw" value="">
-                </div>
-                <div>
-                    <label>管理员邮箱</label>
-                    <input type="email" name="admin_email" value="xxjz@xxgzs.org">
-                </div>
-            </fieldset>
             <br/>
             <span style="display:block; text-align:center;">
-                <input type="submit" class="buttom" name="submit" value="安装" />   
+                <input type="submit" class="buttom" name="submit" value="下一步" />   
             </span>
         </form> 
     </div>
@@ -245,12 +228,6 @@
         }
         if(strlen($Data['db']['prefix']) <= 1) {
             die(ShowAlert('数据库表名前缀不能为空','安装失败'));
-        }
-        if(strlen($Data['admin']['user']) <= 1) {
-            die(ShowAlert('管理员账号无效，请重新输入。','安装失败'));
-        }
-        if(strlen($Data['admin']['psw']) < 6) {
-            die(ShowAlert('管理员密码太短，请重新输入。','安装失败'));
         }
     }
 
