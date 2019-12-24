@@ -148,7 +148,7 @@
                 ShowForm();
             }
         } else {
-            var_dump("创建新数据库。");
+            // var_dump("创建新数据库。");
             if (isset($_POST['submit']) && $_POST['submit'] == "安装") {
                 $username = htmlspecialchars(trim($_POST['admin_user']));
                 $password = md5(trim($_POST['admin_psw']));
@@ -318,6 +318,9 @@
             case '安装完成':
             case '无需升级':
                 echo '<a href="index.php">跳转到主页</a>';
+                break;
+            case '连接数据库失败':
+                echo '<a href="install.php">返回</a>';
                 break;
             case '尚未安装':
             case '未知错误':
