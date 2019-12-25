@@ -151,9 +151,12 @@
             // var_dump("创建新数据库。");
             if (isset($_POST['submit']) && $_POST['submit'] == "安装") {
                 $username = htmlspecialchars(trim($_POST['admin_user']));
-                $password = md5(trim($_POST['admin_psw']));
+                $password = htmlspecialchars(trim($_POST['admin_psw']));
+                $email = htmlspecialchars(trim($_POST['admin_email']));
+                CheckNewUser($username, $password, $email);
                 var_dump($username);
                 var_dump($password);
+                var_dump($email);
             } else {
                 ShowAdminForm();
             }
@@ -295,6 +298,16 @@
         }
     }
     
+    // 检查新用户信息有效性
+    function CheckNewUser($username, $password, $email) {
+        if(strlen($username) <= 1) {
+            die(ShowAlert('管理员账号太短，请重新输入。','安装失败'));
+        }
+        if(strlen($password) < 6) {
+            die(ShowAlert('管理员密码太短，请重新输入。','安装失败'));
+        }
+    }
+    
     // 执行多条数据库命令
     function RunSqlQuery($Conn, $sql, $xxjz, $config) {
         mysqli_select_db($Conn, $config['DB_NAME']);
@@ -329,6 +342,7 @@
             case '无法升级':
                 echo '<a href="updata.php">刷新</a>';
                 break;
+            case '安装失败':
             default:
                 echo '<a href="updata.php">返回</a>';
                 break;
