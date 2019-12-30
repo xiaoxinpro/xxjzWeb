@@ -182,7 +182,7 @@
             </fieldset>
             <br/>
             <span style="display:block; text-align:center;">
-                <input type="submit" class="buttom" name="submit" value="下一步" />   
+                <input type="submit" class="buttom" name="submit" value="安装" />   
             </span>
         </form> 
     </div>
