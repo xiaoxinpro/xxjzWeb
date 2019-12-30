@@ -20,7 +20,7 @@ return array(
 			"fid" => array('COLUMN_NAME'=>"fid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL",'COLUMN_DEFAULT'=>"DEFAULT '-1'"),
 		),
 		'tableKey' => "acid",
-		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 	'account_class' => array(
@@ -32,7 +32,7 @@ return array(
 			"ufid" => array('COLUMN_NAME'=>"ufid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
 		),
 		'tableKey' => "classid",
-		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 	'account_funds' => array(
@@ -43,7 +43,7 @@ return array(
 			"uid" => array('COLUMN_NAME'=>"uid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
 		),
 		'tableKey' => "fundsid",
-		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 	'user' => array(
@@ -56,7 +56,7 @@ return array(
 			"utime" => array('COLUMN_NAME'=>"utime",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
 		),
 		'tableKey' => "uid",
-		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 	'user_config' => array(
@@ -70,7 +70,7 @@ return array(
 			"time" => array('COLUMN_NAME'=>"time",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
 		),
 		'tableKey' => "cid",
-		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 	'user_login' => array(
@@ -84,7 +84,7 @@ return array(
 			"login_token" => array('COLUMN_NAME'=>"login_token",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
 		),
 		'tableKey' => "lid",
-		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 	'user_push' => array(
@@ -98,7 +98,7 @@ return array(
 			"time" => array('COLUMN_NAME'=>"time",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
 		),
 		'tableKey' => "pid",
-		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 );
