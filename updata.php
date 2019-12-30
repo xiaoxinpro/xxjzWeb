@@ -131,7 +131,22 @@
         $sql_md5 = md5($sql);
         
         if ($sql == "") {
-            die(ShowAlert('当前数据库为最新版本，无需升级。','无需升级'));
+            if (CheckUserEmpty($Conn, $config)) {
+                if (isset($_POST['submit']) && $_POST['submit'] == "创建") {
+                    $username = htmlspecialchars(trim($_POST['admin_user']));
+                    $password = htmlspecialchars(trim($_POST['admin_psw']));
+                    $email = htmlspecialchars(trim($_POST['admin_email']));
+                    CheckNewUser($username, $password, $email);
+                    CreateAdminUser($Conn, $config, $username, md5($password), $email);
+                    InstallDone();
+                    ShowAlert("升级已经完成，请点击下面跳转到登陆页！","安装完成");
+                } else {
+                    ShowAdminForm();
+                }
+            } else {
+                InstallDone();
+                die(ShowAlert('当前数据库为最新版本，无需升级。','无需升级'));
+            }
         } elseif ((substr_count($sql, 'CREATE TABLE') !== count($xxjz)) || (stripos($sql, "ALTER TABLE") !== false && substr_count($sql, 'CREATE TABLE') === count($xxjz))) {
             // var_dump("升级数据库。");
             if (isset($_POST['submit']) && $_POST['submit'] == "升级") {
@@ -140,6 +155,7 @@
                 CheckUserShell($Conn, $config, $username, $password);
                 // var_dump('验证通过，开始升级数据库。');
                 if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
+                    InstallDone();
                     ShowAlert("升级已经完成，请点击下面跳转到登陆页！","升级完成");
                 } else {
                     ShowAlert("升级因未知原因被中断，建议重新进行数据库安装。","未知错误");
@@ -149,22 +165,11 @@
             }
         } else {
             // var_dump("创建新数据库。");
-            if (isset($_POST['submit']) && $_POST['submit'] == "安装") {
-                $username = htmlspecialchars(trim($_POST['admin_user']));
-                $password = htmlspecialchars(trim($_POST['admin_psw']));
-                $email = htmlspecialchars(trim($_POST['admin_email']));
-                CheckNewUser($username, $password, $email);
-                var_dump($username);
-                var_dump($password);
-                var_dump($email);
-            } else {
+            if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
                 ShowAdminForm();
+            } else {
+                ShowAlert("升级因未知原因被中断，建议重新进行数据库安装。","未知错误");
             }
-            // if (RunSqlQuery($Conn, $sql, $xxjz, $config)) {
-            //     ShowAlert("安装已经完成，请点击下面跳转到登陆页！","安装完成");
-            // } else {
-            //     ShowAlert("安装因未知原因被中断，建议重新进行数据库安装。","未知错误");
-            // }
         }
         
         // var_dump($sql);
@@ -298,6 +303,19 @@
         }
     }
     
+    // 检测用户数据库是否为空
+    function CheckUserEmpty($Conn, $config) {
+        $dbName = $config['DB_NAME'];
+        $tableName =  $config['DB_PREFIX'] . "user";
+        $sql = "select count(*) from `$dbName`.`$tableName`";
+        $dbData = intval(mysqli_fetch_array(mysqli_query($Conn, $sql))[0]);
+        if($dbData > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
     // 检查新用户信息有效性
     function CheckNewUser($username, $password, $email) {
         if(strlen($username) <= 1) {
@@ -312,12 +330,37 @@
     function RunSqlQuery($Conn, $sql, $xxjz, $config) {
         mysqli_select_db($Conn, $config['DB_NAME']);
         if (mysqli_multi_query($Conn, $sql)) {
-            $dbFile = fopen("install.tmp", "w");
-            fwrite($dbFile, base64_encode(json_encode($config)));
-            fclose($dbFile);
             return true;
         } else {
             return false;
+        }
+    }
+    
+    // 安装完成
+    function InstallDone() {
+        $dbFile = fopen("install.tmp", "w");
+        fwrite($dbFile, '此文件有安装或升级向导自动生成，如需要重新安装或升级请删除此文件；否则不要删除此文件，以防止重复安装。');
+        fclose($dbFile);
+        ClearThinkphpRuntime();
+    }
+    
+    // 清除ThinkPHP缓存
+    function ClearThinkphpRuntime() {
+        if (is_dir('./Application/Runtime/')) {
+            deleteDir('./Application/Runtime/');
+        }
+    }
+    
+    // 创建管理员用户
+    function CreateAdminUser($Conn, $config, $username, $password, $email)
+    {
+        $utime = strtotime("now");
+        $dbName = $config['DB_NAME'];
+        $tableName =  $config['DB_PREFIX'] . "user";
+        $sql="insert into `$dbName`.`$tableName` (username, password,email,utime) values ('$username', '$password','$email','$utime')";
+        $query=mysqli_query($Conn, $sql);
+        if(!$query){
+            die(ShowAlert('请检查该用户是否有权限添加数据权限。','创建管理员失败'));
         }
     }
     
@@ -330,6 +373,7 @@
             case '升级完成':
             case '安装完成':
             case '无需升级':
+            case '创建管理员失败':
                 echo '<a href="index.php">跳转到主页</a>';
                 break;
             case '连接数据库失败':
@@ -359,9 +403,10 @@
             <fieldset>
                 <legend>升级说明</legend>
                 <div>
-                    本向导将1.x数据库升级到2.x数据库，升级前请确认一下内容：<br/>
-                    &emsp;&emsp;1、在升级前请务必备份好数据库中全部数据，如发生数据丢失将无法恢复。<br/>
-                    &emsp;&emsp;2、升级前请先填写管理员账号密码，若没有则无法进行升级。<br/>
+                    本向导将完成2.x版本的数据库升级，升级前请确认一下内容：<br/>
+                    &emsp;&emsp;1、在升级前请务必备份好数据库中全部数据，否则升级后将无法恢复数据。<br/>
+                    &emsp;&emsp;2、将最新版本的“sql.php”文件放在网站根目录下。<br/>
+                    &emsp;&emsp;3、升级前请先填写管理员账号密码，若没有则无法进行升级。<br/>
                     确认无误后请删除根目录下的“install.tmp”文件，并点击“升级”按钮。<br/>
                 </div>
             </fieldset>
@@ -397,7 +442,7 @@ ___;
         <h3 class="enter"><p>小歆记账Web安装向导</p></h3><br/>
         <form action="updata.php" method="post">
             <fieldset>
-                <legend>管理员信息</legend>
+                <legend>创建管理员</legend>
                 <div>
                     <label>管理员账号</label>
                     <input type="text" name="admin_user" value="admin">
@@ -413,13 +458,41 @@ ___;
             </fieldset>
             <br/>
             <span style="display:block; text-align:center;">
-                <a href="install.php" class="buttom">返回</a>
-                <input type="submit" class="buttom" name="submit" value="安装" />
+                <input type="submit" class="buttom" name="submit" value="创建" />
             </span>
         </form>
     </div>
 ___;
     }
+    
+/**
+ * 删除当前目录及其目录下的所有目录和文件
+ * @param string $path 待删除的目录
+ * @note  $path路径结尾不要有斜杠/(例如:正确[$path='./static/image'],错误[$path='./static/image/'])
+ */
+function deleteDir($path) {
+    if (is_dir($path)) {
+        //扫描一个目录内的所有目录和文件并返回数组
+        $dirs = scandir($path);
+        foreach ($dirs as $dir) {
+            //排除目录中的当前目录(.)和上一级目录(..)
+            if ($dir != '.' && $dir != '..') {
+                //如果是目录则递归子目录，继续操作
+                $sonDir = $path.'/'.$dir;
+                if (is_dir($sonDir)) {
+                    //递归删除
+                    deleteDir($sonDir);
+                    //目录内的子目录和文件删除后删除空目录
+                    @rmdir($sonDir);
+                } else {
+                    //如果是文件直接删除
+                    @unlink($sonDir);
+                }
+            }
+        }
+        @rmdir($path);
+    }
+}
 
 ?>
     </body>
