@@ -272,7 +272,7 @@
         } else {
             //创建数据库(已存在则跳过)
             if(!inDataBase($DbData['name'],$Conn)){
-                $sql = "create database ".$DbData['name']." default character SET utf8 COLLATE utf8_general_ci";
+                $sql = "create database ".$DbData['name']." default character SET utf8mb4 COLLATE utf8mb4_general_ci";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert('请检查该用户是否有权限创建数据库。','创建数据库失败'));
@@ -284,7 +284,7 @@
             if(intable($DbData['name'],$TableName,$Conn)){
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
-                $sql = "CREATE TABLE `$DbName`.`$TableName` (`acid` int(11) unsigned NOT NULL AUTO_INCREMENT,`acmoney` double(9,2) unsigned NOT NULL,`acclassid` int(11) NOT NULL,`actime` int(11) NOT NULL,`acremark` varchar(64) NOT NULL,`jiid` int(11) NOT NULL,`zhifu` int(11) NOT NULL,`fid` int(11) NOT NULL DEFAULT '-1',PRIMARY KEY (`acid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`acid` int(11) unsigned NOT NULL AUTO_INCREMENT,`acmoney` double(9,2) unsigned NOT NULL,`acclassid` int(11) NOT NULL,`actime` int(11) NOT NULL,`acremark` varchar(64) NOT NULL,`jiid` int(11) NOT NULL,`zhifu` int(11) NOT NULL,`fid` int(11) NOT NULL DEFAULT '-1',PRIMARY KEY (`acid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
@@ -295,7 +295,7 @@
             if(intable($DbData['name'],$TableName,$Conn)){
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
-                $sql = "CREATE TABLE `$DbName`.`$TableName` (`classid` int(11) NOT NULL AUTO_INCREMENT,`classname` varchar(24) NOT NULL,`classtype` int(1) NOT NULL,`ufid` int(11) NOT NULL,PRIMARY KEY (`classid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`classid` int(11) NOT NULL AUTO_INCREMENT,`classname` varchar(24) NOT NULL,`classtype` int(1) NOT NULL,`ufid` int(11) NOT NULL,PRIMARY KEY (`classid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
@@ -306,7 +306,7 @@
             if(intable($DbData['name'],$TableName,$Conn)){
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
-                $sql = "CREATE TABLE `$DbName`.`$TableName` (`fundsid` int(11) NOT NULL AUTO_INCREMENT,`fundsname` varchar(24) NOT NULL,`uid` int(11) NOT NULL,PRIMARY KEY (`fundsid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`fundsid` int(11) NOT NULL AUTO_INCREMENT,`fundsname` varchar(24) NOT NULL,`uid` int(11) NOT NULL,PRIMARY KEY (`fundsid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
@@ -317,7 +317,7 @@
             if(intable($DbData['name'],$TableName,$Conn)){
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
-                $sql = "CREATE TABLE `$DbName`.`$TableName` (`lid` int(11) NOT NULL AUTO_INCREMENT,`uid` int(11) NOT NULL,`login_name` varchar(32) NOT NULL,`login_id` varchar(32) NOT NULL,`login_key` varchar(32) NOT NULL,`login_token` varchar(32) NOT NULL,PRIMARY KEY (`lid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`lid` int(11) NOT NULL AUTO_INCREMENT,`uid` int(11) NOT NULL,`login_name` varchar(32) NOT NULL,`login_id` varchar(32) NOT NULL,`login_key` varchar(32) NOT NULL,`login_token` varchar(32) NOT NULL,PRIMARY KEY (`lid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
@@ -328,7 +328,7 @@
             if(intable($DbData['name'],$TableName,$Conn)){
                 die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
             }else{
-                $sql = "CREATE TABLE `$DbName`.`$TableName` (`uid` int(11) NOT NULL AUTO_INCREMENT,`username` varchar(24) NOT NULL,`password` varchar(32) NOT NULL,`email` varchar(255) NOT NULL,`utime` int(11) NOT NULL,PRIMARY KEY (`uid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+                $sql = "CREATE TABLE `$DbName`.`$TableName` (`uid` int(11) NOT NULL AUTO_INCREMENT,`username` varchar(24) NOT NULL,`password` varchar(32) NOT NULL,`email` varchar(255) NOT NULL,`utime` int(11) NOT NULL,PRIMARY KEY (`uid`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;";
                 $query=mysqli_query($Conn, $sql);
                 if(!$query){
                     die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
@@ -366,7 +366,7 @@
         $txt = $txt."'DB_PORT'   => 3306,     // 端口 \n";
         $txt = $txt."'DB_PARAMS' =>  array(), // 数据库连接参数 \n";
         $txt = $txt."'DB_PREFIX' => '". $DbData['prefix'] ."',  // 数据库表前缀  \n";
-        $txt = $txt."'DB_CHARSET'=> 'utf8',   // 字符集 \n";
+        $txt = $txt."'DB_CHARSET'=> 'utf8mb4',   // 字符集 \n";
         $txt = $txt."'DB_DEBUG'  =>  TRUE,    // 数据库调试模式 开启后可以记录SQL日志 \n";
 
         $txt = $txt."\n//系统配置\n";

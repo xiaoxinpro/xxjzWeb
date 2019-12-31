@@ -1,6 +1,6 @@
 -- Adminer 4.3.1 MySQL dump
 
-SET NAMES utf8;
+SET NAMES utf8mb4;
 SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
@@ -16,7 +16,7 @@ CREATE TABLE `xxjz_account` (
   `zhifu` int(11) NOT NULL,
   `fid` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`acid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `xxjz_account_class`;
@@ -26,7 +26,7 @@ CREATE TABLE `xxjz_account_class` (
   `classtype` int(1) NOT NULL,
   `ufid` int(11) NOT NULL,
   PRIMARY KEY (`classid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `xxjz_account_funds`;
@@ -35,7 +35,7 @@ CREATE TABLE `xxjz_account_funds` (
   `fundsname` varchar(24) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`fundsid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `xxjz_user`;
@@ -46,7 +46,7 @@ CREATE TABLE `xxjz_user` (
   `email` varchar(255) NOT NULL,
   `utime` int(11) NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `xxjz_user` (`uid`, `username`, `password`, `email`, `utime`) VALUES
 (1,	'admin',	'7fef6171469e80d32c0559f88b377245',	'xxjz@xxgzs.org',	1550554411);
@@ -60,7 +60,7 @@ CREATE TABLE `xxjz_user_login` (
   `login_key` varchar(32) NOT NULL,
   `login_token` varchar(32) NOT NULL,
   PRIMARY KEY (`lid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 -- 2019-02-19 05:35:32
