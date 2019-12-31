@@ -236,7 +236,7 @@
                 if(!intable($DbName,$TableName,$Conn)){
                     die(ShowAlert($TableName.'数据表不存在，请重新安装！','数据表不存在'));
                 }else{
-                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `acclassid` `acclassid` int(11) NOT NULL AFTER `acmoney`, CHANGE `acremark` `acremark` varchar(64) COLLATE 'utf8_general_ci' NOT NULL AFTER `actime`, CHANGE `jiid` `jiid` int(11) NOT NULL AFTER `acremark`, CHANGE `zhifu` `zhifu` int(11) NOT NULL AFTER `jiid`, ADD `fid` int(11) NOT NULL DEFAULT '-1';";
+                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `acclassid` `acclassid` int(11) NOT NULL AFTER `acmoney`, CHANGE `acremark` `acremark` varchar(64) COLLATE 'utf8mb4_general_ci' NOT NULL AFTER `actime`, CHANGE `jiid` `jiid` int(11) NOT NULL AFTER `acremark`, CHANGE `zhifu` `zhifu` int(11) NOT NULL AFTER `jiid`, ADD `fid` int(11) NOT NULL DEFAULT '-1';";
                     $query=mysqli_query($Conn, $sql);
                     if(!$query){
                         echo "警告： $TableName 未修改。";
@@ -252,7 +252,7 @@
                 if(!intable($DbName,$TableName,$Conn)){
                     die(ShowAlert($TableName.'数据表不存在，请重新安装！','数据表不存在'));
                 }else{
-                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `classid` `classid` int(11) NOT NULL AUTO_INCREMENT FIRST, CHANGE `classname` `classname` varchar(24) COLLATE 'utf8_general_ci' NOT NULL AFTER `classid`, CHANGE `ufid` `ufid` int(11) NOT NULL AFTER `classtype`;";
+                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `classid` `classid` int(11) NOT NULL AUTO_INCREMENT FIRST, CHANGE `classname` `classname` varchar(24) COLLATE 'utf8mb4_general_ci' NOT NULL AFTER `classid`, CHANGE `ufid` `ufid` int(11) NOT NULL AFTER `classtype`;";
                     $query=mysqli_query($Conn, $sql);
                     if(!$query){
                         echo "警告： $TableName 未修改。";
@@ -264,7 +264,7 @@
                 if(!intable($DbName,$TableName,$Conn)){
                     die(ShowAlert($TableName.'数据表不存在，请重新安装！','数据表不存在'));
                 }else{
-                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `uid` `uid` int(11) NOT NULL AUTO_INCREMENT FIRST, CHANGE `username` `username` varchar(24) COLLATE 'utf8_general_ci' NOT NULL AFTER `uid`, CHANGE `email` `email` varchar(255) COLLATE 'utf8_general_ci' NOT NULL AFTER `password`;";
+                    $sql = "ALTER TABLE `$DbName`.`$TableName` CHANGE `uid` `uid` int(11) NOT NULL AUTO_INCREMENT FIRST, CHANGE `username` `username` varchar(24) COLLATE 'utf8mb4_general_ci' NOT NULL AFTER `uid`, CHANGE `email` `email` varchar(255) COLLATE 'utf8mb4_general_ci' NOT NULL AFTER `password`;";
                     $query=mysqli_query($Conn, $sql);
                     if(!$query){
                         echo "警告： $TableName 未修改。";
@@ -276,7 +276,7 @@
                 if(intable($DbName,$TableName,$Conn)){
                     // die(ShowAlert('请删除数据库中的'.$TableName.'表，或者修改表前缀！','数据表已存在'));
                 }else{
-                    $sql = "CREATE TABLE `$DbName`.`$TableName` ( `fundsid` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `fundsname` varchar(24) COLLATE 'utf8_general_ci' NOT NULL, `uid` int(11) NOT NULL ) ENGINE='MyISAM' COLLATE 'utf8_general_ci';";
+                    $sql = "CREATE TABLE `$DbName`.`$TableName` ( `fundsid` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, `fundsname` varchar(24) COLLATE 'utf8mb4_general_ci' NOT NULL, `uid` int(11) NOT NULL ) ENGINE='MyISAM' COLLATE 'utf8mb4_general_ci';";
                     $query=mysqli_query($Conn, $sql);
                     if(!$query){
                         die(ShowAlert("请检查该用户是否有权限创建表 $TableName 。",'创建表失败'));
