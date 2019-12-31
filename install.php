@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
@@ -372,6 +372,7 @@
         $txt = $txt."\n//系统配置\n";
         $txt = $txt."'HTML_CACHE_ON'         => false,       // 关闭静态缓存 \n";
         $txt = $txt."'URL_CASE_INSENSITIVE'  => false,       // 区分大小写(必须) \n";
+        $txt = $txt."'URL_MODEL'             => 3,           // URL模式 \n";
 
         $txt = $txt."\n//应用配置信息\n";
         $txt = $txt."'USER_LOGIN_TIMES'  => 10,              // 用户登录次 \n";
