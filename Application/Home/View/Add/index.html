@@ -16,7 +16,7 @@
             <else/>
                 <div data-tab-panel-2 class="am-tab-panel am-active">
             </if>
-                <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+                <form class="am-form am-form-horizontal" enctype="multipart/form-data" method="post" data-am-validator="H5validation:false">
                     <legend>添加支出</legend>
                     <input type="hidden" name="add_type" value="2">
                     <div class="am-input-group">
@@ -48,6 +48,15 @@
                     <div class="am-input-group">
                         <span class="am-input-group-label"><b>备注</b></span>
                         <input type="text" class="am-form-field" id="text-mark" name="add_mark" placeholder="输入支出信息">
+                        <span class="am-input-group-btn am-form-file">
+                            <button type="button" class="am-btn am-btn-default"><i class="am-icon-cloud-upload"></i> 上传图片</button>
+                            <input id="doc-form-file-out" type="file" name="add_photo[]" multiple>
+                        </span>
+                    </div>
+                    <div class="file-group-out" style="display: none;"><p></p></div>
+                    <div class="am-input-group file-group-out" style="display: none;">
+                        <span class="am-input-group-label"><b>附件</b></span>
+                        <div id="file-list-out" class="am-form-field" ></div>
                     </div>
                     <div><p></p></div>
                     <div class="am-input-group">
@@ -55,6 +64,7 @@
                         <input type="date" class="am-form-field" id="text-time" name="add_time" 
                                 value="<php>echo date("Y-m-d",time());</php>" />
                     </div>
+                    
                     <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
                     
                     <p><button type="submit" name="submit" class="am-btn am-btn-warning am-btn-block">添加</button></p>
@@ -98,7 +108,16 @@
                     <div><p></p></div>
                     <div class="am-input-group">
                         <span class="am-input-group-label"><b>备注</b></span>
-                        <input type="text" class="am-form-field" id="text-mark" name="add_mark" placeholder="输入收入信息">
+                        <input type="text" class="am-form-field" id="text-mark" name="add_mark" placeholder="输入支出信息">
+                        <span class="am-input-group-btn am-form-file">
+                            <button type="button" class="am-btn am-btn-default"><i class="am-icon-cloud-upload"></i> 上传图片</button>
+                            <input id="doc-form-file-in" type="file" name="add_photo[]" multiple>
+                        </span>
+                    </div>
+                    <div class="file-group-in" style="display: none;"><p></p></div>
+                    <div class="am-input-group file-group-in" style="display: none;">
+                        <span class="am-input-group-label"><b>附件</b></span>
+                        <div id="file-list-in" class="am-form-field" ></div>
                     </div>
                     <div><p></p></div>
                     <div class="am-input-group">
@@ -118,4 +137,36 @@
     <gt name="PageMax" value="1">
         <a href="__APP__/Home/Index/index/p/2" class="am-btn am-btn-block am-btn-default">更多</a>
     </gt>
+</block>
+
+<block name="javascript">
+    <script>
+      $(function() {
+        $('#doc-form-file-out').on('change', function() {
+          var fileNames = '';
+          $.each(this.files, function() {
+            fileNames += '<span class="am-badge">' + this.name + '</span> ';
+          });
+          $('#file-list-out').html(fileNames);
+          if (fileNames == '') {
+            $('.file-group-out').hide();
+          } else {
+            $('.file-group-out').show();
+          }
+        });
+
+        $('#doc-form-file-in').on('change', function() {
+          var fileNames = '';
+          $.each(this.files, function() {
+            fileNames += '<span class="am-badge">' + this.name + '</span> ';
+          });
+          $('#file-list-in').html(fileNames);
+          if (fileNames == '') {
+            $('.file-group-in').hide();
+          } else {
+            $('.file-group-in').show();
+          }
+        });
+      });
+    </script>
 </block>
