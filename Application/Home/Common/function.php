@@ -753,13 +753,39 @@
             $data = $isCheak[1];
             $DbData = M('account')->add($data);
             if($DbData > 0){
-                return array(true,'数据添加成功!');
+                return array(true,'数据添加成功!',$DbData);
             }else{
                 return array(false,'写入数据库出错(>_<)');
             }
         }else{
             return $isCheak;
         }
+    }
+
+    //获取上传文件的对象
+    function UploadFile($uid) {
+        $upload = new \Think\Upload();// 实例化上传类
+        $upload->maxSize  = 3 * 1024 * 1024 ;// 设置附件上传大小
+        $upload->exts     = array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+        $upload->rootPath = './Uploads/'; // 设置附件上传根目录
+        $upload->savePath = '';
+        $upload->saveName = array('uniqid','');
+        $upload->autoSub  = true;
+        $upload->subName  = date('Y').'/image'.$uid;
+        return $upload->upload();
+    }
+
+    //添加图片到数据库
+    function AddImageData($uid, $upload, $acid = 0) {
+        if (is_array($upload) && count($upload) > 0) {
+            for ($i=0; $i < count($upload); $i++) { 
+                $upload[$i]['uid'] = $uid;
+                $upload[$i]['acid'] = $acid;
+                $upload[$i]['time'] = time();
+            }
+            return M("account_image")->addAll($upload);
+        }
+        return false;
     }
 
     //校验资金账户名
