@@ -789,14 +789,37 @@
     }
 
     //获取数据库中的图片
-    function GetImageData($uid, $acid) {
+    function GetImageData($uid, $acid, $id = false) {
         $sql = array('uid'=>$uid, 'acid'=>$acid);
+        if ($id) {
+            $sql['id'] = $id;
+        }
         $imageData = M("account_image")->where($sql)->select();
         if (is_array($imageData) && count($imageData) > 0) {
+            for ($i=0; $i < count($imageData); $i++) { 
+                if (stripos($imageData[$i]['savepath'], 'http') === 0) {
+                    $imageData[$i]['url'] = $imageData[$i]['savepath'].$imageData[$i]['savename'];
+                } else {
+                    $imageData[$i]['url'] = __ROOT__.'/Uploads/'.$imageData[$i]['savepath'].$imageData[$i]['savename'];
+                }
+            }
             return array(true, $imageData);
         } else {
             return array(false, "此记账无对应的图片附件。");
         }
+    }
+
+    function DelImageData($uid, $acid, $id) {
+        $imageData = GetImageData($uid, $acid, $id);
+        if ($imageData[0]) {
+            $path = './Uploads/'.$imageData[1][0]['savepath'].$imageData[1][0]['savename'];
+            if (file_exists($path)) {
+                $ret = unlink($path);
+            }
+            $sql = array('uid'=>$uid, 'acid'=>$acid, 'id'=>$id);
+            return array(true, $ret, M("account_image")->where($sql)->delete());
+        }
+        return array(false, "删除图片失败，图片数据不存在。");
     }
 
     //校验资金账户名
