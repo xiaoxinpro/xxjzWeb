@@ -46,6 +46,25 @@ return array(
 		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
+	'jizhang_account_image' => array(
+		'tableName'  => "jizhang_account_image",
+		'tableField' => array(
+			"id" => array('COLUMN_NAME'=>"id",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL",'EXTRA'=>"AUTO_INCREMENT"),
+			"uid" => array('COLUMN_NAME'=>"uid",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL"),
+			"acid" => array('COLUMN_NAME'=>"acid",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"DEFAULT NULL"),
+			"name" => array('COLUMN_NAME'=>"name",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"type" => array('COLUMN_NAME'=>"type",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"size" => array('COLUMN_NAME'=>"size",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
+			"ext" => array('COLUMN_NAME'=>"ext",'COLUMN_TYPE'=>"varchar(8)",'IS_NULLABLE'=>"NOT NULL"),
+			"md5" => array('COLUMN_NAME'=>"md5",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"savepath" => array('COLUMN_NAME'=>"savepath",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"savename" => array('COLUMN_NAME'=>"savename",'COLUMN_TYPE'=>"varchar(32)",'IS_NULLABLE'=>"NOT NULL"),
+			"time" => array('COLUMN_NAME'=>"time",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
+		),
+		'tableKey' => "id",
+		'tableOther' => "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+	),
+
 	'user' => array(
 		'tableName'  => "user",
 		'tableField' => array(

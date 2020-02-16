@@ -16,7 +16,7 @@ CREATE TABLE `xxjz_account` (
   `zhifu` int(11) NOT NULL,
   `fid` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`acid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `xxjz_account_class`;
@@ -26,7 +26,7 @@ CREATE TABLE `xxjz_account_class` (
   `classtype` int(1) NOT NULL,
   `ufid` int(11) NOT NULL,
   PRIMARY KEY (`classid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `xxjz_account_funds`;
@@ -35,8 +35,23 @@ CREATE TABLE `xxjz_account_funds` (
   `fundsname` varchar(24) NOT NULL,
   `uid` int(11) NOT NULL,
   PRIMARY KEY (`fundsid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `jizhang_account_image`;
+CREATE TABLE `jizhang_account_image` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
+  `acid` int(11) unsigned DEFAULT NULL,
+  `name` varchar(32) NOT NULL,
+  `type` varchar(32) NOT NULL,
+  `size` int(11) NOT NULL,
+  `ext` varchar(8) NOT NULL,
+  `md5` varchar(32) NOT NULL,
+  `savepath` varchar(32) NOT NULL,
+  `savename` varchar(32) NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `xxjz_user`;
 CREATE TABLE `xxjz_user` (
@@ -46,7 +61,7 @@ CREATE TABLE `xxjz_user` (
   `email` varchar(255) NOT NULL,
   `utime` int(11) NOT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `xxjz_user` (`uid`, `username`, `password`, `email`, `utime`) VALUES
 (1,	'admin',	'7fef6171469e80d32c0559f88b377245',	'xxjz@xxgzs.org',	1564901873);
@@ -60,7 +75,7 @@ CREATE TABLE `xxjz_user_config` (
   `config_value` varchar(32) NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `xxjz_user_login`;
 CREATE TABLE `xxjz_user_login` (
@@ -71,7 +86,7 @@ CREATE TABLE `xxjz_user_login` (
   `login_key` varchar(32) NOT NULL,
   `login_token` varchar(32) NOT NULL,
   PRIMARY KEY (`lid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `xxjz_user_push`;
@@ -83,7 +98,7 @@ CREATE TABLE `xxjz_user_push` (
   `push_mark` varchar(32) DEFAULT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY (`pid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
--- 2019-08-17 08:24:06
+-- 2020-02-16 04:03:59
