@@ -809,6 +809,7 @@
         }
     }
 
+    //删除图片数据库和文件
     function DelImageData($uid, $acid, $id) {
         $imageData = GetImageData($uid, $acid, $id);
         if ($imageData[0]) {
