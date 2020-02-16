@@ -788,6 +788,17 @@
         return false;
     }
 
+    //获取数据库中的图片
+    function GetImageData($uid, $acid) {
+        $sql = array('uid'=>$uid, 'acid'=>$acid);
+        $imageData = M("account_image")->where($sql)->select();
+        if (is_array($imageData) && count($imageData) > 0) {
+            return array(true, $imageData);
+        } else {
+            return array(false, "此记账无对应的图片附件。");
+        }
+    }
+
     //校验资金账户名
     function CheakFundsName($FundsName, $uid, $FundsId = -1) {
         if(strlen($FundsName) < 1){
