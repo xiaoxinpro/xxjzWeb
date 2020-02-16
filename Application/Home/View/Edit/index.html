@@ -54,6 +54,15 @@
                 <div class="am-input-group">
                     <span class="am-input-group-label"><b>备注</b></span>
                     <input type="text" class="am-form-field" id="text-mark" name="edit_mark" value="{$ShowData.mark}">
+                    <span class="am-input-group-btn am-form-file">
+                        <button type="button" class="am-btn am-btn-default"><i class="am-icon-cloud-upload"></i> 上传图片</button>
+                        <input id="doc-form-file" type="file" name="exit_photo[]" multiple>
+                    </span>
+                </div>
+                <div class="file-group" style="display: none;"><p></p></div>
+                <div class="am-input-group file-group" style="display: none;">
+                    <span class="am-input-group-label"><b>附件</b></span>
+                    <div id="file-list" class="am-form-field" ></div>
                 </div>
                 <div><p></p></div>
                 <div class="am-input-group">
@@ -61,6 +70,28 @@
                     <input type="date" class="am-form-field" id="text-time" name="edit_time" 
                             value="<php>echo date("Y-m-d",$ShowData['time']);</php>" />
                 </div>
+
+                <if condition="$ImageData neq false ">
+                <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
+                <ul data-am-widget="gallery" class="am-gallery am-avg-sm-3
+  am-avg-md-4 am-avg-lg-5 am-gallery-bordered" data-am-gallery="{ pureview: true }" id="doc-image-list" >
+                    <foreach name="ImageData" item="image">
+                      <li id="doc-image-{$image.id}">
+                        <a href="javascript:void(0);" data-id="{$image.id}" data-acid="{$acid}" class="am-close am-close-alt am-close-spin am-icon-times" style="position: absolute; margin: 5px;"></a>
+                        <div class="am-gallery-item">
+                          <img src="{$image.url}" alt="{$image.name}"/>
+                            <h3 class="am-gallery-title">
+                                {$image.name}
+                            </h3>
+                            <div class="am-gallery-desc">
+                                {$image.time|date="Y-m-d",###}
+                            </div>
+                        </div>
+                      </li>
+                    </foreach>
+                </ul>
+                </if>
+
                 <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
                 <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="edit_submit" value="修改"></p>
                 
@@ -71,5 +102,63 @@
                 
         </fieldset>
     </form>
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="delete-confirm">
+      <div class="am-modal-dialog">
+        <div class="am-modal-hd">删除图片</div>
+        <div class="am-modal-bd">
+          您确定要删除这张图片附件吗？
+        </div>
+        <div class="am-modal-footer">
+          <span class="am-modal-btn" data-am-modal-confirm>删除</span>
+          <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+        </div>
+      </div>
+    </div>
+    <div style="display: none;">
+        <button type="button" class="am-btn am-btn-warning" id="doc-confirm-toggle">Close</button>
+    </div>
 </block>
 
+<block name="javascript">
+    <script>
+      function DeleteImage(acid, id, callback) {
+          $.post("__APP__/Home/Edit/deleteImage",{acid:acid,id:id},function(ret){
+            callback(ret);
+          });
+      }
+
+      $(function() {
+        $('#doc-form-file').on('change', function() {
+          var fileNames = '';
+          $.each(this.files, function() {
+            fileNames += '<span class="am-badge">' + this.name + '</span> ';
+          });
+          $('#file-list').html(fileNames);
+          if (fileNames == '') {
+            $('.file-group').hide();
+          } else {
+            $('.file-group').show();
+          }
+        });
+        $('#doc-image-list').find('.am-close').add('#doc-confirm-toggle').
+          on('click', function() {
+          $('#delete-confirm').modal({
+            relatedTarget: this,
+            onConfirm: function(options) {
+              var $dataset = $(this.relatedTarget).prev('a').context.dataset;
+              DeleteImage($dataset.acid, $dataset.id, function(ret){
+                $("#doc-image-"+$dataset.id).remove();
+                console.log("#doc-image-"+$dataset.id);
+              });
+            },
+            // closeOnConfirm: false,
+            onCancel: function() {
+              
+            }
+          });
+        });
+
+      });
+
+    </script>
+</block>

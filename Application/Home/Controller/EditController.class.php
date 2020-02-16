@@ -4,7 +4,10 @@ use Think\Controller;
 class EditController extends BaseController {
     public function _initialize(){
         $uid = session('uid');
-        $id = I('get.id');
+        $id = I('get.id', 0, 'int');
+        if ($id == 0) {
+            $id = I('post.acid', 0, 'int');
+        }
         if(!CheakIdShell($id, $uid)){
             $this -> error("非法操作!");
         }
@@ -41,12 +44,15 @@ class EditController extends BaseController {
             $MoneyClass[2] = GetClassData($uid,2);
             $DbClass = $MoneyClass[$DbData['zhifu']];
             $ShowData = ArrDataToShowData($DbData, $DbClass);
+            $ImageData = GetImageData($uid, $id);
             if($DbData) {
+                $this -> assign('acid',$id);
                 $this -> assign('refURL',$refURL);
                 $this -> assign('DbFunds',$DbFunds);
                 $this -> assign('FundsData',$FundsData);
                 $this -> assign('DbClass',$DbClass);
                 $this -> assign('ShowData',$ShowData);
+                $this -> assign('ImageData',$ImageData[0] ? $ImageData[1] : false);
                 $this -> assign('MoneyClass',"'".htmlspecialchars(json_encode($MoneyClass))."'");
                 $this -> display();
             }else{
@@ -64,12 +70,24 @@ class EditController extends BaseController {
             ClearDataCache(); //清除缓存
             ShowAlert($Msg[1],$refURL);
             $this -> display('Public/common');
-            // $this -> success($Msg[1],$refURL);
         }else{
             ShowAlert($Msg[1],$refURL);
             $this -> display('Public/common');
-            // $this -> error($Msg[1],$refURL);
         }
+    }
+
+    public function deleteImage(){
+        $uid = session('uid');
+        $acid  = I('post.acid', 0, 'int');
+        $id = I('post.id', 0, 'int');
+        dump(DelImageData($uid, $acid, $id));
+        // if(IS_POST && $acid > 0 && $id > 0) {
+            
+        // } else {
+        //     ShowAlert('无效的操作。' ,GetRefURL());
+        //     $this -> display('Public/common');
+        // }
+
     }
     
 }
