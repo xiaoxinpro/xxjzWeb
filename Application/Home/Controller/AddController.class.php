@@ -8,6 +8,7 @@ class AddController extends BaseController {
         $refURL = GetRefURL();
         if(IS_POST){
             //$data = array('acid' => $id);
+            
             $data['acmoney']   = I('post.add_money');
             $data['acclassid'] = I('post.add_class');
             $data['actime']    = I('post.add_time');
@@ -16,6 +17,11 @@ class AddController extends BaseController {
             $data['fid']       = I('post.add_funds');
             $data['jiid']      = $uid;
             $Updata = AddAccountData($data);
+
+            $upload = UploadFile($uid);
+            if ($upload && $Updata[0]) {
+                AddImageData($uid, $upload, $Updata[2]);
+            }
             
             ClearDataCache(); //清除缓存
             $type = $data['zhifu'];
