@@ -1,8 +1,13 @@
 
 <extend name="Public:common"/>
 <block name="main">
+    <if condition="$refresh eq true">
+        <script language="JavaScript">
+            location=location;
+        </script>
+    </if>
 
-    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+    <form class="am-form am-form-horizontal" enctype="multipart/form-data" method="post" data-am-validator="H5validation:false">
         <fieldset>
             <legend>编辑</legend>
                 <div class="am-input-group">
@@ -56,13 +61,13 @@
                     <input type="text" class="am-form-field" id="text-mark" name="edit_mark" value="{$ShowData.mark}">
                     <span class="am-input-group-btn am-form-file">
                         <button type="button" class="am-btn am-btn-default"><i class="am-icon-cloud-upload"></i> 上传图片</button>
-                        <input id="doc-form-file" type="file" name="exit_photo[]" multiple>
+                        <input id="doc-form-file" type="file" name="edit_photo[]" accept=".jpg, .gif, .png, .jpeg" multiple />
                     </span>
                 </div>
                 <div class="file-group" style="display: none;"><p></p></div>
                 <div class="am-input-group file-group" style="display: none;">
                     <span class="am-input-group-label"><b>附件</b></span>
-                    <div id="file-list" class="am-form-field" ></div>
+                    <div id="file-list" class="am-form-field" style="height: auto;"></div>
                 </div>
                 <div><p></p></div>
                 <div class="am-input-group">
@@ -79,7 +84,7 @@
                       <li id="doc-image-{$image.id}">
                         <a href="javascript:void(0);" data-id="{$image.id}" data-acid="{$acid}" class="am-close am-close-alt am-close-spin am-icon-times" style="position: absolute; margin: 5px;"></a>
                         <div class="am-gallery-item">
-                          <img src="{$image.url}" alt="{$image.name}"/>
+                          <img src="{$image.url}" alt="{$image.name}" style="height: 20vw;" />
                             <h3 class="am-gallery-title">
                                 {$image.name}
                             </h3>
@@ -127,12 +132,29 @@
           });
       }
 
+      function ResetFormFile() {
+          $('.file-group').hide();
+          $('#doc-form-file').val('');
+      }
+
       $(function() {
         $('#doc-form-file').on('change', function() {
           var fileNames = '';
+          var fileSize = 0;
+          if (this.files.length > 9) {
+            alert("上传文件数量不能超过9个。");
+            ResetFormFile();
+            return;
+          }
           $.each(this.files, function() {
             fileNames += '<span class="am-badge">' + this.name + '</span> ';
+            fileSize += this.size;
           });
+          if (fileSize > 3*1024*1024) {
+            alert("单次上传文件体积不能超过3MB。");
+            ResetFormFile();
+            return;
+          }
           $('#file-list').html(fileNames);
           if (fileNames == '') {
             $('.file-group').hide();
@@ -147,13 +169,14 @@
             onConfirm: function(options) {
               var $dataset = $(this.relatedTarget).prev('a').context.dataset;
               DeleteImage($dataset.acid, $dataset.id, function(ret){
-                $("#doc-image-"+$dataset.id).remove();
-                console.log("#doc-image-"+$dataset.id);
+                location=location;
+                // $("#doc-image-"+$dataset.id).remove();
+                // console.log("#doc-image-"+$dataset.id);
               });
             },
             // closeOnConfirm: false,
             onCancel: function() {
-              
+              console.log($(this.relatedTarget));
             }
           });
         });
