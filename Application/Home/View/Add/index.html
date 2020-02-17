@@ -50,13 +50,13 @@
                         <input type="text" class="am-form-field" id="text-mark" name="add_mark" placeholder="输入支出信息">
                         <span class="am-input-group-btn am-form-file">
                             <button type="button" class="am-btn am-btn-default"><i class="am-icon-cloud-upload"></i> 上传图片</button>
-                            <input id="doc-form-file-out" type="file" name="add_photo[]" multiple>
+                            <input id="doc-form-file-out" type="file" name="add_photo[]" accept=".jpg, .gif, .png, .jpeg" multiple />
                         </span>
                     </div>
                     <div class="file-group-out" style="display: none;"><p></p></div>
                     <div class="am-input-group file-group-out" style="display: none;">
                         <span class="am-input-group-label"><b>附件</b></span>
-                        <div id="file-list-out" class="am-form-field" ></div>
+                        <div id="file-list-out" class="am-form-field" style="height: auto;"></div>
                     </div>
                     <div><p></p></div>
                     <div class="am-input-group">
@@ -77,7 +77,7 @@
                 <div data-tab-panel-1 class="am-tab-panel ">
             </if>
             
-                <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+                <form class="am-form am-form-horizontal" enctype="multipart/form-data" method="post" data-am-validator="H5validation:false">
                     <legend>添加收入</legend>
                     <input type="hidden" name="add_type" value="1">
                     <div class="am-input-group">
@@ -111,13 +111,13 @@
                         <input type="text" class="am-form-field" id="text-mark" name="add_mark" placeholder="输入支出信息">
                         <span class="am-input-group-btn am-form-file">
                             <button type="button" class="am-btn am-btn-default"><i class="am-icon-cloud-upload"></i> 上传图片</button>
-                            <input id="doc-form-file-in" type="file" name="add_photo[]" multiple>
+                            <input id="doc-form-file-in" type="file" name="add_photo[]" accept=".jpg, .gif, .png, .jpeg" multiple />
                         </span>
                     </div>
                     <div class="file-group-in" style="display: none;"><p></p></div>
                     <div class="am-input-group file-group-in" style="display: none;">
                         <span class="am-input-group-label"><b>附件</b></span>
-                        <div id="file-list-in" class="am-form-field" ></div>
+                        <div id="file-list-in" class="am-form-field" style="height: auto;"></div>
                     </div>
                     <div><p></p></div>
                     <div class="am-input-group">
@@ -141,12 +141,30 @@
 
 <block name="javascript">
     <script>
+      function ResetFormFile() {
+          $('.file-group-out').hide();
+          $('.file-group-in').hide();
+          $('#doc-form-file-out').val('');
+          $('#doc-form-file-in').val('');
+      }
       $(function() {
         $('#doc-form-file-out').on('change', function() {
           var fileNames = '';
+          var fileSize = 0;
+          if (this.files.length > 9) {
+            alert("上传文件数量不能超过9个。");
+            ResetFormFile();
+            return;
+          }
           $.each(this.files, function() {
             fileNames += '<span class="am-badge">' + this.name + '</span> ';
+            fileSize += this.size;
           });
+          if (fileSize > 3*1024*1024) {
+            alert("单次上传文件体积不能超过3MB。");
+            ResetFormFile();
+            return;
+          }
           $('#file-list-out').html(fileNames);
           if (fileNames == '') {
             $('.file-group-out').hide();
@@ -157,9 +175,21 @@
 
         $('#doc-form-file-in').on('change', function() {
           var fileNames = '';
+          var fileSize = 0;
+          if (this.files.length > 9) {
+            alert("上传文件数量不能超过9个。");
+            ResetFormFile();
+            return;
+          }
           $.each(this.files, function() {
             fileNames += '<span class="am-badge">' + this.name + '</span> ';
+            fileSize += this.size;
           });
+          if (fileSize > 3*1024*1024) {
+            alert("单次上传文件体积不能超过3MB。");
+            ResetFormFile();
+            return;
+          }
           $('#file-list-in').html(fileNames);
           if (fileNames == '') {
             $('.file-group-in').hide();
