@@ -56,7 +56,42 @@ class AddController extends BaseController {
         $this -> assign('ShowData', $ListData[3]);
 
         $this -> display();
+    }
 
+    public function upload() {
+        $arrData = array();
+
+        //验证登录
+        $uid = session('uid');
+        if ($uid > 0) {
+            $arrData['uid'] = $uid;
+        } else {
+            $arrData['uid'] = 0;
+            $arrData['data'] = "用户未登录，请重新登录！";
+            die(json_encode($arrData));
+        }
+
+        //获取记账ID
+        $acid = I('get.acid', 0, 'int');
+        if ($acid == 0) {
+            $acid = I('post.acid', 0, 'int');
+        }
+
+        if (IS_POST) {
+            $upload = UploadFile($uid);
+            if ($upload) {
+                $ret = AddImageData($uid, $upload, $acid);
+                $arrData['upload'] = $ret;
+                $arrData['data'] = "上传成功！";
+            } else {
+                $arrData['upload'] = false;
+                $arrData['data'] = "上传失败，文件不符合服务器要求，请检查后再试。";
+            }
+        } else {
+            $arrData['uid'] = 0;
+            $arrData['data'] = "无效的请求，请根据协议发送请求！";
+        }
+        die(json_encode($arrData));
     }
     
 }
