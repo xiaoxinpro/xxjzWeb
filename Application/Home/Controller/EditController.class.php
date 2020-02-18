@@ -68,6 +68,7 @@ class EditController extends BaseController {
         }
     }
     
+    //删除记账
     public function del(){
         $refURL = GetRefURL();
         $Msg = DelIdData(I('get.id'));
@@ -81,18 +82,30 @@ class EditController extends BaseController {
         }
     }
 
+    //修改图片对应的记账ID
+    public function image() {
+        $uid = session('uid');
+        $acid  = I('post.acid', 0, 'int');
+        $id = I('post.id', 0, 'int');
+        if(IS_POST && $acid > 0 && $id > 0) {
+            die(json_encode(EditImageAcid($uid, $id, $acid)));
+        } else {
+            ShowAlert('无效的操作。' ,GetRefURL());
+            $this -> display('Public/common');
+        }
+    }
+
+    //删除图片
     public function deleteImage(){
         $uid = session('uid');
         $acid  = I('post.acid', 0, 'int');
         $id = I('post.id', 0, 'int');
-        dump(DelImageData($uid, $acid, $id));
-        // if(IS_POST && $acid > 0 && $id > 0) {
-            
-        // } else {
-        //     ShowAlert('无效的操作。' ,GetRefURL());
-        //     $this -> display('Public/common');
-        // }
-
+        if(IS_POST && $acid > 0 && $id > 0) {
+            die(json_encode(DelImageData($uid, $acid, $id)));
+        } else {
+            ShowAlert('无效的操作。' ,GetRefURL());
+            $this -> display('Public/common');
+        }
     }
     
 }
