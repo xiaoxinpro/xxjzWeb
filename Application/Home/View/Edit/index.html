@@ -66,11 +66,6 @@
                         <input id="doc-form-file" type="file" name="edit_photo[]" accept=".jpg, .gif, .png, .jpeg" multiple />
                     </span>
                 </div>
-                <div class="file-group" style="display: none;"><p></p></div>
-                <div class="am-input-group file-group" style="display: none;">
-                    <span class="am-input-group-label"><b>附件</b></span>
-                    <div id="file-list" class="am-form-field" style="height: auto;"></div>
-                </div>
                 <div><p></p></div>
                 <div class="am-input-group">
                     <span class="am-input-group-label"><b>时间</b></span>
@@ -135,8 +130,18 @@
       }
 
       function ResetFormFile() {
-          $('.file-group').hide();
           $('#doc-form-file').val('');
+      }
+
+      function ResetHtml() {
+          var url = location.href;
+          var mark = location.hash;
+          if (mark != '') {
+            url = url.replace(mark, '')
+          }
+          location.href = url + "#doc-form-file"; 
+          location.reload(true);
+          // location=location;
       }
 
       function UploadImage(files, callback) {
@@ -182,16 +187,11 @@
             ResetFormFile();
             return;
           }
-          $('#file-list').html(fileNames);
-          if (fileNames == '') {
-            $('.file-group').hide();
-          } else {
-            $('.file-group').show();
-          }
           UploadImage(this.files, function(ret) {
-            location=location;
+            ResetHtml();
           });
         });
+
         $('#doc-image-list').find('.am-close').add('#doc-confirm-toggle').
           on('click', function() {
           $('#delete-confirm').modal({
@@ -199,9 +199,7 @@
             onConfirm: function(options) {
               var $dataset = $(this.relatedTarget).prev('a').context.dataset;
               DeleteImage($dataset.acid, $dataset.id, function(ret){
-                location=location;
-                // $("#doc-image-"+$dataset.id).remove();
-                // console.log("#doc-image-"+$dataset.id);
+                ResetHtml();
               });
             },
             onCancel: function() {
