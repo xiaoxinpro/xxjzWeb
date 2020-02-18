@@ -60,7 +60,9 @@
                     <span class="am-input-group-label"><b>备注</b></span>
                     <input type="text" class="am-form-field" id="text-mark" name="edit_mark" value="{$ShowData.mark}">
                     <span class="am-input-group-btn am-form-file">
-                        <button type="button" class="am-btn am-btn-default"><i class="am-icon-cloud-upload"></i> 上传图片</button>
+                        <button type="button" class="am-btn am-btn-default" id="btn-upload-image" data-am-loading="{spinner: 'circle-o-notch', loadingText: '上传中...', resetText: '上传完成'}">
+                            <i class="am-icon-cloud-upload"></i> 上传图片
+                        </button>
                         <input id="doc-form-file" type="file" name="edit_photo[]" accept=".jpg, .gif, .png, .jpeg" multiple />
                     </span>
                 </div>
@@ -137,6 +139,31 @@
           $('#doc-form-file').val('');
       }
 
+      function UploadImage(files, callback) {
+        $('#btn-upload-image').button('loading');
+        var formData = new FormData()
+        formData.append("acid", {$acid});
+        $.each(files, function() {
+            formData.append("file[]", this);
+        });
+        $.ajax({
+            url: '__APP__/Home/Add/upload',
+            type: 'POST',
+            cache: false,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (json) {
+                //上传成功的处理
+                console.log(json);
+                $('#btn-upload-image').button('reset');
+                if (callback) {
+                    callback(json);
+                }
+            }
+        });
+      }
+
       $(function() {
         $('#doc-form-file').on('change', function() {
           var fileNames = '';
@@ -161,6 +188,9 @@
           } else {
             $('.file-group').show();
           }
+          UploadImage(this.files, function(ret) {
+            location=location;
+          });
         });
         $('#doc-image-list').find('.am-close').add('#doc-confirm-toggle').
           on('click', function() {
@@ -174,7 +204,6 @@
                 // console.log("#doc-image-"+$dataset.id);
               });
             },
-            // closeOnConfirm: false,
             onCancel: function() {
               console.log($(this.relatedTarget));
             }
