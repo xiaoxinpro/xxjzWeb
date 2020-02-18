@@ -778,14 +778,32 @@
     //添加图片到数据库
     function AddImageData($uid, $upload, $acid = 0) {
         if (is_array($upload) && count($upload) > 0) {
+            $time = time();
             for ($i=0; $i < count($upload); $i++) { 
                 $upload[$i]['uid'] = $uid;
                 $upload[$i]['acid'] = $acid;
-                $upload[$i]['time'] = time();
+                $upload[$i]['time'] = $time;
             }
-            return M("account_image")->addAll($upload);
+            $ret = M("account_image")->addAll($upload);
+            if ($ret) {
+                $sql = array('uid'=>$uid, 'acid'=>$acid, 'time'=>$time);
+                return M("account_image")->where($sql)->select();
+            }
         }
         return false;
+    }
+
+    //编辑图片对应的记账ID （用户ID，图片ID，待设定的记账ID）
+    function EditImageAcid($uid, $id, $acid) {
+        $sql = array('uid'=>$uid, 'acid'=>$acid);
+        $ret = M("account")->where($sql)->find();
+        if ($ret) {
+            $sql = array('uid'=>$uid, 'id'=>$id);
+            return M("account_image")->where($sql)->setField('acid', $acid);
+        } else {
+            return false;
+        }
+
     }
 
     //获取数据库中的图片
