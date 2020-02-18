@@ -28,15 +28,8 @@ class EditController extends BaseController {
             $Updata = UpdataAccountData($data);
             if($Updata[0]){
                 ClearDataCache(); //清除缓存
-                $upload = UploadFile($uid);
-                if ($upload) {
-                    AddImageData($uid, $upload, $id);
-                    $this -> assign('refresh',true);
-                    $this -> display();
-                } else {
-                    ShowAlert($Updata[1],$refURL);
-                    $this -> display('Public/common');                    
-                }
+                ShowAlert($Updata[1],$refURL);
+                $this -> display('Public/common');   
             }else{
                 ShowAlert($Updata[1],$refURL);
                 $this -> display('Public/common');
