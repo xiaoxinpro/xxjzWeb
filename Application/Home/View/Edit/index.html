@@ -123,6 +123,10 @@
 
 <block name="javascript">
     <script>
+      function GetImageLength() {
+          return $('ul.am-gallery').children('li').length;
+      }
+
       function DeleteImage(acid, id, callback) {
           $.post("__APP__/Home/Edit/deleteImage",{acid:acid,id:id},function(ret){
             callback(ret);
@@ -173,8 +177,8 @@
         $('#doc-form-file').on('change', function() {
           var fileNames = '';
           var fileSize = 0;
-          if (this.files.length > 9) {
-            alert("上传文件数量不能超过9个。");
+          if (this.files.length + GetImageLength() > 9) {
+            alert("每个账单图片数量不能超过9个，请筛选后重新上传。");
             ResetFormFile();
             return;
           }
@@ -183,7 +187,7 @@
             fileSize += this.size;
           });
           if (fileSize > 3*1024*1024) {
-            alert("单次上传文件体积不能超过3MB。");
+            alert("单次上传文件体积不能超过3MB，请压缩后重新上传。");
             ResetFormFile();
             return;
           }
