@@ -306,7 +306,7 @@ class ApiController extends Controller {
 
             case 'del':
                 if (CheakIdShell($data['acid'], $uid)) {
-                    $ret = DelIdData($data['acid']);
+                    $ret = DelIdData($uid, $data['acid']);
                     $arrData['data']['ret'] = $ret[0];
                     $arrData['data']['msg'] = $ret[1];
                     ClearDataCache(); //清除缓存
