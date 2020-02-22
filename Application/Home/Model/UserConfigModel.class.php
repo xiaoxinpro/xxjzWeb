@@ -12,6 +12,14 @@ class UserConfigModel extends Model {
     //   config_key 表示配置键名（最大32字节）
     //   config_value 表示配置值（最大32字节）
 
+    public function Config($uid, $config_key, $config_value=null, $config_name='Web') {
+        if ($config_value === null) {
+            return getConfig($config_key, null, $uid);
+        } else {
+            return setConfig($config_key, $config_value, 'Web', $uid);
+        }
+    }
+
     // 获取配置信息
     public function getConfig($config_key, $config_name = null, $uid = 0) {
         $configData = array();
@@ -26,7 +34,7 @@ class UserConfigModel extends Model {
         } else if ($uid > 0) {
             return $this->getConfig($config_key, $config_name, 0);
         } else {
-            return null;
+            return C($config_key);
         }
     }
 
