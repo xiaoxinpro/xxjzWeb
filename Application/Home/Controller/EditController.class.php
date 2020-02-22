@@ -15,7 +15,7 @@ class EditController extends BaseController {
     
     public function index(){
         $uid = session('uid');
-        $id  = I('get.id');
+        $id  = I('get.id', 0, 'int');
         $refURL = GetRefURL();
         if(IS_POST){
             $data = array('acid' => $id);
@@ -63,8 +63,9 @@ class EditController extends BaseController {
     
     //删除记账
     public function del(){
+        $uid = session('uid');
         $refURL = GetRefURL();
-        $Msg = DelIdData(I('get.id'));
+        $Msg = DelIdData($uid, I('get.id', 0, 'int'));
         if($Msg[0]) {
             ClearDataCache(); //清除缓存
             ShowAlert($Msg[1],$refURL);
