@@ -765,9 +765,9 @@
     //获取上传文件的对象
     function UploadFile($uid) {
         $upload = new \Think\Upload();// 实例化上传类
-        $upload->maxSize  = 3 * 1024 * 1024 ;// 设置附件上传大小
-        $upload->exts     = array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
-        $upload->rootPath = './Uploads/'; // 设置附件上传根目录
+        $upload->maxSize  = C('IMAGE_SIZE');// 设置附件上传大小
+        $upload->exts     = C('IMAGE_EXT');// 设置附件上传类型
+        $upload->rootPath = C('IMAGE_ROOT_PATH'); // 设置附件上传根目录
         $upload->savePath = '';
         $upload->saveName = array('uniqid','');
         $upload->autoSub  = true;
@@ -778,8 +778,12 @@
     //添加图片到数据库
     function AddImageData($uid, $upload, $acid = 0) {
         if (is_array($upload) && count($upload) > 0) {
+            $count = GetImageCount($uid, $acid);
             $time = time();
             for ($i=0; $i < count($upload); $i++) { 
+                if (i > C('IMAGE_COUNT') + $count) {
+                    break; //防止上传文件数量超过限制
+                }
                 $upload[$i]['uid'] = $uid;
                 $upload[$i]['acid'] = $acid;
                 $upload[$i]['time'] = $time;
@@ -795,15 +799,15 @@
 
     //编辑图片对应的记账ID （用户ID，图片ID，待设定的记账ID）
     function EditImageAcid($uid, $id, $acid) {
-        $sql = array('uid'=>$uid, 'acid'=>$acid);
-        $ret = M("account")->where($sql)->find();
-        if ($ret) {
-            $sql = array('uid'=>$uid, 'id'=>$id);
-            return M("account_image")->where($sql)->setField('acid', $acid);
-        } else {
-            return false;
+        if (GetImageCount($uid, $acid) < C('IMAGE_COUNT')) {
+            $sql = array('uid'=>$uid, 'acid'=>$acid);
+            $ret = M("account")->where($sql)->find();
+            if ($ret) {
+                $sql = array('uid'=>$uid, 'id'=>$id);
+                return M("account_image")->where($sql)->setField('acid', $acid);
+            }
         }
-
+        return false;
     }
 
     //获取数据库中的图片
@@ -817,6 +821,8 @@
             for ($i=0; $i < count($imageData); $i++) { 
                 if (stripos($imageData[$i]['savepath'], 'http') === 0) {
                     $imageData[$i]['url'] = $imageData[$i]['savepath'].$imageData[$i]['savename'];
+                } elseif (stripos(C('IMAGE_CACHE_URL'), 'http') === 0) {
+                    $imageData[$i]['url'] = C('IMAGE_CACHE_URL').'/'.$imageData[$i]['savepath'].$imageData[$i]['savename'];
                 } else {
                     $imageData[$i]['url'] = __ROOT__.'/Uploads/'.$imageData[$i]['savepath'].$imageData[$i]['savename'];
                 }
@@ -825,6 +831,18 @@
         } else {
             return array(false, "此记账无对应的图片附件。");
         }
+    }
+
+    //获取指定条件下的图片数量
+    function GetImageCount($uid=false, $acid=false) {
+        $sql = array();
+        if ($uid !== false) {
+            $sql['uid'] = $uid;
+        }
+        if ($acid !== false) {
+            $sql['acid'] = $acid;
+        }
+        return M("account_image")->where($sql)->count();
     }
 
     //删除图片数据库和文件
