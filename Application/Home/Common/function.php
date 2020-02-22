@@ -670,10 +670,11 @@
     }
     
     //删除指定记账id数据
-    function DelIdData($id) {
+    function DelIdData($uid, $id) {
         if(is_numeric($id)){
             $DbData = M('account')->where("acid='$id'")->delete();
             if($DbData > 0){
+                DelImageData($uid, $id);
                 return array(true,'已成功删除'.$DbData.'条数据(^_^)');
             }elseif($DbData === 0){
                 return array(false,'未找到你要删除的数据(@_@)');
@@ -846,14 +847,19 @@
     }
 
     //删除图片数据库和文件
-    function DelImageData($uid, $acid, $id) {
+    function DelImageData($uid, $acid, $id=false) {
         $imageData = GetImageData($uid, $acid, $id);
         if ($imageData[0]) {
-            $path = './Uploads/'.$imageData[1][0]['savepath'].$imageData[1][0]['savename'];
-            if (file_exists($path)) {
-                $ret = unlink($path);
+            for ($i=0; $i < count($imageData[1]); $i++) { 
+                $path = './Uploads/'.$imageData[1][$i]['savepath'].$imageData[1][$i]['savename'];
+                if (file_exists($path)) {
+                    $ret = unlink($path);
+                }
             }
-            $sql = array('uid'=>$uid, 'acid'=>$acid, 'id'=>$id);
+            $sql = array('uid'=>$uid, 'acid'=>$acid);
+            if ($id != false) {
+                $sql['id'] = $id;
+            }
             return array(true, $ret, M("account_image")->where($sql)->delete());
         }
         return array(false, "删除图片失败，图片数据不存在。");
