@@ -178,7 +178,22 @@
 |fundsname|varchar(24)|资金账户名称|
 |uid|int(11)|所属用户ID|
 
-### 4.4、用户表 xxjz_user
+### 4.4、图片表 xxjz_account_image
+| 字段 | 类型 | 备注 |
+|:--------:|--------|--------|
+|id|int(11) 自动增量|图片ID|
+|uid|int(11)|用户ID|
+|acid|int(11)|记账ID|
+|name|varchar(32)|图片名称|
+|type|varchar(32)|图片类型|
+|size|int(11)|图片大小（字节）|
+|ext|varchar(8)|图片扩展名|
+|md5|varchar(32)|图片Hash值|
+|savepath|varchar(32)|图片文件路径|
+|savename|varchar(32)|图片文件名称|
+|time|int(11)|上传时间|
+
+### 4.5、用户表 xxjz_user
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |uid|int(11) 自动增量|用户ID|
@@ -187,7 +202,7 @@
 |email|varchar(255)|邮箱|
 |utime|int(11)|注册时间戳|
 
-### 4.5、用户表 xxjz_user_config
+### 4.6、用户表 xxjz_user_config
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |cid|int(11) 自动增量|配置ID|
@@ -197,7 +212,7 @@
 |config_value|varchar(32)|配置值|
 |time|int(11)|创建时间戳|
 
-### 4.6、用户登陆表 xxjz_user_login
+### 4.7、用户登陆表 xxjz_user_login
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |lid|int(11) 自动增量|登陆ID|
@@ -207,7 +222,7 @@
 |login_key|varchar(32)|平台session_key|
 |login_token|varchar(32)|平台unionid|
 
-### 4.7、信息推送表 xxjz_user_push
+### 4.8、信息推送表 xxjz_user_push
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |pid|int(11) 自动增量|推送ID|
