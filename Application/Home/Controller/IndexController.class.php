@@ -8,14 +8,6 @@ class IndexController extends BaseController {
         
         //设置返回页
         SetRefURL(__ACTION__."/p/$p");
-        
-        //向webApp发送用户名和密码
-        if(session('webAppPass')){
-            $str = "'"."web_login"."','".session('webAppUser')."','".session('webAppPass')."'";
-            echo '<body href="javascript:void(0);" onload="WebApp_Login('.$str.')"></body>';
-            session('webAppUser',null);
-            session('webAppPass',null);
-        }
 
         //管理员权限
         if ($uid == C('ADMIN_UID')) {
