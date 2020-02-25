@@ -437,8 +437,6 @@ class ApiController extends Controller {
                 $password = I('post.login_password','','htmlspecialchars');
                 if(UserLogin($username, $password)){
                     session('submit',$_POST['login_submit']);
-                    session('webAppUser',$username); //webApp参数
-                    session('webAppPass',$password); //webApp参数
                     ClearAllCache(); //清除缓存
                     echo '登陆成功';
                     $this -> redirect('Home/Index/index');
@@ -491,14 +489,6 @@ class ApiController extends Controller {
         }elseif(UserShell(session('username'),session('user_shell'))){
             $this -> redirect(Home/Index/index);
         }else{
-            //向webApp发送用户名
-            if(session('webAppUser')){
-                // $str = "'".session('webAppUser')."'";
-                // echo '<body href="javascript:void(0);" onload="WebApp_Logout('.$str.')"></body>';
-                $str = "'"."web_logout"."','".session('webAppUser')."',''";
-                echo '<body href="javascript:void(0);" onload="WebApp_Login('.$str.')"></body>';
-                session('webAppUser',null);
-            }
             $this -> display();
         }
     }
@@ -550,9 +540,6 @@ class ApiController extends Controller {
         $UserName = session('username');
         ClearAllCache(); //清除缓存
         session(null);
-        if($UserName){
-            session('webAppUser',$UserName);
-        }
         $this -> redirect('Home/Login/index');
     }
     
