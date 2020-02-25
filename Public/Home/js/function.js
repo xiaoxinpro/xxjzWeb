@@ -1,16 +1,4 @@
 
-function WebApp_Login(str,u,p){
-    if (window.hasOwnProperty('webkit')) {
-        window.webkit.messageHandlers.webAppLogin.postMessage({body:str,user:u,pass:p});
-    }
-}
-
-function WebApp_Logout(u){
-    if (window.hasOwnProperty('webkit')) {
-        window.webkit.messageHandlers.webAppLogout.postMessage({user:u});
-    }
-}
-
 function SelectChange(){ 
     var objS = document.getElementById("pid"); 
     var grade = objS.options[objS.selectedIndex].value; 
