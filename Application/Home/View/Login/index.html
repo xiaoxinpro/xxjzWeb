@@ -36,7 +36,7 @@
         <a href="#" data-am-modal="{target: '#my-xxjz'}">小程序</a>
         <span class="am-badge am-badge-danger am-round">Hot</span>
         &nbsp;|&nbsp;
-        <a href="#" data-am-modal="{target: '#my-popup'}">关于我们</a>
+        <a href="#" data-am-modal="{target: '#my-about'}">关于我们</a>
       </div>
     </div>
 
@@ -70,6 +70,77 @@
                 <span class="am-icon-spinner am-icon-spin"></span>
             </div>
         </div>
+    </div>
+  </div>
+</div>
+
+<div class="am-popup" id="my-about">
+  <div class="am-popup-inner">
+    <div class="am-popup-hd">
+        <h4 class="am-popup-title">关于我们</h4>
+        <span data-am-modal-close class="am-close">&times;</span>
+    </div>
+    <div class="am-container" >
+      <div class="am-text-center">
+        <img src="__PUBLIC__/Home/i/logo.png" style="max-height: 200px;">
+      </div>
+      <fieldset>
+        <legend>关于小歆记账</legend>
+        <div class="am-text-left">
+          <p style="text-indent:25px">
+            小歆记账是一款开源、轻量级、面向移动端的云记账工具，整个项目是基于ThinkPHP搭建的，记账数据使用MySql存储，可搭建在任意PHP+MySql环境中。
+          </p>
+          
+          <p style="text-indent:25px">
+            本记账软件可灵活创建各种收支分类和账户，记账时可根据需要添加收据或发票图片附件，个性化的查询功能可方便的找到历史账目，对于长期账单能够统计出图表显示供本人查看，有效的显示整体收支情况。
+          </p>
+          <p style="text-indent:25px">
+            GitHub：<a href="https://github.com/xiaoxinpro/xxjzWeb">https://github.com/xiaoxinpro/xxjzWeb</a>
+          </p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>关于微信小程序</legend>
+        <div class="am-text-left">
+          <p style="text-indent:25px">
+            小歆记账的微信小程序是基于本服务端基础上的客户端，因此微信小程序不可独立与本服务端运行，小程序方便用户在手机端使用记账功能的同时有更好的使用体验。可使用微信扫描下面的二维码体验：
+          </p>
+          <img src="__PUBLIC__/Home/i/xxjz-wechat-min.png" alt="小歆记账 for 微信小程序">
+          <p style="text-indent:25px">
+            同时小歆记账的微信小程序也是一款开源的项目，项目使用微信官方的小程序开发工具。
+          </p>
+          <p style="text-indent:25px">
+            GitHub：<a href="https://github.com/xiaoxinpro/xxjzWeChat">https://github.com/xiaoxinpro/xxjzWeChat</a>
+          </p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>关于捐赠</legend>
+        <div class="am-text-left">
+          <p>
+            如果您觉得小歆记账对你有帮助，欢迎给予我们一定的捐助来维持项目的长期发展。
+          </p>
+          <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
+          am-avg-md-3 am-avg-lg-4 am-gallery-bordered" data-am-gallery="{ pureview: true }" >
+              <li>
+                <div class="am-gallery-item">
+                  <img src="__PUBLIC__/Home/i/wechat.png"  alt="微信捐赠"/>
+                  <div class="am-text-center am-text-success"><strong>微信捐赠</strong></div>
+                </div>
+              </li>
+              <li>
+                <div class="am-gallery-item">
+                  <img src="__PUBLIC__/Home/i/alipay.png"  alt="支付宝捐赠"/>
+                  <div class="am-text-center am-text-secondary"><strong>支付宝捐赠</strong></div>
+                </div>
+              </li>
+          </ul>
+        </div>
+        <hr />
+      </fieldset>
+
     </div>
   </div>
 </div>
