@@ -10,10 +10,7 @@ class LoginController extends Controller {
                 $password = I('post.login_password','','htmlspecialchars');
                 if(UserLogin($username, $password)){
                     session('submit',$_POST['login_submit']);
-                    session('webAppUser',$username); //webApp参数
-                    session('webAppPass',$password); //webApp参数
                     ClearAllCache(); //清除缓存
-                    echo '登陆成功';
                     $this -> redirect('Home/Index/index');
                 }else if(intval(S('login_times_'.$username)) > C('USER_LOGIN_TIMES')){
                     ShowAlert('你的账号已被锁定，请联系管理员解锁！',U('Home/Login/index'));
@@ -21,7 +18,6 @@ class LoginController extends Controller {
                 }else{
                     ShowAlert('用户名或密码错误！',U('Home/Login/index'));
                     $this -> display('Public/base');
-                    // $this -> error('用户名或密码错误！');
                 }
             }elseif($_POST['forget_submit']){
         	    //验证Email的正确性
@@ -77,14 +73,6 @@ class LoginController extends Controller {
         }elseif(UserShell(session('username'),session('user_shell'))){
             $this -> redirect(Home/Index/index);
         }else{
-            //向webApp发送用户名
-            if(session('webAppUser')){
-                // $str = "'".session('webAppUser')."'";
-                // echo '<body href="javascript:void(0);" onload="WebApp_Logout('.$str.')"></body>';
-                $str = "'"."web_logout"."','".session('webAppUser')."',''";
-                echo '<body href="javascript:void(0);" onload="WebApp_Login('.$str.')"></body>';
-                session('webAppUser',null);
-            }
             $this -> assign('app_ios_url', C('APP_IOS_URL'));
             $this -> assign('app_android_url', C('APP_ANDROID_URL'));
             $this -> display();
@@ -298,11 +286,9 @@ class LoginController extends Controller {
                 $username = trim($array['0']);
                 $password = trim($_POST["forget_password"]);
                 $StrUser = "username='$username'";
-                //$row = $DbUser->where($StrUser)->find();
                 if($password <> ""){
                     $umima=md5($password);
                     $DbUser-> where($StrUser)->setField('password',$umima);
-                    // $this -> success('OK，修改成功！马上为你跳转登录页面...', U('/Home/Login/index'), 2);
                     ShowAlert('OK，修改成功！',U('/Home/Login/index'));
                     $this -> display('Public/base');
                 }else{
@@ -321,9 +307,9 @@ class LoginController extends Controller {
     public function regist(){
         if (IS_POST) {
             if ($_POST['regist_submit']) {
-                $username = I('post.regist_username');
-                $password = I('post.regist_password');
-                $email = I('post.regist_email');
+                $username = I('post.regist_username','','htmlspecialchars');
+                $password = I('post.regist_password','','htmlspecialchars');
+                $email = I('post.regist_email','','htmlspecialchars');
                 $ret = RegistShell($username, $password, $email);
                 if (I('post.regist_submit') == 'xxjzAUI') {
                     $arrData['uid'] = ($ret[0]) ? $ret[2] : 0 ;
@@ -346,13 +332,9 @@ class LoginController extends Controller {
     }
     
     public function logout(){
-        //header('Content-type:text/html;charset=utf-8');
         $UserName = session('username');
         ClearAllCache(); //清除缓存
         session(null);
-        if($UserName){
-            session('webAppUser',$UserName);
-        }
         $this -> redirect('Home/Login/index');
     }
     
