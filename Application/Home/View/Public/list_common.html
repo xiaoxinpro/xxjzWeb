@@ -40,7 +40,7 @@
     </li>
     
     <li class="am-pagination-select">
-        <select id="pid" onchange="SelectChange()">
+        <select id="pid" onchange="SelectChange()" style="-webkit-appearance: button;">
             <foreach name="ArrPage" item="i">
                 <if condition="$i eq $Page "> 
                     <option value="__ACTION__/p/{$i}#money-table" selected="selected">&nbsp;{$i}</option>
