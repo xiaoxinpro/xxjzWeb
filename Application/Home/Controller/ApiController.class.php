@@ -327,6 +327,24 @@ class ApiController extends Controller {
                 }
                 break;
 
+            case 'get_image':
+                $ret = GetImageData($uid, $data['acid']);
+                $arrData['data']['ret'] = $ret;
+                $arrData['data']['msg'] = $ret == false ? '不存在查询的图片。' : 'OK';
+                break;
+
+            case 'set_image':
+                $ret = EditImageAcid($uid, $data['id'], $data['acid']);
+                $arrData['data']['ret'] = $ret;
+                $arrData['data']['msg'] = $ret == false ? '目标账单无法添加图片。' : 'OK';
+                break;
+
+            case 'del_image':
+                $ret = DelImageData($uid, $data['acid'], $data['id']);
+                $arrData['data']['ret'] = $ret[0];
+                $arrData['data']['msg'] = $ret[1];
+                break;
+
             default:
                 break;
         }
