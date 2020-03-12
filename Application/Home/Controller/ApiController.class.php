@@ -329,8 +329,8 @@ class ApiController extends Controller {
 
             case 'get_image':
                 $ret = GetImageData($uid, $data['acid']);
-                $arrData['data']['ret'] = $ret;
-                $arrData['data']['msg'] = $ret == false ? '不存在查询的图片。' : 'OK';
+                $arrData['data']['ret'] = $ret[0];
+                $arrData['data']['msg'] = $ret[1];
                 break;
 
             case 'set_image':
