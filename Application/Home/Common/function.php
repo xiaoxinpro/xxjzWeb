@@ -754,6 +754,12 @@
             $data = $isCheak[1];
             $DbData = M('account')->add($data);
             if($DbData > 0){
+                // 增加图片（uploads中是已保存到数据库中的图片数据）
+                if (isset($data['uploads']) && count($data['uploads']) > 0) {
+                    for ($i=0; $i < count($data['uploads']); $i++) { 
+                        EditImageAcid($data['jiid'], $data['uploads'][$i]['id'], $DbData);
+                    }
+                }
                 return array(true,'数据添加成功!',$DbData);
             }else{
                 return array(false,'写入数据库出错(>_<)');
