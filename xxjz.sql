@@ -37,8 +37,8 @@ CREATE TABLE `xxjz_account_funds` (
   PRIMARY KEY (`fundsid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
-DROP TABLE IF EXISTS `jizhang_account_image`;
-CREATE TABLE `jizhang_account_image` (
+DROP TABLE IF EXISTS `xxjz_account_image`;
+CREATE TABLE `xxjz_account_image` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `uid` int(11) unsigned NOT NULL,
   `acid` int(11) unsigned DEFAULT NULL,
@@ -51,7 +51,7 @@ CREATE TABLE `jizhang_account_image` (
   `savename` varchar(32) NOT NULL,
   `time` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `xxjz_user`;
 CREATE TABLE `xxjz_user` (
