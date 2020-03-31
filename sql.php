@@ -46,8 +46,8 @@ return array(
 		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
-	'jizhang_account_image' => array(
-		'tableName'  => "jizhang_account_image",
+	'account_image' => array(
+		'tableName'  => "account_image",
 		'tableField' => array(
 			"id" => array('COLUMN_NAME'=>"id",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL",'EXTRA'=>"AUTO_INCREMENT"),
 			"uid" => array('COLUMN_NAME'=>"uid",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL"),
@@ -62,7 +62,7 @@ return array(
 			"time" => array('COLUMN_NAME'=>"time",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
 		),
 		'tableKey' => "id",
-		'tableOther' => "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;"
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
 	'user' => array(
