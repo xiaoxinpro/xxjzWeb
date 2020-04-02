@@ -2,7 +2,7 @@
 
 [V2.x版本](https://github.com/xiaoxinpro/xxjzWeb) | [V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x) | [基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base) | [微信小程序](https://github.com/xiaoxinpro/xxjzWeChat)
 
-![](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/logo.png)
+![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ## 1、简介
 
@@ -18,7 +18,7 @@
 
 你可以使用Demo账号登陆体验V2.x版本，也可以自行搭建更加稳定的[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/releases/tag/V1.0.0)项目。
 
->Demo  ：http://jz.xiaoxin.pro/xxjzApp/index.php
+>Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
 
     Demo账号：demo
     Demo密码：xxgzs.org
@@ -31,14 +31,19 @@
 
 部署项目建议选择[Releases](https://github.com/xiaoxinpro/xxjzWeb/releases)版本，master分支属于开发分支，可能存在一些BUG无法正常使用。
 
-如果服务端不是Windows环境，请将根目录下的`Application`文件夹及其子文件设为755权限，否则安装后无法访问页面。
-
 #### 2.1.1、快速安装
-部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与管理员账号、密码和邮箱。提交后若配置信息无误则自动跳转到登陆页面。
+部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与邮箱配置（可选）。
 
-![小歆记账Web安装向导.png](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/install.png)
+![小歆记账Web安装向导.png](https://upload-images.jianshu.io/upload_images/1568014-9755a6530689bc8f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-点击安装后若配置信息无误则自动跳转到登陆页面，使用刚刚填写的管理员账号和密码就可以登陆使用了。
+点击安装按钮进行一步，设置管理员账号与密码。
+
+![设置管理员账户.png](https://upload-images.jianshu.io/upload_images/1568014-8aace673080113a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+点击创建后若配置信息无误提示以下界面，点击自动跳转到登陆页面，使用刚刚填写的管理员账号和密码就可以登陆使用了。
+
+![安装完成](https://upload-images.jianshu.io/upload_images/1568014-ddddfb259342c019.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 > 如果你只是日常使用阅读到这里就可以了，如果你想进一步完善或优化请往下看。
 
@@ -58,17 +63,19 @@
 
 ### 2.2、升级
 
-若已经安装过1.x版本，可按照以下说明升级到2.x版本。
+升级流程已全面升级，将适配全部旧版本升级到最新数据库。
 
 > 在升级前请务必备份好数据库与项目文件，以防升级失败造成数据丢失。
 
-下载本项目源码，将 `/Application/Home` 文件夹复制并覆盖到部署目录下的 `/Application` 文件夹中，将 `updata_2.0.php` 复制到部署根目录下，删除部署目录下的 `install.tmp` 文件（没用请忽略）。
+首先需要在 [Releases](https://github.com/xiaoxinpro/xxjzWeb/releases) 页面下载最新版本的 `xxjzWeb-Updata.zip` 文件，解压后将 `xxjzWeb-Updata` 目录下的全部内容覆盖到原项目的根目录下。
 
-使用浏览器访问`/updata_2.0.php`文件，阅读升级说明并填写管理员账号和密码。
+删除项目根目录下的 `install.tmp` 文件（没用请忽略）。
 
-![](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/updata.png)
+使用浏览器访问`./updata.php`文件，阅读升级说明并填写管理员账号和密码。
 
-点击 `升级` 按钮完成升级，升级结束后请务必删除`/updata_2.0.php`文件，防止二次升级破坏数据库文件。
+![](https://upload-images.jianshu.io/upload_images/1568014-adfdce14c9106549.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+点击 `升级` 按钮完成升级，升级结束后请务必删除`./updata.php`文件，防止二次升级破坏数据库文件。
 
 ### 2.3、使用优化
 
@@ -256,5 +263,4 @@ Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxi
 ### 微信扫描捐赠
 
 ![微信扫描捐赠](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/wechat.png)
-
 
