@@ -831,7 +831,7 @@
                 } elseif (stripos(C('IMAGE_CACHE_URL'), 'http') === 0) {
                     $imageData[$i]['url'] = C('IMAGE_CACHE_URL').'/'.$imageData[$i]['savepath'].$imageData[$i]['savename'];
                 } else {
-                    $imageData[$i]['url'] = __ROOT__.'/Uploads/'.$imageData[$i]['savepath'].$imageData[$i]['savename'];
+                    $imageData[$i]['url'] = __ROOT__.C('IMAGE_ROOT_PATH').$imageData[$i]['savepath'].$imageData[$i]['savename'];
                 }
             }
             return array(true, $imageData);
@@ -857,7 +857,7 @@
         $imageData = GetImageData($uid, $acid, $id);
         if ($imageData[0]) {
             for ($i=0; $i < count($imageData[1]); $i++) { 
-                $path = './Uploads/'.$imageData[1][$i]['savepath'].$imageData[1][$i]['savename'];
+                $path = C('IMAGE_ROOT_PATH').$imageData[1][$i]['savepath'].$imageData[1][$i]['savename'];
                 if (file_exists($path)) {
                     $ret = unlink($path);
                 }
