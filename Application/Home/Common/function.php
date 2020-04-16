@@ -774,7 +774,7 @@
         $upload = new \Think\Upload();// 实例化上传类
         $upload->maxSize  = C('IMAGE_SIZE');// 设置附件上传大小
         $upload->exts     = C('IMAGE_EXT');// 设置附件上传类型
-        $upload->rootPath = C('IMAGE_ROOT_PATH'); // 设置附件上传根目录
+        $upload->rootPath = '.'.C('IMAGE_ROOT_PATH'); // 设置附件上传根目录
         $upload->savePath = '';
         $upload->saveName = array('uniqid','');
         $upload->autoSub  = true;
@@ -857,7 +857,7 @@
         $imageData = GetImageData($uid, $acid, $id);
         if ($imageData[0]) {
             for ($i=0; $i < count($imageData[1]); $i++) { 
-                $path = C('IMAGE_ROOT_PATH').$imageData[1][$i]['savepath'].$imageData[1][$i]['savename'];
+                $path = '.'.C('IMAGE_ROOT_PATH').$imageData[1][$i]['savepath'].$imageData[1][$i]['savename'];
                 if (file_exists($path)) {
                     $ret = unlink($path);
                 }
