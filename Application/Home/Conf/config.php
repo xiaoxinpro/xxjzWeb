@@ -20,6 +20,6 @@ return array(
     'IMAGE_SIZE'    => 3*1024*1024,     //图片大小限制
     'IMAGE_COUNT'   => 9,               //图片数量限制
     'IMAGE_EXT'     => array('jpg', 'gif', 'png', 'jpeg'), //允许图片格式
-    'IMAGE_ROOT_PATH' => './Uploads/',  //图片根目录路径
+    'IMAGE_ROOT_PATH' => '/Uploads/',  //图片根目录路径
     'IMAGE_CACHE_URL' => '',            //图片缓存URL,必须以http(s)开头,否则无效。
 );
