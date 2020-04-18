@@ -178,7 +178,7 @@
 |classtype|int(1)|收入1/支出2|
 |ufid|int(11)|所属用户ID|
 
-### 4.3、分类表 xxjz_account_funds
+### 4.3、账户表 xxjz_account_funds
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |fundsid|int(11)|资金账户ID|
@@ -209,7 +209,7 @@
 |email|varchar(255)|邮箱|
 |utime|int(11)|注册时间戳|
 
-### 4.6、用户表 xxjz_user_config
+### 4.6、用户配置表 xxjz_user_config
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |cid|int(11) 自动增量|配置ID|
