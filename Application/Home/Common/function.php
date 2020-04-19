@@ -915,7 +915,7 @@
                         'money' => floatval($FundsMoney),
                         'source_fid' => 0,
                         'target_fid' => $fid,
-                        'time' => time(),
+                        'time' => strtotime(date('Y-m-d', time())),
                         'mark' => $FundsName.'账户的默认金额',
                     ));
                     if ($ret[0] == false) {
@@ -1077,6 +1077,7 @@
         if ($ret[0]) {
             $data = $ret[1];
             $ret = GetTransferIdData($tid, $data['uid']);
+            ClearDataCache();
             if ($ret[0]) {
                 $DbData = M('account_transfer')->where(array('tid' => intval($tid)))->data($data)->save();
                 return array(true,'转账记录更新成功!');
@@ -1092,6 +1093,7 @@
     function DelTransferData($tid, $uid) {
         $sql = array('tid' => intval($tid), 'uid' => $uid);
         $DbData = M("account_transfer")->where($sql)->delete();
+        ClearDataCache();
         if($DbData > 0){
             ClearDataCache();
             return array(true,'转账记录删除成功！');
@@ -1131,12 +1133,12 @@
         if ($fid > 0) {
             $sql['_complex'] = array('_logic'=>'or', 'transfer.source_fid'=>$fid, 'transfer.target_fid'=>$fid);
         }
+        $ret['count'] = M('account_transfer')->alias('transfer')->where($sql)->count();
         $DbSQL = M('account_transfer')->alias('transfer')
             ->field('transfer.*, source.fundsname as source_fname, target.fundsname as target_fname')
             ->join('__ACCOUNT_FUNDS__ AS target ON transfer.target_fid = target.fundsid', 'LEFT')
             ->join('__ACCOUNT_FUNDS__ AS source ON transfer.source_fid = source.fundsid', 'LEFT')
-            ->fetchSql(false)->where($sql)->order("time DESC , tid DESC");
-        $ret['count'] = M('account_transfer')->where($sql)->count();
+            ->fetchSql(false)->where($sql)->order("transfer.time DESC , transfer.tid DESC");
         $ret['page'] = 1;
         $ret['pagemax'] = 1;
         if ($page > 0) {
