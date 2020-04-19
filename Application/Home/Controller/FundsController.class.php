@@ -4,16 +4,23 @@ use Think\Controller;
 class FundsController extends BaseController {
     public function index(){
         $uid = session('uid');
+        $p = I('get.p', 1, 'intval');
 
         if (IS_POST) {
             $strFundsName = I('post.funds_name');
-            $Updata = AddNewFunds($strFundsName, $uid);
+            $numFundsMoney = I('post.funds_money', 0, 'float');
+            $Updata = AddNewFunds($strFundsName, $numFundsMoney, $uid);
             ClearDataCache(); //清除缓存
             ShowAlert($Updata[1]);
         }
         $FundsData = GetFundsData($uid);
+        $TransferData = GetFundsIdTransferData($uid, $p);
         // dump($FundsData);
-        $this -> assign('ShowData', $FundsData);
+        dump($TransferData);
+        $this -> assign('FundsData', $FundsData);
+        $this -> assign('TransferData', $TransferData['data']);
+        $this -> assign('TransferPage', $TransferData['page']);
+        $this -> assign('TransferPageMax', $TransferData['pagemax']);
         $this -> display();
     }
 
