@@ -902,13 +902,26 @@
     }
 
     //新建资金账户
-    function AddNewFunds($FundsName, $uid) {
+    function AddNewFunds($FundsName, $FundsMoney, $uid) {
         $isCheak = CheakFundsName($FundsName, $uid);
         if($isCheak[0]){
             $data = array('fundsname'=>$isCheak[1],'uid'=>$uid);
-            $DbData = M('account_funds')->add($data);
+            $fid = M('account_funds')->add($data);
             ClearDataCache();
-            if($DbData > 0){
+            if($fid > 0){
+                if (floatval($FundsMoney) > 0) {
+                    $ret = AddTransferData(array(
+                        'uid' => $uid,
+                        'money' => floatval($FundsMoney),
+                        'source_fid' => 0,
+                        'target_fid' => $fid,
+                        'time' => time(),
+                        'mark' => $FundsName.'账户的默认金额',
+                    ));
+                    if ($ret[0] == false) {
+                        return array(false, $ret[1]);
+                    }
+                }
                 return array(true,'新建资金账户成功!');
             }else{
                 return array(false,'写入数据库出错(&_&)');
@@ -949,7 +962,16 @@
             $sql['zhifu'] = 2; //支出
             $OutMoneySum = floatval(M('account')->where($sql)->sum('acmoney'));
             $OverMoneySum = $InMoneySum - $OutMoneySum;
-            $retData = array('over'=>$OverMoneySum, 'in'=>$InMoneySum, 'out'=>$OutMoneySum, 'count'=>$FundsCount);
+            $retData = array('init'=>0, 'over'=>$OverMoneySum, 'in'=>$InMoneySum, 'out'=>$OutMoneySum, 'count'=>$FundsCount);
+            if ($FundsId > 0) {
+                $TransferData = GetFundsTransferMoney($FundsId, $uid);
+                if ($TransferData[0]) {
+                    $retData['init'] = $TransferData[1]['init'];
+                    $retData['in'] += $TransferData[1]['in'];
+                    $retData['out'] += $TransferData[1]['out'];
+                    $retData['over'] += $TransferData[1]['over'];
+                }
+            }      
             $CacheData[$FundsId] = $retData;
             S('account_funds_data_'.$uid, $CacheData);
             return $retData;
@@ -997,6 +1019,133 @@
         } else {
             return array(false,'待转移的资金账户不存在!');
         }
+    }
+
+    //校验转账信息
+    function CheakTransferData($data) {
+        if (!is_array($data)) {
+            return array(false,'非法操作~~~');
+        }
+        $uid = $data['uid'];
+        if (!(is_numeric($uid) && $uid > 0)) {
+            return array(false,'未授权的访问！');
+        } elseif (!(is_numeric($data['money'])&&($data['money'] >= 0.01)&&($data['money'] <= C('MAX_MONEY_VALUE')))) {
+            return array(false,'输入的金额无效，请输入0.01到' . C('MAX_MONEY_VALUE') . '范围内的有效数字。');
+        } elseif (strlen($data['mark']) > C('MAX_MARK_VALUE')) {
+            return array(false,'备注信息太长，请把长度控制在' . C('MAX_MARK_VALUE') . '个字符以内。');
+        } elseif ($data['source_fid'] > 0 && GetFundsIdData($data['source_fid'], $uid)[0] == false) {
+            return array(false,'来源账户不存在，请重新选择。');
+        } elseif (GetFundsIdData($data['target_fid'], $uid)[0] == false) {
+            return array(false,'目标账户不存在，请重新选择。');
+        }
+        if(!is_int($data['time'])){
+            $data['time'] = strtotime($data['time']);
+        }
+        return array(true, $data);
+    }
+
+    //获取转账ID对应的数据
+    function GetTransferIdData($tid, $uid) {
+        $sql = array('tid' => intval($tid), 'uid' => $uid);
+        $DbData = M("account_transfer")->where($sql)->find();
+        if(is_array($DbData)){
+            return array(true,$DbData);
+        }else{
+            return array(false,'转账id不存在~');
+        }
+    }
+
+    //添加转账记录
+    function AddTransferData($data) {
+        $ret = CheakTransferData($data);
+        if ($ret[0]) {
+            $DbData = M('account_transfer')->add($ret[1]);
+            ClearDataCache();
+            if($DbData > 0){
+                return array(true,'资金转账成功!');
+            }else{
+                return array(false,'写入数据库出错(T_T)');
+            }
+        } else {
+            return $ret;
+        }
+    }
+
+    //编辑转账记录
+    function EditTransferData($tid, $data) {
+        $ret = CheakTransferData($data);
+        if ($ret[0]) {
+            $data = $ret[1];
+            $ret = GetTransferIdData($tid, $data['uid']);
+            if ($ret[0]) {
+                $DbData = M('account_transfer')->where(array('tid' => intval($tid)))->data($data)->save();
+                return array(true,'转账记录更新成功!');
+            } else {
+                return $ret;
+            }
+        } else {
+            return $ret;
+        }
+    }
+
+    //删除转账记录
+    function DelTransferData($tid, $uid) {
+        $sql = array('tid' => intval($tid), 'uid' => $uid);
+        $DbData = M("account_transfer")->where($sql)->delete();
+        if($DbData > 0){
+            ClearDataCache();
+            return array(true,'转账记录删除成功！');
+        }elseif($DbData === 0){
+            return array(false,'未找到你要删除的转账记录(@_@)');
+        }else{
+            return array(false,'转账数据库异常(*_*)');
+        }
+    }
+
+    //转移转账记录到指定账户
+    function MoveFundsTransferData($source_fid, $target_fid, $uid, $mark) {
+        // 源账户初始值转移至目标账户
+        // 源账户初始记录和删除
+        // 将源账户的转入转出id改为目标账户
+    }
+
+    //获取指定账户转账金额汇总、转入金额、转出金额
+    function GetFundsTransferMoney($fid, $uid) {
+        $FundsData = GetFundsIdData($fid, $uid);
+        if ($FundsData[0]) {
+            $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$fid);
+            $initMoney = floatval(M("account_transfer")->where($sql)->sum('money'));
+            $sql = array('uid'=>$uid, 'source_fid'=>$fid);
+            $outSum = floatval(M("account_transfer")->where($sql)->sum('money'));
+            $sql = array('uid'=>$uid, 'target_fid'=>$fid, 'source_fid'=>array('gt', 0));
+            $inSum = floatval(M("account_transfer")->where($sql)->sum('money'));
+            return array(true, array('in'=>$inSum, 'out'=>$outSum, 'init'=> $initMoney, 'over'=>$initMoney+$inSum-$outSum));
+        } else {
+            return array(false, '资金账户id不存在~');
+        }
+    }
+
+    //获取转账数据列表
+    function GetFundsIdTransferData($uid, $page=1, $fid=0) {
+        $sql = array('transfer.uid'=>$uid);
+        if ($fid > 0) {
+            $sql['_complex'] = array('_logic'=>'or', 'transfer.source_fid'=>$fid, 'transfer.target_fid'=>$fid);
+        }
+        $DbSQL = M('account_transfer')->alias('transfer')
+            ->field('transfer.*, source.fundsname as source_fname, target.fundsname as target_fname')
+            ->join('__ACCOUNT_FUNDS__ AS target ON transfer.target_fid = target.fundsid', 'LEFT')
+            ->join('__ACCOUNT_FUNDS__ AS source ON transfer.source_fid = source.fundsid', 'LEFT')
+            ->fetchSql(false)->where($sql)->order("time DESC , tid DESC");
+        $ret['count'] = M('account_transfer')->where($sql)->count();
+        $ret['page'] = 1;
+        $ret['pagemax'] = 1;
+        if ($page > 0) {
+            $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
+            $ret['page'] = $page;
+            $ret['pagemax'] = intval($ret['count'] / C('PAGE_SIZE')) + 1;
+        }
+        $ret['data'] = $DbSQL->select();
+        return $ret;
     }
 
     //校验分类名
