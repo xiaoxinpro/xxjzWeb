@@ -131,7 +131,7 @@ class ApiController extends Controller {
                 $arrData['data'] = GetFundsIdData($data['fundsid'], $uid);
                 break;
             case 'add':
-                $arrData['data'] = AddNewFunds($data['fundsname'], $uid);
+                $arrData['data'] = AddNewFunds($data['fundsname'], 0, $uid);
                 break;
             case 'edit':
                 $arrData['data'] = EditFundsName($data['fundsid'], $data['fundsname'], $uid);
