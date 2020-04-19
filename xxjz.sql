@@ -53,6 +53,18 @@ CREATE TABLE `xxjz_account_image` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `xxjz_account_transfer`;
+CREATE TABLE `xxjz_account_transfer` (
+  `tid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
+  `money` double(9,2) unsigned NOT NULL,
+  `source_fid` int(11) unsigned NOT NULL,
+  `target_fid` int(11) unsigned NOT NULL,
+  `time` int(11) unsigned NOT NULL,
+  `mark` varchar(64) NOT NULL,
+  PRIMARY KEY (`tid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
 DROP TABLE IF EXISTS `xxjz_user`;
 CREATE TABLE `xxjz_user` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
@@ -101,4 +113,4 @@ CREATE TABLE `xxjz_user_push` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
--- 2020-02-16 04:03:59
+-- 2020-04-19 09:24:59
