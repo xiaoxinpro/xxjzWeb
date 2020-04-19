@@ -65,6 +65,21 @@ return array(
 		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
 	),
 
+	'account_transfer' => array(
+		'tableName'  => "account_transfer",
+		'tableField' => array(
+			"tid" => array('COLUMN_NAME'=>"tid",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL",'EXTRA'=>"AUTO_INCREMENT"),
+			"uid" => array('COLUMN_NAME'=>"uid",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL"),
+			"money" => array('COLUMN_NAME'=>"money",'COLUMN_TYPE'=>"double(9,2) unsigned",'IS_NULLABLE'=>"NOT NULL"),
+			"source_fid" => array('COLUMN_NAME'=>"source_fid",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL"),
+			"target_fid" => array('COLUMN_NAME'=>"target_fid",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL"),
+			"time" => array('COLUMN_NAME'=>"time",'COLUMN_TYPE'=>"int(11) unsigned",'IS_NULLABLE'=>"NOT NULL"),
+			"mark" => array('COLUMN_NAME'=>"mark",'COLUMN_TYPE'=>"varchar(64)",'IS_NULLABLE'=>"NOT NULL"),
+		),
+		'tableKey' => "tid",
+		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
+	),
+
 	'user' => array(
 		'tableName'  => "user",
 		'tableField' => array(
