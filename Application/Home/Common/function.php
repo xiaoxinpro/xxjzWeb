@@ -1009,6 +1009,7 @@
             $retCount = M('account')->where(array('fid' => $oldFundsId, 'uid' => $uid))->setField('fid', $newFundsId);
             $retDelete = M('account_funds')->where(array('fundsid' => $oldFundsId, 'uid' => $uid))->delete();
             ClearDataCache();
+            MoveFundsTransferData($oldFundsId, $newFundsId, $uid);
             if ($retCount==0 && $retDelete==1) {
                 return array(true, "资金账户删除成功。");
             } elseif ($retCount>0 && $retDelete==1) {
@@ -1105,10 +1106,41 @@
     }
 
     //转移转账记录到指定账户
-    function MoveFundsTransferData($source_fid, $target_fid, $uid, $mark) {
-        // 源账户初始值转移至目标账户
+    function MoveFundsTransferData($source_fid, $target_fid, $uid) {
+        // 若目标账户为-1默认账户，则直接删除源账户
+        if ($target_fid > 0) {
+            // 源账户初始值转移至目标账户
+            $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$source_fid);
+            $DbSource = M('account_transfer')->where($sql)->find();
+            if (is_array($DbSource)) {
+                $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$target_fid);
+                $DbTarget = M('account_transfer')->where($sql)->find();
+                if (is_array($DbTarget)) {
+                    $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$target_fid);
+                    M('account_transfer')->where($sql)->setField('money', $DbSource['money'] + $DbTarget['money']);
+                } else {
+                    $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$source_fid);
+                    M('account_transfer')->where($sql)->setField('target_fid', $target_fid);
+                }
+            }
+            // 源账户初始记录和删除
+            $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$source_fid);
+            M('account_transfer')->where($sql)->delete();
+            // 将源账户的转入转出id改为目标账户
+            $sql = array('uid'=>$uid, 'source_fid'=>$source_fid, 'target_fid'=>array('neq', $target_fid));
+            M('account_transfer')->where($sql)->setField('source_fid', $target_fid);
+            $sql = array('uid'=>$uid, 'target_fid'=>$source_fid, 'source_fid'=>array('neq', $target_fid));
+            M('account_transfer')->where($sql)->setField('target_fid', $target_fid);
+        }
         // 源账户初始记录和删除
-        // 将源账户的转入转出id改为目标账户
+        $sql = array(
+            'uid'=>$uid, 
+            '_complex'=>array(
+                '_logic'=>'or', 
+                'source_fid'=>$source_fid, 
+                'target_fid'=>$source_fid)
+        );
+        $retDelete = M('account_transfer')->where($sql)->delete();
     }
 
     //获取指定账户转账金额汇总、转入金额、转出金额
