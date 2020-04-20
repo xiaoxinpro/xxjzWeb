@@ -12,17 +12,19 @@
     <tbody class="">
         <volist name="TransferData" id="data">
         <tr>
-            <td class="am-text-middle">{$data.source_fname|default='默认金额'}</td>
+            <td class="am-text-middle">{$data.source_fname|default='创建账户'}</td>
             <td class="am-text-middle money-format">{$data.money}</td>
             <td class="am-text-middle">{$data.target_fname}</td>
             <td class="am-text-middle am-text-xs"><php>echo date("Y-m-d",$data['time']);</php></td>
             <td class="am-text-middle">{$data.mark}</td>
             <td class="am-text-middle">
-                <if condition="$data.id eq -1 ">
-                    <a href="javascript:void(0);" onclick="alert('默认资金账户无法编辑。');">编辑</a> 
+                <if condition="$data.source_fid eq 0 ">
+                    <php>
+                        echo "<a href=".U("Home/Funds/edit?id=".$data['target_fid']).">账户</a>";
+                    </php>
                 <else />
                     <php>
-                        echo "<a href=".U("Home/Funds/transfer?id=".$data['id']).">编辑</a>";
+                        echo "<a href=".U("Home/Edit/transfer?id=".$data['tid']).">编辑</a>";
                     </php>
                 </if>
             </td>
