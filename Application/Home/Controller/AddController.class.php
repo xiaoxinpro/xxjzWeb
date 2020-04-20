@@ -58,6 +58,33 @@ class AddController extends BaseController {
         $this -> display();
     }
 
+    public function transfer() {
+        $uid = session('uid');
+        if (IS_POST) {
+            $data['money'] = I('post.transfer_money', 0, 'float');
+            $data['source_fid'] = I('post.transfer_funds_source', 0, 'int');
+            $data['target_fid'] = I('post.transfer_funds_target', 0, 'int');
+            $data['mark'] = I('post.transfer_mark', '');
+            $data['time'] = I('post.transfer_time', '');
+            $data['uid'] = $uid;
+            $Updata = AddTransferData($data);
+            ShowAlert($Updata[1]);
+        }
+
+        //获取资金账户数据
+        $FundsData = GetFundsData($uid);
+        $TransferData = GetFundsIdTransferData($uid, 1);
+        // dump($FundsData);
+
+        $this -> assign('refURL', GetRefURL());
+        $this -> assign('FundsData',$FundsData);
+        $this -> assign('TransferData', $TransferData['data']);
+        $this -> assign('TransferPage', $TransferData['page']);
+        $this -> assign('TransferPageMax', $TransferData['pagemax']);
+
+        $this -> display();
+    }
+
     public function upload() {
         $arrData = array();
 
