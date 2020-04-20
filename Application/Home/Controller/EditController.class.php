@@ -2,20 +2,30 @@
 namespace Home\Controller;
 use Think\Controller;
 class EditController extends BaseController {
+    private $uid;
+    private $id;
+
+    //检测acid与uid是否匹配
+    private function cheak_acid() {
+        if(!CheakIdShell($this->id, $this->uid)){
+            $this -> error("非法操作!");
+        }
+    }
+
     public function _initialize(){
-        $uid = session('uid');
+        $uid = intval(session('uid'));
         $id = I('get.id', 0, 'int');
         if ($id == 0) {
             $id = I('post.acid', 0, 'int');
         }
-        if(!CheakIdShell($id, $uid)){
-            $this -> error("非法操作!");
-        }
+        $this->uid = $uid;
+        $this->id = $id; 
     }
     
-    public function index(){
-        $uid = session('uid');
-        $id  = I('get.id', 0, 'int');
+    public function index() {
+        $this->cheak_acid();
+        $uid = $this->uid;
+        $id  = $this->id;
         $refURL = GetRefURL();
         if(IS_POST){
             $data = array('acid' => $id);
@@ -63,9 +73,11 @@ class EditController extends BaseController {
     
     //删除记账
     public function del(){
-        $uid = session('uid');
+        $this->cheak_acid();
+        $uid = $this->uid;
+        $id  = $this->id;
         $refURL = GetRefURL();
-        $Msg = DelIdData($uid, I('get.id', 0, 'int'));
+        $Msg = DelIdData($uid, $id);
         if($Msg[0]) {
             ClearDataCache(); //清除缓存
             ShowAlert($Msg[1],$refURL);
@@ -78,8 +90,9 @@ class EditController extends BaseController {
 
     //修改图片对应的记账ID
     public function image() {
-        $uid = session('uid');
-        $acid  = I('post.acid', 0, 'int');
+        $this->cheak_acid();
+        $uid = $this->uid;
+        $acid  = $this->id;
         $id = I('post.id', 0, 'int');
         if(IS_POST && $acid > 0 && $id > 0) {
             die(json_encode(EditImageAcid($uid, $id, $acid)));
@@ -91,8 +104,9 @@ class EditController extends BaseController {
 
     //删除图片
     public function deleteImage(){
-        $uid = session('uid');
-        $acid  = I('post.acid', 0, 'int');
+        $this->cheak_acid();
+        $uid = $this->uid;
+        $acid  = $this->id;
         $id = I('post.id', 0, 'int');
         if(IS_POST && $acid > 0 && $id > 0) {
             die(json_encode(DelImageData($uid, $acid, $id)));
