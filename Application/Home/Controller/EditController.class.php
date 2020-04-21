@@ -4,11 +4,22 @@ use Think\Controller;
 class EditController extends BaseController {
     private $uid;
     private $id;
+    private $transfer;
 
     //检测acid与uid是否匹配
     private function cheak_acid() {
         if(!CheakIdShell($this->id, $this->uid)){
             $this -> error("非法操作!");
+        }
+    }
+
+    //检测tid与uid是否匹配
+    private function cheak_tid() {
+        $transferData = GetTransferIdData($this->id, $this->uid);
+        if(!$transferData[0]){
+            $this->error($transferData[1]);
+        } else {
+            $this->transfer = $transferData[1];
         }
     }
 
@@ -26,6 +37,9 @@ class EditController extends BaseController {
         $this->cheak_acid();
         $uid = $this->uid;
         $id  = $this->id;
+        if (!stripos($_SERVER['HTTP_REFERER'], __SELF__)) {
+            SetRefURL($_SERVER['HTTP_REFERER']);
+        }
         $refURL = GetRefURL();
         if(IS_POST){
             $data = array('acid' => $id);
@@ -114,6 +128,55 @@ class EditController extends BaseController {
             ShowAlert('无效的操作。' ,GetRefURL());
             $this -> display('Public/common');
         }
+    }
+
+    //编辑转账
+    public function transfer() {
+        $this->cheak_tid();
+        $uid = $this->uid;
+        $tid  = $this->id;
+        $transfer = $this->transfer;
+        if (!stripos($_SERVER['HTTP_REFERER'], __SELF__)) {
+            SetRefURL($_SERVER['HTTP_REFERER']);
+        }
+        $refURL = GetRefURL();
+        if (IS_POST) {
+            $data = array();
+            $data['money'] = I('post.transfer_money', 0, 'float');
+            $data['source_fid'] = I('post.transfer_funds_source', 0, 'int');
+            $data['target_fid'] = I('post.transfer_funds_target', 0, 'int');
+            $data['mark'] = I('post.transfer_mark', '');
+            $data['time'] = I('post.transfer_time', '');
+            $data['uid'] = $uid;
+            $Updata = EditTransferData($tid, $data);
+            if($Updata[0]){
+                ClearDataCache(); //清除缓存
+                ShowAlert($Updata[1],$refURL);
+                $this -> display('Public/common');   
+            }else{
+                ShowAlert($Updata[1],$refURL);
+                $this -> display('Public/common');
+            }
+        } else {
+            SetRefURL($_SERVER['HTTP_REFERER']);
+            $FundsData = GetFundsData($uid);
+
+            $this -> assign('refURL',$_SERVER['HTTP_REFERER']);
+            $this -> assign('TransferData',$transfer);
+            $this -> assign('FundsData',$FundsData);
+
+            $this -> display();            
+        }
+    }
+
+    //删除转账
+    public function deleteTransfer() {
+        $this->cheak_tid();
+        $uid = $this->uid;
+        $tid  = $this->id;
+        $refURL = GetRefURL();
+
+        $this -> display('Public/common');
     }
     
 }
