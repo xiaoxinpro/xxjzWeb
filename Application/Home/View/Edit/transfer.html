@@ -1,0 +1,92 @@
+
+<extend name="Public:common"/>
+<block name="main">
+    <style type="text/css">
+        .am-selected {
+            width: 100%;
+        }
+        .am-selected-status {
+            text-align: left;
+            width: 100%;
+            display: block;
+            word-wrap: normal;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .am-dropdown-toggle {
+            border-color: #ccc;
+            line-height: inherit;
+        }
+    </style>
+
+    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+        <fieldset>
+            <legend>编辑转账</legend>
+                <div class="am-input-group">
+                    <span class="am-input-group-label"><b>转账金额</b></span>
+                    <input type="number" class="am-form-field" id="text-money" name="transfer_money" step=0.01 value="{$TransferData.money}" required>
+                    <p></p>
+                </div>
+                <div><p></p></div>
+                <div class="am-input-group">
+                    <span class="am-input-group-label"><b>转出账户</b></span>
+                    <select id="select-funds-source" class="am-form-field" name="transfer_funds_source" data-am-selected placeholder="选择转出账户" required>
+                        <option value=""></option>
+                        <foreach name="FundsData" item="data">
+                            <if condition="$data.id gt 0">
+                              <if condition="$data['id'] eq $TransferData['source_fid']">
+                                  <option value="{$data.id}" selected>{$data.name}</option>
+                              <else/>
+                                  <option value="{$data.id}">{$data.name}</option>
+                              </if>
+                            </if>
+                        </foreach>
+                    </select>
+                    <span class="am-form-caret"></span>
+                </div>
+                <div><p></p></div>
+                <div class="am-input-group">
+                    <span class="am-input-group-label"><b>转入账户</b></span>
+                    <select id="select-funds-target" class="am-form-field" name="transfer_funds_target" data-am-selected placeholder="选择转入账户" required>
+                        <option value=""></option>
+                        <foreach name="FundsData" item="data">
+                            <if condition="$data.id gt 0">
+                              <if condition="$data['id'] eq $TransferData['target_fid']">
+                                  <option value="{$data.id}" selected>{$data.name}</option>
+                              <else/>
+                                  <option value="{$data.id}">{$data.name}</option>
+                              </if>
+                            </if>
+                        </foreach>
+                    </select>
+                    <span class="am-form-caret"></span>
+                </div>
+                <div><p></p></div>
+                <div class="am-input-group">
+                    <span class="am-input-group-label"><b>转账备注</b></span>
+                    <input type="text" class="am-form-field" id="text-mark" name="transfer_mark" value="{$TransferData.mark}">
+                </div>
+                <div><p></p></div>
+                <div class="am-input-group">
+                    <span class="am-input-group-label"><b>转账时间</b></span>
+                    <input type="date" class="am-form-field" id="text-time" name="transfer_time" value="<php>echo date('Y-m-d',$TransferData['time']);</php>" style="height: auto;" />
+                </div>
+
+                <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
+                <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="transfer_submit" value="修改转账"></p>
+                
+                <p><a href="javascript:void(0);" class="am-btn am-btn-block am-btn-danger" 
+                    onclick="isDelete('__APP__/Home/Edit/deleteTransfer/id/{$TransferData['tid']}')" >删除转账</a></p>
+                
+                <p><a href="{$refURL}" class="am-btn am-btn-block am-btn-default">返回</a></p>
+                
+        </fieldset>
+    </form>
+</block>
+
+<block name="javascript">
+    <script>
+
+    </script>
+</block>
