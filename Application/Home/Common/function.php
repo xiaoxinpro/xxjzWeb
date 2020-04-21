@@ -1034,10 +1034,12 @@
             return array(false,'输入的金额无效，请输入0.01到' . C('MAX_MONEY_VALUE') . '范围内的有效数字。');
         } elseif (strlen($data['mark']) > C('MAX_MARK_VALUE')) {
             return array(false,'备注信息太长，请把长度控制在' . C('MAX_MARK_VALUE') . '个字符以内。');
+        } elseif ($data['source_fid'] == $data['target_fid']) {
+            return array(false,'转出账户与转入账户不能相同，请重新选择。');
         } elseif ($data['source_fid'] > 0 && GetFundsIdData($data['source_fid'], $uid)[0] == false) {
-            return array(false,'来源账户不存在，请重新选择。');
+            return array(false,'转出账户不存在，请重新选择。');
         } elseif (GetFundsIdData($data['target_fid'], $uid)[0] == false) {
-            return array(false,'目标账户不存在，请重新选择。');
+            return array(false,'转入账户不存在，请重新选择。');
         }
         if(!is_int($data['time'])){
             $data['time'] = strtotime($data['time']);
@@ -1080,7 +1082,7 @@
             $ret = GetTransferIdData($tid, $data['uid']);
             ClearDataCache();
             if ($ret[0]) {
-                $DbData = M('account_transfer')->where(array('tid' => intval($tid)))->data($data)->save();
+                $DbData = M('account_transfer')->where(array('tid'=>intval($tid), 'uid'=>$data['uid']))->data($data)->save();
                 return array(true,'转账记录更新成功!');
             } else {
                 return $ret;
