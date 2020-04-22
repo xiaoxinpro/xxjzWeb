@@ -1178,7 +1178,7 @@
         if ($page > 0) {
             $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
             $ret['page'] = $page;
-            $ret['pagemax'] = intval($ret['count'] / C('PAGE_SIZE')) + 1;
+            $ret['pagemax'] = intval(($ret['count'] - 1) / C('PAGE_SIZE')) + 1;
         }
         $ret['data'] = $DbSQL->select();
         return $ret;
