@@ -9,8 +9,8 @@
             </div>
             <p></p>
             <div class="am-input-group">
-                <span class="am-input-group-label"><b>默认金额</b></span>
-                <input type="number" class="am-form-field" id="text-money" name="funds_money" placeholder="输入资金账户默认金额">
+                <span class="am-input-group-label"><b>初始金额</b></span>
+                <input type="number" class="am-form-field" id="text-money" name="funds_money" placeholder="输入资金账户初始金额">
             </div>
             <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="funds_submit" value="新建"></p>
         </fieldset>
@@ -23,7 +23,7 @@
             <thead>
                 <tr>
                     <th width='80' bgcolor="#FFFFFF">资金账户</th>
-                    <th width='80' bgcolor="#FFFFFF">默认金额</th>
+                    <th width='80' bgcolor="#FFFFFF">初始金额</th>
                     <th width='80' bgcolor="#FFFFFF">收入金额</th>
                     <th width='80' bgcolor="#FFFFFF">支出金额</th>
                     <th width='80' bgcolor="#FFFFFF">账户金额</th>
@@ -42,7 +42,7 @@
                     <td class="am-text-middle">{$data.money.count}</td>
                     <td class="am-text-middle">
                         <if condition="$data.id eq -1 ">
-                            <a href="javascript:void(0);" onclick="alert('默认资金账户无法编辑。');">编辑</a> 
+                            <a href="javascript:void(0);" onclick="alert('初始资金账户无法编辑。');">编辑</a> 
                         <else />
                             <php>
                                 echo "<a href=".U("Home/Funds/edit?id=".$data['id']).">编辑</a>";
