@@ -79,8 +79,8 @@ class AddController extends BaseController {
         $this -> assign('refURL', GetRefURL());
         $this -> assign('FundsData',$FundsData);
         $this -> assign('TransferData', $TransferData['data']);
-        $this -> assign('TransferPage', $TransferData['page']);
-        $this -> assign('TransferPageMax', $TransferData['pagemax']);
+        // $this -> assign('TransferPage', $TransferData['page']);
+        // $this -> assign('TransferPageMax', $TransferData['pagemax']);
 
         $this -> display();
     }
