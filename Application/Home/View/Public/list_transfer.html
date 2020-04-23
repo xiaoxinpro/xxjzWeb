@@ -1,12 +1,12 @@
 <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
     <thead>
         <tr>
-            <th width='80' bgcolor="#FFFFFF">转出账户</th>
-            <th width='80' bgcolor="#FFFFFF">金额</th>
-            <th width='80' bgcolor="#FFFFFF">转入账户</th>
-            <th width='80' bgcolor="#FFFFFF">时间</th>
-            <th width='80' bgcolor="#FFFFFF">备注</th>
-            <th width='80' bgcolor="#FFFFFF">编辑</th>
+            <th bgcolor="#FFFFFF">转出账户</th>
+            <th bgcolor="#FFFFFF">金额</th>
+            <th bgcolor="#FFFFFF">转入账户</th>
+            <th bgcolor="#FFFFFF">时间</th>
+            <th bgcolor="#FFFFFF">备注</th>
+            <th bgcolor="#FFFFFF">编辑</th>
         </tr>
     </thead>
     <tbody class="">
@@ -44,13 +44,13 @@
     
     <li class="am-pagination-select">
         <select id="pid" onchange="SelectChange()" style="-webkit-appearance: button;">
-            <foreach name="ArrPage" item="i">
+            <for start="1" end="$TransferPageMax + 1">
                 <if condition="$i eq $TransferPage "> 
                     <option value="__ACTION__/p/{$i}#transfer-table" selected="selected">&nbsp;{$i}</option>
                 <else /> 
                     <option value="__ACTION__/p/{$i}#transfer-table" class="">&nbsp;{$i}</option>
                 </if>
-            </foreach>
+            </for>
         </select>
     </li>
     
