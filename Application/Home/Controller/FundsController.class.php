@@ -16,7 +16,7 @@ class FundsController extends BaseController {
         $FundsData = GetFundsData($uid);
         $TransferData = GetFundsIdTransferData($uid, $p);
         // dump($FundsData);
-        dump($TransferData);
+        // dump($TransferData);
         $this -> assign('FundsData', $FundsData);
         $this -> assign('TransferData', $TransferData['data']);
         $this -> assign('TransferPage', $TransferData['page']);
@@ -33,8 +33,18 @@ class FundsController extends BaseController {
                 $fundsSubmit = I('post.funds_submit','');
                 if ($fundsSubmit === '编辑') {
                     $fundsName = I('post.funds_name','');
+                    $fundsMoney = I('post.funds_money', 0, 'float');
                     $ret = EditFundsName($fundsid, $fundsName, $uid);
-                    ShowAlert($ret[1],U('Home/Funds/index'));
+                    if ($ret[0]) {
+                        $ret = EditFundsDefaultMoney($fundsid, $fundsMoney, $uid);
+                        if ($ret[0]) {
+                            ShowAlert('账户编辑完成',U('Home/Funds/index'));
+                        } else {
+                            ShowAlert($ret[1],U('Home/Funds/edit/id/'.$fundsid));
+                        }
+                    } else {
+                        ShowAlert($ret[1],U('Home/Funds/edit/id/'.$fundsid));
+                    }
                     $this -> display('Public/base');
                 } elseif ($fundsSubmit === '删除') {
                     $fundsChange = I('post.funds_change','',int);
@@ -49,6 +59,7 @@ class FundsController extends BaseController {
                     $this -> assign('FundsId', $fundsid);
                     $this -> assign('FundsName', $DbFunds[1]['fundsname']);
                     $this -> assign('FundsData', GetFundsData($uid));
+                    $this -> assign('FundsMoney', GetFundsAccountSumData($fundsid, $uid));
                     $this -> display();  
                 } else {
                     $this -> error($DbData[1]);
