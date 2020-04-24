@@ -1003,6 +1003,25 @@
         }
     }
 
+    //编辑资金账户默认金额
+    function EditFundsDefaultMoney($FundsId, $FundsMoney, $uid) {
+        $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$FundsId);
+        $DbData = M('account_transfer')->where($sql)->find();
+        if ($DbData) {
+            $DbData['money'] = floatval($FundsMoney);
+            return EditTransferData($DbData['tid'], $DbData);
+        } else {
+            return AddTransferData(array(
+                'uid' => $uid,
+                'money' => floatval($FundsMoney),
+                'source_fid' => 0,
+                'target_fid' => $FundsId,
+                'time' => strtotime(date('Y-m-d', time())),
+                'mark' => '更新账户初始金额',
+            ));
+        }
+    }
+
     //删除资金账户并转移记账数据
     function DeleteFunds($oldFundsId, $uid, $newFundsId = -1) {
         if (($newFundsId === -1)||(M("account_funds")->where(array('fundsid' => $newFundsId, 'uid' => $uid))->find())) {
@@ -1030,8 +1049,8 @@
         $uid = $data['uid'];
         if (!(is_numeric($uid) && $uid > 0)) {
             return array(false,'未授权的访问！');
-        } elseif (!(is_numeric($data['money'])&&($data['money'] >= 0.01)&&($data['money'] <= C('MAX_MONEY_VALUE')))) {
-            return array(false,'输入的金额无效，请输入0.01到' . C('MAX_MONEY_VALUE') . '范围内的有效数字。');
+        } elseif (!(is_numeric($data['money'])&&($data['money'] >= ($data['source_fid'] == 0 ? 0 : 0.01))&&($data['money'] <= C('MAX_MONEY_VALUE')))) {
+            return array(false,'输入的金额无效，请输入'.($data['source_fid'] == 0 ? 0 : 0.01).'到' . C('MAX_MONEY_VALUE') . '范围内的有效数字。');
         } elseif (strlen($data['mark']) > C('MAX_MARK_VALUE')) {
             return array(false,'备注信息太长，请把长度控制在' . C('MAX_MARK_VALUE') . '个字符以内。');
         } elseif ($data['source_fid'] == $data['target_fid']) {
