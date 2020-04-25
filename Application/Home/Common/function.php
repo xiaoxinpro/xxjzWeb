@@ -871,6 +871,19 @@
         return array(false, "删除图片失败，图片数据不存在。");
     }
 
+    //是否要显示默认账户
+    function IsShowDefaultFunds($uid) {
+        $ret = true;
+        $sql = array('uid'=>$uid);
+        if (M('account_funds')->where($sql)->count() > 0) {
+            $sql = array('jiid'=>$uid, 'fid'=>-1);
+            if (M('account')->where($sql)->count() == 0) {
+                $ret = false;
+            }
+        }
+        return $ret;
+    }
+
     //校验资金账户名
     function CheakFundsName($FundsName, $uid, $FundsId = -1) {
         if(strlen($FundsName) < 1){
@@ -939,7 +952,9 @@
         } else {
             $sql = array('uid' => $uid);
             $retData = array();
-            array_push($retData, array('name'=>'默认', 'id'=> -1, 'money'=> GetFundsAccountSumData(-1,$uid)));
+            if (IsShowDefaultFunds($uid)) {
+                array_push($retData, array('name'=>'默认', 'id'=> -1, 'money'=> GetFundsAccountSumData(-1,$uid)));
+            }
             $DbData = M('account_funds')->where($sql)->select();
             foreach ($DbData as $key => $FundsArr) {
                 array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>intval($FundsArr['fundsid']), 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
@@ -1024,9 +1039,15 @@
 
     //删除资金账户并转移记账数据
     function DeleteFunds($oldFundsId, $uid, $newFundsId = -1) {
-        if (($newFundsId === -1)||(M("account_funds")->where(array('fundsid' => $newFundsId, 'uid' => $uid))->find())) {
+        if ($oldFundsId == $newFundsId) {
+            return array(false, '转移资金账户错误，无法删除资金账户!');
+        } elseif (($newFundsId === -1)||(M("account_funds")->where(array('fundsid' => $newFundsId, 'uid' => $uid))->find())) {
             $retCount = M('account')->where(array('fid' => $oldFundsId, 'uid' => $uid))->setField('fid', $newFundsId);
-            $retDelete = M('account_funds')->where(array('fundsid' => $oldFundsId, 'uid' => $uid))->delete();
+            if ($oldFundsId === -1) {
+                $retDelete = 1;
+            } else {
+                $retDelete = M('account_funds')->where(array('fundsid' => $oldFundsId, 'uid' => $uid))->delete();
+            }
             ClearDataCache();
             MoveFundsTransferData($oldFundsId, $newFundsId, $uid);
             if ($retCount==0 && $retDelete==1) {
