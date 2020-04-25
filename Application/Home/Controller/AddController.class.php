@@ -50,8 +50,6 @@ class AddController extends BaseController {
         
         //整合List表格数组
         $ListData = OutListData(GetAccountData($uid, 1),GetClassData($uid),$DbFunds);
-        $this -> assign('Page', 1);
-        $this -> assign('PageMax', 1);
         $this -> assign('ArrPage', $ListData[2]);
         $this -> assign('ShowData', $ListData[3]);
 
