@@ -26,9 +26,8 @@ class FundsController extends BaseController {
 
     public function edit(){
         $uid = session('uid');
-        $fundsid = I('get.id','',int);
-        if ($fundsid > 0) {
-            $DbFunds = GetFundsIdData($fundsid, $uid);
+        $fundsid = I('get.id', false, 'int');
+        if ($fundsid) {
             if (IS_POST) {
                 $fundsSubmit = I('post.funds_submit','');
                 if ($fundsSubmit === '编辑') {
@@ -55,15 +54,18 @@ class FundsController extends BaseController {
                     $this -> error('非法操作...');
                 }
             } else {
-                if ($DbFunds[0]) {
-                    $this -> assign('FundsId', $fundsid);
-                    $this -> assign('FundsName', $DbFunds[1]['fundsname']);
-                    $this -> assign('FundsData', GetFundsData($uid));
-                    $this -> assign('FundsMoney', GetFundsAccountSumData($fundsid, $uid));
-                    $this -> display();  
-                } else {
-                    $this -> error($DbData[1]);
+                $this -> assign('FundsId', $fundsid);
+                $this -> assign('FundsData', GetFundsData($uid));
+                $this -> assign('FundsMoney', GetFundsAccountSumData($fundsid, $uid));
+                if ($fundsid > 0) {
+                    $DbFunds = GetFundsIdData($fundsid, $uid);
+                    if ($DbFunds[0]) {
+                        $this -> assign('FundsName', $DbFunds[1]['fundsname']);
+                    } else {
+                        $this -> error($DbData[1]);
+                    }
                 }
+                $this -> display();  
             }
         } else {
             $this -> error('非法操作...');
