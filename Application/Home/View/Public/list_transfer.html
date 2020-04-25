@@ -34,31 +34,33 @@
 </table>
 
 <!--分页大于1时显示-->
-<gt name="TransferPageMax" value="1">
-<ul data-am-widget="pagination" class="am-pagination am-pagination-select">
-    <li class="am-pagination-prev ">
-        <if condition="1 neq $TransferPage "> <a href="__ACTION__/p/{$TransferPage-1}#transfer-table" class="">上一页</a> 
-        <else /> <a href="__ACTION__/p/{$TransferPage}#transfer-table" class="">上一页</a> 
-        </if>
-    </li>
-    
-    <li class="am-pagination-select">
-        <select id="pid" onchange="SelectChange()" style="-webkit-appearance: button;">
-            <for start="1" end="$TransferPageMax + 1">
-                <if condition="$i eq $TransferPage "> 
-                    <option value="__ACTION__/p/{$i}#transfer-table" selected="selected">&nbsp;{$i}</option>
-                <else /> 
-                    <option value="__ACTION__/p/{$i}#transfer-table" class="">&nbsp;{$i}</option>
-                </if>
-            </for>
-        </select>
-    </li>
-    
-    
-    <li class="am-pagination-next ">
-        <if condition="$TransferPageMax neq $TransferPage "> <a href="__ACTION__/p/{$TransferPage+1}#transfer-table" class="">下一页</a>
-        <else /> <a href="__ACTION__/p/{$TransferPage}#transfer-table" class="">下一页</a> 
-        </if>
-    </li>
-</ul>
-</gt>
+<if condition="$TransferPageMax gt 1">
+    <ul data-am-widget="pagination" class="am-pagination am-pagination-select">
+        <li class="am-pagination-prev ">
+            <if condition="1 neq $TransferPage "> <a href="__ACTION__/p/{$TransferPage-1}#transfer-table" class="">上一页</a> 
+            <else /> <a href="__ACTION__/p/{$TransferPage}#transfer-table" class="">上一页</a> 
+            </if>
+        </li>
+        
+        <li class="am-pagination-select">
+            <select id="pid" onchange="SelectChange()" style="-webkit-appearance: button;">
+                <for start="1" end="$TransferPageMax + 1">
+                    <if condition="$i eq $TransferPage "> 
+                        <option value="__ACTION__/p/{$i}#transfer-table" selected="selected">&nbsp;{$i}</option>
+                    <else /> 
+                        <option value="__ACTION__/p/{$i}#transfer-table" class="">&nbsp;{$i}</option>
+                    </if>
+                </for>
+            </select>
+        </li>
+        
+        
+        <li class="am-pagination-next ">
+            <if condition="$TransferPageMax neq $TransferPage "> <a href="__ACTION__/p/{$TransferPage+1}#transfer-table" class="">下一页</a>
+            <else /> <a href="__ACTION__/p/{$TransferPage}#transfer-table" class="">下一页</a> 
+            </if>
+        </li>
+    </ul>
+<elseif condition="$TransferPageMax eq null"/>
+    <p><a href="__APP__/Home/Funds/index#transfer-table" class="am-btn am-btn-block am-btn-default">更多转账记录</a></p>
+</if>
