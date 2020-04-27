@@ -15,8 +15,11 @@ return array(
     'DB_DEBUG'  =>  TRUE,    // 数据库调试模式 开启后可以记录SQL日志
     
     //系统配置
-    'HTML_CACHE_ON'         => false,       // 关闭静态缓存
-    'URL_CASE_INSENSITIVE'  => false,       // 区分大小写(必须)
+    'SHOW_PAGE_TRACE'       => false,       // Trace信息
+    'SHOW_ERROR_MSG'        => false,       // 错误输出
+    'HTML_CACHE_ON'         => false,       // 关闭静态缓存 
+    'URL_CASE_INSENSITIVE'  => false,       // 区分大小写(必须) 
+    'URL_MODEL'             => 3,           // URL模式 
     
     //应用配置信息
     'USER_LOGIN_TIMES'  => 10,              // 用户登录次
