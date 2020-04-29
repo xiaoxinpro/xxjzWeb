@@ -367,6 +367,8 @@
         $txt = $txt."'DB_DEBUG'  =>  TRUE,    // 数据库调试模式 开启后可以记录SQL日志 \n";
 
         $txt = $txt."\n//系统配置\n";
+        $txt = $txt."'SHOW_PAGE_TRACE'       => false,       // Trace信息\n";
+        $txt = $txt."'SHOW_ERROR_MSG'        => false,       // 错误输出\n";
         $txt = $txt."'HTML_CACHE_ON'         => false,       // 关闭静态缓存 \n";
         $txt = $txt."'URL_CASE_INSENSITIVE'  => false,       // 区分大小写(必须) \n";
         $txt = $txt."'URL_MODEL'             => 3,           // URL模式 \n";
