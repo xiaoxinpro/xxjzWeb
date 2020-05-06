@@ -1224,6 +1224,46 @@
         return $ret;
     }
 
+    //搜索转账数据
+    function FindTransferData($data, $p=0) {
+        $arrSQL = array();
+        if ($data['fid']) {
+            $arrSQL['_complex'] = array(
+                'source_fid' => intval($data['fid']),
+                'target_fid' => intval($data['fid']),
+                '_logic' => 'or'
+            );
+        }
+        if($data['jiid']){
+            $arrSQL['uid'] = $data['jiid'];
+        }
+        if($data['acremark']){
+            $arrSQL['mark'] = array('like', '%'.$data['acremark'].'%');
+        }
+        if($data['starttime']){
+            $strData = strtotime(date($data['starttime']." 0:0:0"));
+            $arrSQL['time'] = array('egt', $strData);
+        }
+        if($data['endtime']){
+            $strData = strtotime(date($data['endtime']." 23:59:59"));
+            $arrEnd = array('elt', $strData);
+            if(is_array($arrSQL['time'])){
+                $arrSQL['time'] = array($arrSQL['time'], $arrEnd);
+            }else{
+                $arrSQL['time'] = $arrEnd;
+            }
+        }
+        $ret['count'] = M('account_transfer')->where($arrSQL)->count();
+        $DbSQL = M('account_transfer')->where($arrSQL);
+        if ($p > 0) {
+            $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
+            $ret['page'] = $page;
+            $ret['pagemax'] = intval(($ret['count'] - 1) / C('PAGE_SIZE')) + 1;
+        }
+        $ret['data'] = $DbSQL->select();
+        return $ret;
+    }
+
     //校验分类名
     function CheakClassName($ClassName, $uid, $ClassType=0, $ClassId=0) {
         if(strlen($ClassName) < 1){
