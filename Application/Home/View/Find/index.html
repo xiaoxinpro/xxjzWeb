@@ -23,6 +23,7 @@
             <span class="am-input-group-label"><b>选择分类</b></span>
             <select id="select-type" class="am-form-field" name="find_class" value="{$FindDataClass}">
                 <option value="all">全部分类</option>
+                <option value="transfer">转账--</option>
                 <option value="outClass">支出--</option>
                 <foreach name="outClassData" item="ClassName">
                     <option value="{$key}">----{$ClassName}</option>
@@ -54,7 +55,7 @@
         <p><a href="__APP__/Home/Index/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
         </fieldset>
     </form>
-    
+
     <div id="money-table" class="am-alert am-alert-secondary" data-am-alert>
         <button type="button" class="am-close">&times;</button>
         <p class="am-text-sm">
@@ -65,4 +66,6 @@
     </div>
     
     <include file="Public:list_account"/>
+    
+
 </block>
