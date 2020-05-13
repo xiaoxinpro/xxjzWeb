@@ -1229,32 +1229,38 @@
         $arrSQL = array();
         if ($data['fid']) {
             $arrSQL['_complex'] = array(
-                'source_fid' => intval($data['fid']),
-                'target_fid' => intval($data['fid']),
+                'transfer.source_fid' => intval($data['fid']),
+                'transfer.target_fid' => intval($data['fid']),
                 '_logic' => 'or'
             );
         }
         if($data['jiid']){
-            $arrSQL['uid'] = $data['jiid'];
+            $arrSQL['transfer.uid'] = $data['jiid'];
         }
         if($data['acremark']){
-            $arrSQL['mark'] = array('like', '%'.$data['acremark'].'%');
+            $arrSQL['transfer.mark'] = array('like', '%'.$data['acremark'].'%');
         }
         if($data['starttime']){
             $strData = strtotime(date($data['starttime']." 0:0:0"));
-            $arrSQL['time'] = array('egt', $strData);
+            $arrSQL['transfer.time'] = array('egt', $strData);
         }
         if($data['endtime']){
             $strData = strtotime(date($data['endtime']." 23:59:59"));
             $arrEnd = array('elt', $strData);
-            if(is_array($arrSQL['time'])){
-                $arrSQL['time'] = array($arrSQL['time'], $arrEnd);
+            if(is_array($arrSQL['transfer.time'])){
+                $arrSQL['transfer.time'] = array($arrSQL['transfer.time'], $arrEnd);
             }else{
-                $arrSQL['time'] = $arrEnd;
+                $arrSQL['transfer.time'] = $arrEnd;
             }
         }
-        $ret['count'] = M('account_transfer')->where($arrSQL)->count();
-        $DbSQL = M('account_transfer')->where($arrSQL);
+        $ret['count'] = M('account_transfer')->alias('transfer')->where($arrSQL)->count();
+        $DbSQL = M('account_transfer')->alias('transfer')
+            ->field('transfer.*, source.fundsname as source_fname, target.fundsname as target_fname')
+            ->join('__ACCOUNT_FUNDS__ AS target ON transfer.target_fid = target.fundsid', 'LEFT')
+            ->join('__ACCOUNT_FUNDS__ AS source ON transfer.source_fid = source.fundsid', 'LEFT')
+            ->fetchSql(false)->where($arrSQL)->order("transfer.time DESC , transfer.tid DESC");
+        $ret['page'] = 1;
+        $ret['pagemax'] = 1;
         if ($p > 0) {
             $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
             $ret['page'] = $page;
