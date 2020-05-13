@@ -2,6 +2,7 @@
 namespace Home\Controller;
 use Think\Controller;
 class FindController extends BaseController {
+    private $isTransfer = false;
     public function index(){
         $uid = session('uid');
         $ShowFind = 1;
@@ -36,6 +37,16 @@ class FindController extends BaseController {
             $data = S('find_data_'.$uid);
             $ClassValue = S('find_data_class_'.$uid);
         }
+
+        if ($ClassValue === 'transfer') {
+            $this->isTransfer = true;
+        }
+
+        //表单信息
+        $this -> assign('inClassData',GetClassData($uid,1));
+        $this -> assign('outClassData',GetClassData($uid,2));
+        $this -> assign('FundsData',GetFundsData($uid));
+        $this -> assign('isTransfer',$this->isTransfer);
         
         if($data) {
             //不显示搜索
@@ -47,35 +58,41 @@ class FindController extends BaseController {
             //输出查询信息
             $this -> assign('FindData',$data);
             $this -> assign('FindDataClass',$ClassValue);
-            
-            //获取指定页数据
-            $DbAccount = FindAccountData($data);
-            $this -> assign('SumInMoney', $DbAccount['SumInMoney']);
-            $this -> assign('SumOutMoney', $DbAccount['SumOutMoney']);
-            
-            //获取资金账户数据
-            $DbFunds = array();
-            $FundsData = GetFundsData($uid);
-            foreach ($FundsData as $key => $data) {
-                $DbFunds[$data[id]] = $data[name];
-            }
 
-            //获取分类列表
-            $DbClass = GetClassData($uid);
-            
-            //整合List表格数组
-            $ListData = OutListData($DbAccount,$DbClass,$DbFunds);
-            $this -> assign('Page', $ListData[0]);
-            $this -> assign('PageMax', $ListData[1]);
-            $this -> assign('ArrPage', $ListData[2]);
-            $this -> assign('ShowData', $ListData[3]);
+            if ($this->isTransfer) {
+                $DbTransfer = FindTransferData($data);
+                $this -> assign('Page', $DbTransfer['Page']);
+                $this -> assign('PageMax', $DbTransfer['PageMax']);
+                $this -> assign('TransferData', $DbTransfer['data']);
+                $this -> display('transfer');
+            } else {
+                //获取指定页数据
+                $DbAccount = FindAccountData($data);
+                $this -> assign('SumInMoney', $DbAccount['SumInMoney']);
+                $this -> assign('SumOutMoney', $DbAccount['SumOutMoney']);
+                
+                //获取资金账户数据
+                $DbFunds = array();
+                $FundsData = GetFundsData($uid);
+                foreach ($FundsData as $key => $data) {
+                    $DbFunds[$data[id]] = $data[name];
+                }
+
+                //获取分类列表
+                $DbClass = GetClassData($uid);
+                
+                //整合List表格数组
+                $ListData = OutListData($DbAccount,$DbClass,$DbFunds);
+                $this -> assign('Page', $ListData[0]);
+                $this -> assign('PageMax', $ListData[1]);
+                $this -> assign('ArrPage', $ListData[2]);
+                $this -> assign('ShowData', $ListData[3]);       
+                $this -> display();         
+            }
+        } else {
+            $this -> assign('ShowFind', 1);
+            $this -> display();
         }
-        
-        $this -> assign('inClassData',GetClassData($uid,1));
-        $this -> assign('outClassData',GetClassData($uid,2));
-        $this -> assign('FundsData',GetFundsData($uid));
-        $this -> assign('ShowFind',$ShowFind);
-        $this -> display();
     }
     
     public function reboot() {
