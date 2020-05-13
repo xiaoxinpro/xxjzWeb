@@ -1228,11 +1228,18 @@
     function FindTransferData($data, $p=0) {
         $arrSQL = array();
         if ($data['fid']) {
-            $arrSQL['_complex'] = array(
-                'transfer.source_fid' => intval($data['fid']),
-                'transfer.target_fid' => intval($data['fid']),
-                '_logic' => 'or'
-            );
+            if ($data['acclassid'] === 'outTransfer') {
+                $arrSQL['transfer.source_fid'] = intval($data['fid']);
+            } elseif ($data['acclassid'] === 'inTransfer') {
+                $arrSQL['transfer.target_fid'] = intval($data['fid']);
+            } else {
+                $arrSQL['_complex'] = array(
+                    'transfer.source_fid' => intval($data['fid']),
+                    'transfer.target_fid' => intval($data['fid']),
+                    '_logic' => 'or'
+                );
+            }
+            
         }
         if($data['jiid']){
             $arrSQL['transfer.uid'] = $data['jiid'];
