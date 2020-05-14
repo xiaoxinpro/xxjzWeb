@@ -10,7 +10,7 @@
         </if>
         <div class="am-input-group">
             <span class="am-input-group-label"><b>资金账户</b></span>
-            <select id="select-funds" class="am-form-field" name="find_funds">
+            <select id="select-funds" class="am-form-field" name="find_funds" value="{$FindData.fid}">
             <option value="">全部账户</option>
             <foreach name="FundsData" item="data">
                 <option value="{$data.id}">{$data.name}</option>
@@ -23,7 +23,6 @@
             <span class="am-input-group-label"><b>选择分类</b></span>
             <select id="select-type" class="am-form-field" name="find_class" value="{$FindDataClass}">
                 <option value="all">全部分类</option>
-                <option value="transfer">转账--</option>
                 <option value="outClass">支出--</option>
                 <foreach name="outClassData" item="ClassName">
                     <option value="{$key}">----{$ClassName}</option>
@@ -32,6 +31,9 @@
                 <foreach name="inClassData" item="ClassName">
                     <option value="{$key}">----{$ClassName}</option>
                 </foreach>
+                <option value="transfer">转账--</option>
+                <option value="inTransfer">----转入</option>
+                <option value="outTransfer">----转出</option>
             </select>
         </div>
         <div><p></p></div>
