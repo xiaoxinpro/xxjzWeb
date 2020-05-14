@@ -38,7 +38,7 @@ class FindController extends BaseController {
             $ClassValue = S('find_data_class_'.$uid);
         }
 
-        if ($ClassValue === 'transfer') {
+        if (stripos($ClassValue, 'transfer') >= 0) {
             $this->isTransfer = true;
         }
 
