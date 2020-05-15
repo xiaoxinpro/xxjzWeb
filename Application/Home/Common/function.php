@@ -1225,7 +1225,7 @@
     }
 
     //搜索转账数据
-    function FindTransferData($data, $p=0) {
+    function FindTransferData($data, $page=0) {
         $arrSQL = array();
         if ($data['fid']) {
             if ($data['acclassid'] === 'outTransfer') {
@@ -1268,10 +1268,68 @@
             ->fetchSql(false)->where($arrSQL)->order("transfer.time DESC , transfer.tid DESC");
         $ret['page'] = 1;
         $ret['pagemax'] = 1;
-        if ($p > 0) {
+        if ($page > 0) {
             $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
             $ret['page'] = $page;
             $ret['pagemax'] = intval(($ret['count'] - 1) / C('PAGE_SIZE')) + 1;
+        }
+        $ret['data'] = $DbSQL->select();
+        return $ret;
+    }
+
+    //搜索转账和记账数据
+    function FindTransferAccountData($data, $page=0) {
+        if($data['jiid']){
+            $arrSQL['account.jiid'] = $data['jiid'];
+        }
+        if ($data['fid']) {
+            $arrSQL['account.fid'] = $data['fid'];
+        }
+        if($data['acremark']){
+            $arrSQL['account.mark'] = array('like', '%'.$data['acremark'].'%');
+        }
+        if($data['starttime']){
+            $strData = strtotime(date($data['starttime']." 0:0:0"));
+            $arrSQL['account.time'] = array('egt', $strData);
+        }
+        if($data['endtime']){
+            $strData = strtotime(date($data['endtime']." 23:59:59"));
+            $arrEnd = array('elt', $strData);
+            if(is_array($arrSQL['account.time'])){
+                $arrSQL['account.time'] = array($arrSQL['account.time'], $arrEnd);
+            }else{
+                $arrSQL['account.time'] = $arrEnd;
+            }
+        }
+        $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
+        $DbSQL = M('account')->alias('account')
+            ->field('account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid')
+            ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
+            ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT')
+            ->fetchSql(false)->where($arrSQL);
+        if ($data['fid'] && intval($data['fid']) > 0) {
+            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+left join xxjz_test_account_funds as funds on funds.fundsid = transfer.source_fid
+where transfer.uid = $data[jiid] and transfer.source_fid = $data[fid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+left join xxjz_test_account_funds as funds on funds.fundsid = transfer.target_fid
+where transfer.uid = $data[jiid] and transfer.target_fid= $data[fid] ORDER BY time DESC, id DESC");
+        } else {
+            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+left join xxjz_test_account_funds as funds on funds.fundsid = transfer.source_fid
+where transfer.uid = $data[jiid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+left join xxjz_test_account_funds as funds on funds.fundsid = transfer.target_fid
+where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
+        }
+        $ret['page'] = 1;
+        $ret['pagemax'] = 1;
+        $ret['ArrPage'] = array();
+        if ($page > 0) {
+            $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
+            $ret['page'] = $page;
+            $ret['pagemax'] = intval(($ret['count'] - 1) / C('PAGE_SIZE')) + 1;
+            for($i=0; $i<$ret['pagemax']; $i++) {
+                array_push($ret['ArrPage'], $i + 1);
+            }
         }
         $ret['data'] = $DbSQL->select();
         return $ret;
