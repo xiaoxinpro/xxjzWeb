@@ -65,6 +65,8 @@ class FindController extends BaseController {
 
             if ($this->isAllClass) {
                 $DbAccount = FindTransferAccountData($data, 0);
+                $this -> assign('SumInMoney', $DbAccount['SumInMoney']);
+                $this -> assign('SumOutMoney', $DbAccount['SumOutMoney']);
                 $this -> assign('Page', $DbAccount['page']);
                 $this -> assign('PageMax', $DbAccount['pagemax']);
                 $this -> assign('ShowData', $DbAccount['data']);
