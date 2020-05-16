@@ -1316,20 +1316,20 @@
             unset($data['zhifu']);
         }
         $DbSQL = M('account')->alias('account')
-            ->field('account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid')
+            ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
             ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT')
             ->fetchSql(false)->where($arrSQL);
         if ($data['fid'] && intval($data['fid']) > 0) {
-            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, '支出', transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
 left join xxjz_test_account_funds as funds on funds.fundsid = transfer.source_fid
-where transfer.uid = $data[jiid] and transfer.source_fid = $data[fid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+where transfer.uid = $data[jiid] and transfer.source_fid = $data[fid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 1, '收入', transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
 left join xxjz_test_account_funds as funds on funds.fundsid = transfer.target_fid
 where transfer.uid = $data[jiid] and transfer.target_fid= $data[fid] ORDER BY time DESC, id DESC");
         } else {
-            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, '支出', transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
 left join xxjz_test_account_funds as funds on funds.fundsid = transfer.source_fid
-where transfer.uid = $data[jiid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
+where transfer.uid = $data[jiid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 1, '收入', transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
 left join xxjz_test_account_funds as funds on funds.fundsid = transfer.target_fid
 where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
         }
@@ -1345,6 +1345,7 @@ where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
             }
         }
         $ret['data'] = $DbSQL->select();
+        dump($ret);
         return $ret;
     }
 
