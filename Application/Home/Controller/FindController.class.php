@@ -3,6 +3,7 @@ namespace Home\Controller;
 use Think\Controller;
 class FindController extends BaseController {
     private $isTransfer = false;
+    private $isAllClass = false;
     public function index(){
         $uid = session('uid');
         $ShowFind = 1;
@@ -38,8 +39,11 @@ class FindController extends BaseController {
             $ClassValue = S('find_data_class_'.$uid);
         }
 
-        if (stripos($ClassValue, 'transfer') >= 0) {
+        if (stripos($ClassValue, 'transfer') !== false) {
             $this->isTransfer = true;
+        }
+        if ($ClassValue === 'all') {
+            $this->isAllClass = true;
         }
 
         //表单信息
@@ -59,7 +63,13 @@ class FindController extends BaseController {
             $this -> assign('FindData',$data);
             $this -> assign('FindDataClass',$ClassValue);
 
-            if ($this->isTransfer) {
+            if ($this->isAllClass) {
+                $DbAccount = FindTransferAccountData($data, 0);
+                $this -> assign('Page', $DbAccount['page']);
+                $this -> assign('PageMax', $DbAccount['pagemax']);
+                $this -> assign('ShowData', $DbAccount['data']);
+                $this -> display();
+            } elseif ($this->isTransfer) {
                 $DbTransfer = FindTransferData($data);
                 $this -> assign('Page', $DbTransfer['Page']);
                 $this -> assign('PageMax', $DbTransfer['PageMax']);
