@@ -1345,7 +1345,7 @@ where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
             }
         }
         $ret['data'] = $DbSQL->select();
-        dump($ret);
+        // dump($ret);
         return $ret;
     }
 
