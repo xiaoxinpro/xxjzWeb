@@ -19,11 +19,12 @@
             <td class="am-text-middle am-text-xs"><php>echo date("Y-m-d",$data['time']);</php></td>
             <td class="am-text-middle">{$data.mark}</td>
             <td class="am-text-middle">
-                <php>
-                    echo "<a href=".U("Home/Edit/index?id=".$data['id']).">编辑</a>";
-                    echo " ";
-                    echo "<a href=\"javascript:void(0);\" onclick=\"isDelete('__APP__/Home/Edit/del/id/".$data['id']."')\" >删除</a>";
-                </php>
+                <if condition="$data.classid gt 0">
+                    <a href="__APP__/Home/Edit/index/id/{$data.id}">编辑 </a>
+                    <a href="javascript:void(0);" onclick="isDelete('__APP__/Home/Edit/del/id/{$data.id}')"> 删除</a>
+                <else />
+                    <a href="__APP__/Home/Edit/transfer/id/{$data.id}">编辑</a> 
+                </if>
             </td>
         </tr>
         </volist>
