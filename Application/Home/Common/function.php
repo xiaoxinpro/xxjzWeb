@@ -1302,6 +1302,19 @@
             }
         }
         $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
+        if($data['zhifu'] == 1){
+            $ret['SumInMoney']  = SumDbAccount(GetFindSqlArr($data));
+            $ret['SumOutMoney'] = 0.0;
+        }elseif($data['zhifu'] == 2){
+            $ret['SumInMoney']  = 0.0;
+            $ret['SumOutMoney'] = SumDbAccount(GetFindSqlArr($data));
+        }else{
+            $data['zhifu'] = 1;
+            $ret['SumInMoney']  = SumDbAccount(GetFindSqlArr($data));
+            $data['zhifu'] = 2;
+            $ret['SumOutMoney'] = SumDbAccount(GetFindSqlArr($data));
+            unset($data['zhifu']);
+        }
         $DbSQL = M('account')->alias('account')
             ->field('account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid')
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
