@@ -1337,14 +1337,17 @@ where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
         $ret['pagemax'] = 1;
         $ret['ArrPage'] = array();
         if ($page > 0) {
+            $strSQL = $DbSQL->fetchSql(true)->select()." LIMIT ".(intval($page)-1)*C('PAGE_SIZE').",".C('PAGE_SIZE');
+            $ret['data'] = M()->query($strSQL);
             $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
             $ret['page'] = $page;
             $ret['pagemax'] = intval(($ret['count'] - 1) / C('PAGE_SIZE')) + 1;
             for($i=0; $i<$ret['pagemax']; $i++) {
                 array_push($ret['ArrPage'], $i + 1);
             }
+        } else {
+            $ret['data'] = $DbSQL->select();
         }
-        $ret['data'] = $DbSQL->select();
         // dump($ret);
         return $ret;
     }
