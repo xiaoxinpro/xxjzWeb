@@ -14,7 +14,19 @@
         <volist name="ShowData" id="data">
         <tr>
             <td class="am-text-middle">{$data.class}</td>
-            <td class="am-text-middle money-format">{$data.money}</td>
+            <td class="am-text-middle">
+                <if condition="$data.classid gt 0">
+                    <if condition="$data.typeid eq 1">
+                        <font class="am-text-success money-format">{$data.money}</font>
+                    <elseif condition="$data.typeid eq 2" />
+                        <font class="am-text-danger money-format">{$data.money}</font>
+                    <else />
+                        <font class="money-format">{$data.money}</font>
+                    </if>
+                <else />
+                    <font class="money-format">{$data.money}</font>
+                </if>
+            </td>
             <td class="am-text-middle">{$data.funds} {$data.type}</td>
             <td class="am-text-middle am-text-xs"><php>echo date("Y-m-d",$data['time']);</php></td>
             <td class="am-text-middle">{$data.mark}</td>
