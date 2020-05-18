@@ -15,25 +15,31 @@ class IndexController extends BaseController {
             $this -> assign('PushAdminUrl', '/Home/Push/admin/token/'.$tokenObj['token'].'/time/'.$tokenObj['time']);
         }
         
-        //获取指定页数据
-        $DbAccount = GetAccountData($uid, $p);
+        // //获取指定页数据
+        // $DbAccount = GetAccountData($uid, $p);
 
-        //获取资金账户数据
-        $DbFunds = array();
-        $FundsData = GetFundsData($uid);
-        foreach ($FundsData as $key => $data) {
-            $DbFunds[$data[id]] = $data[name];
-        }
+        // //获取资金账户数据
+        // $DbFunds = array();
+        // $FundsData = GetFundsData($uid);
+        // foreach ($FundsData as $key => $data) {
+        //     $DbFunds[$data[id]] = $data[name];
+        // }
         
-        //获取分类列表
-        $DbClass = GetClassData($uid);
+        // //获取分类列表
+        // $DbClass = GetClassData($uid);
         
-        //整合List表格数组
-        $ListData = OutListData($DbAccount,$DbClass,$DbFunds);
-        $this -> assign('Page', $ListData[0]);
-        $this -> assign('PageMax', $ListData[1]);
-        $this -> assign('ArrPage', $ListData[2]);
-        $this -> assign('ShowData', $ListData[3]);
+        // //整合List表格数组
+        // $ListData = OutListData($DbAccount,$DbClass,$DbFunds);
+        // $this -> assign('Page', $ListData[0]);
+        // $this -> assign('PageMax', $ListData[1]);
+        // $this -> assign('ArrPage', $ListData[2]);
+        // $this -> assign('ShowData', $ListData[3]);
+
+        $ListData = FindTransferAccountData(array('jiid'=>$uid), $p);
+        $this -> assign('Page', $ListData['page']);
+        $this -> assign('PageMax', $ListData['pagemax']);
+        $this -> assign('ShowData', $ListData['data']);
+        $this -> assign('ArrPage', $ListData['ArrPage']);
         
         //输出用户名
         $this -> assign('UserName', session('username'));
