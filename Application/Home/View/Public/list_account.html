@@ -54,13 +54,13 @@
         
         <li class="am-pagination-select">
             <select id="pid" onchange="SelectChange()" style="-webkit-appearance: button;">
-                <foreach name="ArrPage" item="i">
+                <for start="1" end="$PageMax + 1">
                     <if condition="$i eq $Page "> 
                         <option value="__ACTION__/p/{$i}#money-table" selected="selected">&nbsp;{$i}</option>
                     <else /> 
                         <option value="__ACTION__/p/{$i}#money-table" class="">&nbsp;{$i}</option>
                     </if>
-                </foreach>
+                </for>
             </select>
         </li>
         
