@@ -6,6 +6,7 @@ class FindController extends BaseController {
     private $isAllClass = false;
     public function index(){
         $uid = session('uid');
+        $p = I('get.p', 1, 'intval');
         $ShowFind = 1;
         if(IS_POST){
             $ClassValue = I('post.find_class');
@@ -64,7 +65,7 @@ class FindController extends BaseController {
             $this -> assign('FindDataClass',$ClassValue);
 
             if ($this->isAllClass) {
-                $DbAccount = FindTransferAccountData($data, 0);
+                $DbAccount = FindTransferAccountData($data, $p);
                 $this -> assign('SumInMoney', $DbAccount['SumInMoney']);
                 $this -> assign('SumOutMoney', $DbAccount['SumOutMoney']);
                 $this -> assign('Page', $DbAccount['page']);
@@ -72,14 +73,14 @@ class FindController extends BaseController {
                 $this -> assign('ShowData', $DbAccount['data']);
                 $this -> display();
             } elseif ($this->isTransfer) {
-                $DbTransfer = FindTransferData($data);
+                $DbTransfer = FindTransferData($data, $p);
                 $this -> assign('Page', $DbTransfer['Page']);
                 $this -> assign('PageMax', $DbTransfer['PageMax']);
                 $this -> assign('TransferData', $DbTransfer['data']);
                 $this -> display('transfer');
             } else {
                 //获取指定页数据
-                $DbAccount = FindAccountData($data);
+                $DbAccount = FindAccountData($data, $p);
                 $this -> assign('SumInMoney', $DbAccount['SumInMoney']);
                 $this -> assign('SumOutMoney', $DbAccount['SumOutMoney']);
                 
