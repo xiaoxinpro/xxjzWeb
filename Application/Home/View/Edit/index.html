@@ -63,7 +63,7 @@
                         <button type="button" class="am-btn am-btn-default" id="btn-upload-image" data-am-loading="{spinner: 'circle-o-notch', loadingText: '上传中...', resetText: '上传完成'}">
                             <i class="am-icon-cloud-upload"></i> 上传图片
                         </button>
-                        <input id="doc-form-file" type="file" name="edit_photo[]" accept=".jpg, .gif, .png, .jpeg" multiple />
+                        <input id="doc-form-file" type="file" name="edit_photo[]" accept=".{$Think.config.IMAGE_EXT|implode=', .', ###}" multiple />
                     </span>
                 </div>
                 <div><p></p></div>
@@ -122,6 +122,9 @@
 
 <block name="javascript">
     <script>
+      const IMAGE_SIZE = {$Think.config.IMAGE_SIZE};
+      const IMAGE_COUNT = {$Think.config.IMAGE_COUNT};
+      const IMAGE_EXT = "{$Think.config.IMAGE_EXT|implode=',', ###}";
       function GetImageLength() {
           return $('ul.am-gallery').children('li').length;
       }
@@ -176,8 +179,8 @@
         $('#doc-form-file').on('change', function() {
           var fileNames = '';
           var fileSize = 0;
-          if (this.files.length + GetImageLength() > 9) {
-            alert("每个账单图片数量不能超过9个，请筛选后重新上传。");
+          if (this.files.length + GetImageLength() > IMAGE_COUNT) {
+            alert("每个账单图片数量不能超过" + IMAGE_COUNT + "个，请筛选后重新上传。");
             ResetFormFile();
             return;
           }
@@ -185,8 +188,8 @@
             fileNames += '<span class="am-badge">' + this.name + '</span> ';
             fileSize += this.size;
           });
-          if (fileSize > 3*1024*1024) {
-            alert("单次上传文件体积不能超过3MB，请压缩后重新上传。");
+          if (fileSize > IMAGE_SIZE) {
+            alert("单次上传文件体积不能超过" + (IMAGE_SIZE/1024/1024) + "MB，请压缩后重新上传。");
             ResetFormFile();
             return;
           }
