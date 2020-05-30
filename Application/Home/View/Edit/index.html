@@ -7,6 +7,20 @@
         </script>
     </if>
 
+    <style type="text/css">
+      .zoomImage{
+        width:100%;
+        height:0;
+        padding-bottom: 100%;
+        overflow:hidden;
+        background-position: center center;
+        background-repeat: no-repeat;
+        -webkit-background-size:cover;
+        -moz-background-size:cover;
+        background-size:cover;
+      }
+    </style>
+
     <form class="am-form am-form-horizontal" enctype="multipart/form-data" method="post" data-am-validator="H5validation:false">
         <fieldset>
             <legend>编辑</legend>
@@ -75,18 +89,21 @@
                 <if condition="$ImageData neq false ">
                 <p><hr data-am-widget="divider" style="" class="am-divider am-divider-dashed" /></p>
                 <ul data-am-widget="gallery" class="am-gallery am-avg-sm-3
-  am-avg-md-4 am-avg-lg-5 am-gallery-bordered" data-am-gallery="{ pureview: true }" id="doc-image-list" >
+  am-avg-md-4 am-avg-lg-5 am-gallery-bordered" data-am-gallery="{pureview:{target: 'a'}}" id="doc-image-list" >
                     <foreach name="ImageData" item="image">
                       <li id="doc-image-{$image.id}">
                         <a href="javascript:void(0);" data-id="{$image.id}" data-acid="{$acid}" class="am-close am-close-alt am-close-spin am-icon-times" style="position: absolute; margin: 5px;"></a>
                         <div class="am-gallery-item">
-                          <img src="{$image.url}" alt="{$image.name}" style="height: 20vw;" />
+                          <a href="{$image.url}">
+                            <!-- <img src="{$image.url}" alt="{$image.name}" style="height: 20vw;" /> -->
+                            <div class="zoomImage" style="background-image:url({$image.url})"></div>
                             <h3 class="am-gallery-title">
                                 {$image.name}
                             </h3>
                             <div class="am-gallery-desc">
                                 {$image.time|date="Y-m-d",###}
                             </div>
+                          </a>
                         </div>
                       </li>
                     </foreach>
