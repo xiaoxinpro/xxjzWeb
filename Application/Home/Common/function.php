@@ -1286,19 +1286,19 @@
             $arrSQL['account.fid'] = $data['fid'];
         }
         if($data['acremark']){
-            $arrSQL['account.mark'] = array('like', '%'.$data['acremark'].'%');
+            $arrSQL['account.acremark'] = array('like', '%'.$data['acremark'].'%');
         }
         if($data['starttime']){
             $strData = strtotime(date($data['starttime']." 0:0:0"));
-            $arrSQL['account.time'] = array('egt', $strData);
+            $arrSQL['account.actime'] = array('egt', $strData);
         }
         if($data['endtime']){
             $strData = strtotime(date($data['endtime']." 23:59:59"));
             $arrEnd = array('elt', $strData);
-            if(is_array($arrSQL['account.time'])){
-                $arrSQL['account.time'] = array($arrSQL['account.time'], $arrEnd);
+            if(is_array($arrSQL['account.actime'])){
+                $arrSQL['account.actime'] = array($arrSQL['account.actime'], $arrEnd);
             }else{
-                $arrSQL['account.time'] = $arrEnd;
+                $arrSQL['account.actime'] = $arrEnd;
             }
         }
         $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
@@ -1319,7 +1319,7 @@
             ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
             ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT')
-            ->fetchSql(false)->where($arrSQL);
+            ->fetchSql(true)->where($arrSQL);
         if ($data['fid'] && intval($data['fid']) > 0) {
             $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, '支出', transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
 left join xxjz_test_account_funds as funds on funds.fundsid = transfer.source_fid
@@ -1337,7 +1337,7 @@ where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
         $ret['pagemax'] = 1;
         $ret['ArrPage'] = array();
         if ($page > 0) {
-            $strSQL = $DbSQL->fetchSql(true)->select()." LIMIT ".(intval($page)-1)*C('PAGE_SIZE').",".C('PAGE_SIZE');
+            $strSQL = $DbSQL->select()." LIMIT ".(intval($page)-1)*C('PAGE_SIZE').",".C('PAGE_SIZE');
             $ret['data'] = M()->query($strSQL);
             $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
             $ret['page'] = $page;
@@ -1348,7 +1348,6 @@ where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
         } else {
             $ret['data'] = $DbSQL->select();
         }
-        // dump($ret);
         return $ret;
     }
 
