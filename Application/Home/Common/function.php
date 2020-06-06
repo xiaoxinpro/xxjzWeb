@@ -1277,6 +1277,51 @@
         return $ret;
     }
 
+    //获取搜索记账数据的SQL
+    function GetFindTransferSql($data, $typeid) {
+        $arrSQL = array();
+        if($data['jiid']){
+            $arrSQL['transfer.uid'] = $data['jiid'];
+        }
+        if($data['acremark']){
+            $arrSQL['transfer.mark'] = array('like', '%'.$data['acremark'].'%');
+        }
+        if($data['starttime']){
+            $strData = strtotime(date($data['starttime']." 0:0:0"));
+            $arrSQL['transfer.time'] = array('egt', $strData);
+        }
+        if($data['endtime']){
+            $strData = strtotime(date($data['endtime']." 23:59:59"));
+            $arrEnd = array('elt', $strData);
+            if(is_array($arrSQL['transfer.time'])){
+                $arrSQL['transfer.time'] = array($arrSQL['transfer.time'], $arrEnd);
+            }else{
+                $arrSQL['transfer.time'] = $arrEnd;
+            }
+        }
+        $retSql = "";
+        $DbSQL = M('account_transfer')->alias('transfer');
+        if ($typeid == 2) {
+            if ($data['fid']) {
+                $arrSQL['transfer.source_fid'] = intval($data['fid']);
+            }
+            $DbSQL = $DbSQL->field(" transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, '支出', transfer.source_fid, funds.fundsname as funds, transfer.uid")
+            ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = transfer.source_fid', 'LEFT')
+            ->where($arrSQL);
+            $retSql = $DbSQL->fetchSql(true)->select();
+        }
+        if ($typeid == 1) {
+            if ($data['fid']) {
+                $arrSQL['transfer.target_fid'] = intval($data['fid']);
+            }
+            $DbSQL = $DbSQL->field(" transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 1, '收入', transfer.target_fid, funds.fundsname as funds, transfer.uid")
+            ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = transfer.target_fid', 'LEFT')
+            ->where($arrSQL);
+            $retSql = $DbSQL->fetchSql(true)->select();
+        }
+        return $retSql;
+    }
+
     //搜索转账和记账数据
     function FindTransferAccountData($data, $page=0) {
         if($data['jiid']){
@@ -1315,24 +1360,15 @@
             $ret['SumOutMoney'] = SumDbAccount(GetFindSqlArr($data));
             unset($data['zhifu']);
         }
+
+        // dump(GetFindTransferSql($data, 2));
+        // dump(GetFindTransferSql($data, 1));
         $DbSQL = M('account')->alias('account')
             ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
             ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT')
+            ->union(GetFindTransferSql($data, 2))->union(GetFindTransferSql($data, 1) . " ORDER BY time DESC, id DESC")
             ->fetchSql(true)->where($arrSQL);
-        if ($data['fid'] && intval($data['fid']) > 0) {
-            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, '支出', transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
-left join xxjz_test_account_funds as funds on funds.fundsid = transfer.source_fid
-where transfer.uid = $data[jiid] and transfer.source_fid = $data[fid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 1, '收入', transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
-left join xxjz_test_account_funds as funds on funds.fundsid = transfer.target_fid
-where transfer.uid = $data[jiid] and transfer.target_fid= $data[fid] ORDER BY time DESC, id DESC");
-        } else {
-            $DbSQL = $DbSQL->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, '支出', transfer.source_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
-left join xxjz_test_account_funds as funds on funds.fundsid = transfer.source_fid
-where transfer.uid = $data[jiid]")->union("select transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 1, '收入', transfer.target_fid, funds.fundsname as funds, transfer.uid from xxjz_test_account_transfer as transfer
-left join xxjz_test_account_funds as funds on funds.fundsid = transfer.target_fid
-where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
-        }
         $ret['page'] = 1;
         $ret['pagemax'] = 1;
         $ret['ArrPage'] = array();
@@ -1348,7 +1384,7 @@ where transfer.uid = $data[jiid] ORDER BY time DESC, id DESC");
         } else {
             $ret['data'] = $DbSQL->select();
         }
-        // dump($strSQL);
+        dump($strSQL);
         return $ret;
     }
 
