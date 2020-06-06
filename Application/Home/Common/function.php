@@ -1384,7 +1384,7 @@
         } else {
             $ret['data'] = $DbSQL->select();
         }
-        dump($strSQL);
+        // dump($strSQL);
         return $ret;
     }
 
