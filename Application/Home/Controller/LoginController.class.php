@@ -198,7 +198,7 @@ class LoginController extends Controller {
             $arrData = array('uid'=>'0','uname'=>'非法访问。');
             die(json_encode($arrData));        
         }
-        $str_data = post('https://api.weixin.qq.com/sns/jscode2session', array('appid' => C('WX_OPENID'), 'secret' => C('WX_SECRET'),'js_code' => $js_code, 'grant_type' => 'authorization_code'));
+        $str_data = request('https://api.weixin.qq.com/sns/jscode2session?appid='.C('WX_OPENID').'&secret='.C('WX_SECRET').'&js_code='.$js_code.'&grant_type=authorization_code');
         $str_data = substr($str_data, strpos($str_data, '{'));
         $js_data = json_decode($str_data, true);
         if ($js_data['openid']) {
