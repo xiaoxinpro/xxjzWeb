@@ -1,2 +1,5 @@
 
 Application/Home/sftp-config.json
+*.exe
+*.zip
+*.txt
