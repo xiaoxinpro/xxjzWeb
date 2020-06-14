@@ -1,6 +1,6 @@
 # 小歆记账WebApp项目(Web服务端)
 
-[V2.x版本](https://github.com/xiaoxinpro/xxjzWeb) | [V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x) | [基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base) | [微信小程序](https://github.com/xiaoxinpro/xxjzWeChat)
+[master版本](https://github.com/xiaoxinpro/xxjzWeb) | [V2.1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V2.1.x) | [V2.0.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V2.0.x) | [V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x) | [基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base) | [微信小程序](https://github.com/xiaoxinpro/xxjzWeChat)
 
 ![](http://upload-images.jianshu.io/upload_images/1568014-caeefa6ab53be35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -12,13 +12,17 @@
 
 * 项目[基础版本](https://github.com/xiaoxinpro/xxjzWeb/tree/Base)已经完成框架开发，后续版本在此版本框架上升级而来。
 
-* 项目[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x)已经完成功能开发，后续若有BUG还会进行升级，功能将不会再增加了。
+* 项目[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V1.x)已经完成功能开发，后续将不再提供支持，建议升级到V2.x版本。
 
-* 项目[V2.x版本](https://github.com/xiaoxinpro/xxjzWeb)目前正在添加更多功能，数据结构与功能随时变动，稳定性不如以上几个版本。
+* 项目[V2.0.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V2.0.x)已经完成功能开发，功能相对稳定，后续只针对Bug进行修复，不再增加功能。
 
-你可以使用Demo账号登陆体验V2.x版本，也可以自行搭建更加稳定的[V1.x版本](https://github.com/xiaoxinpro/xxjzWeb/releases/tag/V1.0.0)项目。
+* 项目[V2.1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V2.1.x)功能已基本完成，不排除有部分比较隐蔽的Bug，后续将集中进行优化。
 
->Demo  ：http://jz.xxgzs.org/xxjzApp/index.php
+* 项目[master版本](https://github.com/xiaoxinpro/xxjzWeb)目前正在添加更多功能，数据结构与功能随时变动，稳定性不如以上几个版本。
+
+你可以使用Demo账号登陆最新稳定版本，也可以自行搭建任意稳定版本(https://github.com/xiaoxinpro/xxjzWeb/releases)项目。
+
+>Demo  ：http://jz.xiaoxin.pro/xxjzApp/index.php
 
     Demo账号：demo
     Demo密码：xxgzs.org
