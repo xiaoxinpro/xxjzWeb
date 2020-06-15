@@ -175,8 +175,15 @@ class EditController extends BaseController {
         $uid = $this->uid;
         $tid  = $this->id;
         $refURL = GetRefURL();
-
-        $this -> display('Public/common');
+        $Msg = DelTransferData($tid, $uid);
+        if($Msg[0]) {
+            ClearDataCache(); //清除缓存
+            ShowAlert($Msg[1],$refURL);
+            $this -> display('Public/common');
+        }else{
+            ShowAlert($Msg[1],$refURL);
+            $this -> display('Public/common');
+        }
     }
     
 }
