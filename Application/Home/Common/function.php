@@ -1360,9 +1360,6 @@
             $ret['SumOutMoney'] = SumDbAccount(GetFindSqlArr($data));
             unset($data['zhifu']);
         }
-
-        // dump(GetFindTransferSql($data, 2));
-        // dump(GetFindTransferSql($data, 1));
         $DbSQL = M('account')->alias('account')
             ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
