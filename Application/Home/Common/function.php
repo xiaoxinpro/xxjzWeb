@@ -1186,16 +1186,41 @@
     }
 
     //获取指定账户转账金额汇总、转入金额、转出金额
-    function GetFundsTransferMoney($fid, $uid) {
+    function GetFundsTransferMoney($fid, $uid, $data=false) {
         $FundsData = GetFundsIdData($fid, $uid);
         if ($FundsData[0]) {
-            $sql = array('uid'=>$uid, 'source_fid'=>0, 'target_fid'=>$fid);
-            $initMoney = floatval(M("account_transfer")->where($sql)->sum('money'));
-            $sql = array('uid'=>$uid, 'source_fid'=>$fid);
+            $sql = array('uid'=>$uid);
+            if ($data != false) {
+                if($data['acremark']){
+                    $sql['mark'] = array('like', '%'.$data['acremark'].'%');
+                }
+                if($data['starttime']){
+                    $strData = strtotime(date($data['starttime']." 0:0:0"));
+                    $sql['time'] = array('egt', $strData);
+                }
+                if($data['endtime']){
+                    $strData = strtotime(date($data['endtime']." 23:59:59"));
+                    $arrEnd = array('elt', $strData);
+                    if(is_array($sql['time'])){
+                        $sql['time'] = array($sql['time'], $arrEnd);
+                    }else{
+                        $sql['time'] = $arrEnd;
+                    }
+                }
+            }
+            $count = 0;
+            $sql['source_fid'] = $fid;
             $outSum = floatval(M("account_transfer")->where($sql)->sum('money'));
-            $sql = array('uid'=>$uid, 'target_fid'=>$fid, 'source_fid'=>array('gt', 0));
+            $count += intval(M("account_transfer")->where($sql)->count());
+            $sql['source_fid'] = 0;
+            $sql['target_fid'] = $fid;
+            $initMoney = floatval(M("account_transfer")->where($sql)->sum('money'));
+            $count += intval(M("account_transfer")->where($sql)->count());
+            $sql['source_fid'] = array('gt', 0);
+            $sql['target_fid'] = $fid;
             $inSum = floatval(M("account_transfer")->where($sql)->sum('money'));
-            return array(true, array('in'=>$inSum, 'out'=>$outSum, 'init'=> $initMoney, 'over'=>$initMoney+$inSum-$outSum));
+            $count += intval(M("account_transfer")->where($sql)->count());
+            return array(true, array('in'=>$inSum, 'out'=>$outSum, 'init'=> $initMoney, 'over'=>$initMoney+$inSum-$outSum, 'count'=>$count));
         } else {
             return array(false, '资金账户id不存在~');
         }
@@ -1327,8 +1352,16 @@
         if($data['jiid']){
             $arrSQL['account.jiid'] = $data['jiid'];
         }
+        $ret = array('count'=>0, 'SumInMoney'=>0.0, 'SumOutMoney'=>0.0, 'isTransfer'=>false);
         if ($data['fid']) {
             $arrSQL['account.fid'] = $data['fid'];
+            $sumTransfer = GetFundsTransferMoney($data['fid'], $data['jiid'], $data);
+            if ($sumTransfer[0]) {
+                $ret['count'] += $sumTransfer[1]['count'];
+                $ret['SumInMoney']  += $sumTransfer[1]['in'];
+                $ret['SumOutMoney'] += $sumTransfer[1]['out'];
+                $ret['isTransfer'] = true;
+            }
         }
         if($data['acremark']){
             $arrSQL['account.acremark'] = array('like', '%'.$data['acremark'].'%');
@@ -1348,16 +1381,14 @@
         }
         $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
         if($data['zhifu'] == 1){
-            $ret['SumInMoney']  = SumDbAccount(GetFindSqlArr($data));
-            $ret['SumOutMoney'] = 0.0;
+            $ret['SumInMoney']  += SumDbAccount(GetFindSqlArr($data));
         }elseif($data['zhifu'] == 2){
-            $ret['SumInMoney']  = 0.0;
-            $ret['SumOutMoney'] = SumDbAccount(GetFindSqlArr($data));
+            $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
         }else{
             $data['zhifu'] = 1;
-            $ret['SumInMoney']  = SumDbAccount(GetFindSqlArr($data));
+            $ret['SumInMoney']  += SumDbAccount(GetFindSqlArr($data));
             $data['zhifu'] = 2;
-            $ret['SumOutMoney'] = SumDbAccount(GetFindSqlArr($data));
+            $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
             unset($data['zhifu']);
         }
         $DbSQL = M('account')->alias('account')
