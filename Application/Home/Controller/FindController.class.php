@@ -63,7 +63,6 @@ class FindController extends BaseController {
             //输出查询信息
             $this -> assign('FindData',$data);
             $this -> assign('FindDataClass',$ClassValue);
-
             if ($this->isAllClass) {
                 $DbAccount = FindTransferAccountData($data, $p);
                 $this -> assign('SumInMoney', $DbAccount['SumInMoney']);
@@ -71,6 +70,7 @@ class FindController extends BaseController {
                 $this -> assign('Page', $DbAccount['page']);
                 $this -> assign('PageMax', $DbAccount['pagemax']);
                 $this -> assign('ShowData', $DbAccount['data']);
+                $this -> assign('isTransfer', $DbAccount['isTransfer']);
                 $this -> display();
             } elseif ($this->isTransfer) {
                 $DbTransfer = FindTransferData($data, $p);
