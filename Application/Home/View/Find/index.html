@@ -64,6 +64,11 @@
           收入:<font class="am-text-success money-format">{$SumInMoney}</font> &nbsp;
           支出:<font class="am-text-danger money-format" >{$SumOutMoney}</font> &nbsp;
           剩余:<font class="am-text-primary money-format">{$SumInMoney - $SumOutMoney}</font>
+          <if condition="$isTransfer">
+            <span class="am-badge am-round" style="margin-left: 6px;">含转账</span>
+          <else/>
+            <span class="am-badge am-round" style="margin-left: 6px;">不含转账</span>
+          </if>
         </p>
     </div>
     
