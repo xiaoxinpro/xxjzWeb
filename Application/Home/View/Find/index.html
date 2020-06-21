@@ -13,7 +13,11 @@
             <select id="select-funds" class="am-form-field" name="find_funds" value="{$FindData.fid}">
             <option value="">全部账户</option>
             <foreach name="FundsData" item="data">
+              <if condition="$FindData[fid] eq $data[id]">
+                <option value="{$data.id}" selected="selected">{$data.name}</option>
+              <else/>
                 <option value="{$data.id}">{$data.name}</option>
+              </if>
             </foreach>
             </select>
             <span class="am-form-caret"></span>
