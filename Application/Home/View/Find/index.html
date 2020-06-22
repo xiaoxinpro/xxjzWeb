@@ -25,7 +25,7 @@
         <div><p></p></div>
         <div class="am-input-group">
             <span class="am-input-group-label"><b>选择分类</b></span>
-            <select id="select-type" class="am-form-field" name="find_class" value="{$FindDataClass}">
+            <select id="select-type" class="am-form-field" name="find_class">
                 <option value="all">全部分类</option>
                 <option value="outClass">支出--</option>
                 <foreach name="outClassData" item="ClassName">
@@ -78,5 +78,14 @@
     
     <include file="Public:list_account"/>
     
+</block>
 
+<block name="javascript">
+    <script type="text/javascript">
+    $(function(){
+        if ({$FindDataClass} != "") {
+            $("#select-type").val("{$FindDataClass}");
+        }
+    });
+    </script>
 </block>
