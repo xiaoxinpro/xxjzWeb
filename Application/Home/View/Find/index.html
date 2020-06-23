@@ -10,14 +10,10 @@
         </if>
         <div class="am-input-group">
             <span class="am-input-group-label"><b>资金账户</b></span>
-            <select id="select-funds" class="am-form-field" name="find_funds" value="{$FindData.fid}">
+            <select id="select-funds" class="am-form-field" name="find_funds">
             <option value="">全部账户</option>
             <foreach name="FundsData" item="data">
-              <if condition="$FindData[fid] eq $data[id]">
-                <option value="{$data.id}" selected="selected">{$data.name}</option>
-              <else/>
-                <option value="{$data.id}">{$data.name}</option>
-              </if>
+              <option value="{$data.id}">{$data.name}</option>
             </foreach>
             </select>
             <span class="am-form-caret"></span>
@@ -83,9 +79,12 @@
 <block name="javascript">
     <script type="text/javascript">
     $(function(){
-        if ({$FindDataClass} != "") {
+        if ("{$FindDataClass}" != "") {
             $("#select-type").val("{$FindDataClass}");
         }
+        if ("{$FindData.fid}" != "") {
+            $("#select-funds").val("{$FindData.fid}");
+        }        
     });
     </script>
 </block>
