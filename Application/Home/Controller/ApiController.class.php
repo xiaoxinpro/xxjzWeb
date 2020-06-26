@@ -374,6 +374,13 @@ class ApiController extends Controller {
 
         switch ($type) {
             case 'get':
+                if (!isset($data['fid'])) {
+                    $data['fid'] = 0;
+                }
+                $arrData['data'] = GetFundsIdTransferData($uid, $data['page'], $data['fid']); // 获取转账数据
+                break;
+                
+            case 'get_id':
                 $arrData['data'] = GetTransferIdData($data['tid'], $uid); // 获取转账ID数据
                 break;
 
