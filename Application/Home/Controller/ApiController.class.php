@@ -352,6 +352,71 @@ class ApiController extends Controller {
         die(json_encode($arrData));
     }
 
+    //转账数据Api
+    public function transfer() {
+        if (IS_POST) {
+            $type = I('post.type','get');
+            $data = json_decode(base64_decode(I('post.data',null)),true);
+        } else {
+            $type = I('get.type','get');
+            $data = json_decode(base64_decode(I('get.data',null)),true);
+        }
+
+        $arrData = array();
+        $uid = session('uid');
+        if ($uid > 0) {
+            $arrData['uid'] = $uid;
+        } else {
+            $arrData['uid'] = 0;
+            $arrData['data'] = "用户未登录，请重新登录！";
+            die(json_encode($arrData));
+        }
+
+        switch ($type) {
+            case 'get':
+                $arrData['data'] = GetTransferIdData($data['tid'], $uid); // 获取转账ID数据
+                break;
+
+            case 'add':
+                $data['jiid'] = $uid;
+                $ret = AddTransferData($data);
+                $arrData['data']['ret'] = $ret[0];
+                $arrData['data']['msg'] = $ret[1];
+                ClearDataCache(); //清除缓存
+                break;
+
+            case 'edit':
+                $data['jiid'] = $uid;
+                $ret = EditTransferData($data['tid'], $data);
+                $arrData['data']['ret'] = $ret[0];
+                $arrData['data']['msg'] = $ret[1];
+                ClearDataCache(); //清除缓存
+                break;
+
+            case 'del':
+                $ret = DelTransferData($data['tid'], $uid);
+                $arrData['data']['ret'] = $ret[0];
+                $arrData['data']['msg'] = $ret[1];
+                ClearDataCache(); //清除缓存
+                break;
+
+            case 'find':
+                if ($data['jiid'] == $uid) {
+                    $ret = FindTransferData($data, $data['page']);
+                    $arrData['data']['ret'] = true;
+                    $arrData['data']['msg'] = $ret;
+                } else {
+                    $arrData['data']['ret'] = false;
+                    $arrData['data']['msg'] = '未通过用户验证！';
+                }
+                break;
+
+            default:
+                break;
+        }
+        die(json_encode($arrData));
+    }
+
     //表格数据api
     public function chart() {
         if (IS_POST) {
