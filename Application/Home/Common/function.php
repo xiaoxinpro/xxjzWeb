@@ -395,6 +395,7 @@
             $ret['pagemax'] = 1;
             $ret['page'] = 1;
         }
+        $ret['isTransfer']  = false;
         $ret['SumInMoney']  = $inSumData;
         $ret['SumOutMoney'] = $outSumData;
         $ret['count']       = $DbCount;
@@ -1264,7 +1265,6 @@
                     '_logic' => 'or'
                 );
             }
-            
         }
         if($data['jiid']){
             $arrSQL['transfer.uid'] = $data['jiid'];
@@ -1291,6 +1291,9 @@
             ->join('__ACCOUNT_FUNDS__ AS target ON transfer.target_fid = target.fundsid', 'LEFT')
             ->join('__ACCOUNT_FUNDS__ AS source ON transfer.source_fid = source.fundsid', 'LEFT')
             ->fetchSql(false)->where($arrSQL)->order("transfer.time DESC , transfer.tid DESC");
+        $ret['isTransfer'] = true;
+        $ret['SumInMoney'] = 0;
+        $ret['SumOutMoney'] = 0;
         $ret['page'] = 1;
         $ret['pagemax'] = 1;
         if ($page > 0) {
@@ -1378,6 +1381,12 @@
             }else{
                 $arrSQL['account.actime'] = $arrEnd;
             }
+        }
+        if($data['acclassid']){
+            $arrSQL['account.acclassid'] = $data['acclassid'];
+        }
+        if($data['zhifu']){
+            $arrSQL['account.zhifu'] = $data['zhifu'];
         }
         $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
         if($data['zhifu'] == 1){
