@@ -3,7 +3,6 @@ namespace Home\Controller;
 use Think\Controller;
 class FindController extends BaseController {
     private $isTransfer = false;
-    private $isAllClass = false;
     public function index(){
         $uid = session('uid');
         $p = I('get.p', 1, 'intval');
@@ -43,15 +42,11 @@ class FindController extends BaseController {
         if (stripos($ClassValue, 'transfer') !== false) {
             $this->isTransfer = true;
         }
-        if ($ClassValue === 'all') {
-            $this->isAllClass = true;
-        }
 
         //表单信息
         $this -> assign('inClassData',GetClassData($uid,1));
         $this -> assign('outClassData',GetClassData($uid,2));
         $this -> assign('FundsData',GetFundsData($uid));
-        $this -> assign('isTransfer',$this->isTransfer);
         
         if($data) {
             //不显示搜索
