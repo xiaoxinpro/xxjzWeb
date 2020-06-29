@@ -162,8 +162,7 @@ class ClassController extends BaseController {
                     $ListData = OutListData($DbAccount,$DbClass);
                     $this -> assign('Page', $ListData[0]);
                     $this -> assign('PageMax', $ListData[1]);
-                    $this -> assign('ArrPage', $ListData[2]);
-                    $this -> assign('ShowData', $ListData[3]);
+                    $this -> assign('ShowData', $ListData[2]);
 
                     $this -> display();
                 }else{
