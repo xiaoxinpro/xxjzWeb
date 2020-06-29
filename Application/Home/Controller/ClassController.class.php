@@ -143,7 +143,7 @@ class ClassController extends BaseController {
                     $this -> assign('ClassType',$DbData[1]['classtype']);
                     $this -> assign('ClassData',$ClassData);
 
-                    if (count($ClassData) > 1) {
+                    if (count($ClassData) <= 1) {
                         ShowAlert('没有检测到可转移的分类!');
                     }
 
