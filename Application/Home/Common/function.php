@@ -515,15 +515,11 @@
     function OutListData($ArrAccount, $ArrClass, $ArrFunds = null) {
         $Page = $ArrAccount['page'];
         $PageMax = $ArrAccount['pagemax'];
-        $ArrPage = array();
-        for($i=0; $i<$PageMax; $i++) {
-            $ArrPage[$i] = $i + 1;
-        }
         $retShowData = array();
         foreach($ArrAccount['data'] as $key => $ArrData) {
             $retShowData[$key] = ArrDataToShowData($ArrData, $ArrClass, $ArrFunds);
         }
-        return array($Page,$PageMax,$ArrPage,$retShowData);
+        return array($Page,$PageMax,$retShowData);
     }
     
     function SumDbAccount($StrSQL) {
@@ -1435,16 +1431,12 @@
         //输出明细
         $ret['page'] = 1;
         $ret['pagemax'] = 1;
-        $ret['ArrPage'] = array();
         $DbSQL = GetFindTransferAccountDb($data);
         if ($page > 0) {
             $strSQL = $DbSQL->fetchSql(true)->select()." LIMIT ".(intval($page)-1)*C('PAGE_SIZE').",".C('PAGE_SIZE');
             $ret['data'] = M()->query($strSQL);
             $ret['page'] = $page;
             $ret['pagemax'] = intval(($ret['count'] - 1) / C('PAGE_SIZE')) + 1;
-            for($i=0; $i<$ret['pagemax']; $i++) {
-                array_push($ret['ArrPage'], $i + 1);
-            }
         } else {
             $ret['data'] = $DbSQL->select();
         }
