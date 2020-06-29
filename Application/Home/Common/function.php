@@ -1305,8 +1305,8 @@
         return $ret;
     }
 
-    //获取搜索记账数据的SQL
-    function GetFindTransferSql($data, $typeid) {
+    //获取搜索转账数据库对象
+    function GetFindTransferDb($data, $typeid) {
         $arrSQL = array();
         if($data['jiid']){
             $arrSQL['transfer.uid'] = $data['jiid'];
@@ -1327,7 +1327,6 @@
                 $arrSQL['transfer.time'] = $arrEnd;
             }
         }
-        $retSql = "";
         $DbSQL = M('account_transfer')->alias('transfer');
         if ($typeid == 2) {
             if ($data['fid']) {
@@ -1336,7 +1335,6 @@
             $DbSQL = $DbSQL->field(" transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 2, '支出', transfer.source_fid, funds.fundsname as funds, transfer.uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = transfer.source_fid', 'LEFT')
             ->where($arrSQL);
-            $retSql = $DbSQL->fetchSql(true)->select();
         }
         if ($typeid == 1) {
             if ($data['fid']) {
@@ -1345,50 +1343,75 @@
             $DbSQL = $DbSQL->field(" transfer.tid, transfer.money, 0, '转账', transfer.mark, transfer.time, 1, '收入', transfer.target_fid, funds.fundsname as funds, transfer.uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = transfer.target_fid', 'LEFT')
             ->where($arrSQL);
-            $retSql = $DbSQL->fetchSql(true)->select();
         }
-        return $retSql;
+        return $DbSQL;
     }
 
-    //搜索转账和记账数据
-    function FindTransferAccountData($data, $page=0) {
+    function GetFindTransferAccountSql($data, $alias='') {
         if($data['jiid']){
-            $arrSQL['account.jiid'] = $data['jiid'];
+            $arrSQL[$alias.'jiid'] = $data['jiid'];
         }
-        $ret = array('count'=>0, 'SumInMoney'=>0.0, 'SumOutMoney'=>0.0, 'isTransfer'=>false);
         if ($data['fid']) {
-            $arrSQL['account.fid'] = $data['fid'];
-            $sumTransfer = GetFundsTransferMoney($data['fid'], $data['jiid'], $data);
-            if ($sumTransfer[0]) {
-                $ret['count'] += $sumTransfer[1]['count'];
-                $ret['SumInMoney']  += $sumTransfer[1]['in'];
-                $ret['SumOutMoney'] += $sumTransfer[1]['out'];
-                $ret['isTransfer'] = true;
-            }
+            $arrSQL[$alias.'fid'] = $data['fid'];
         }
         if($data['acremark']){
-            $arrSQL['account.acremark'] = array('like', '%'.$data['acremark'].'%');
+            $arrSQL[$alias.'acremark'] = array('like', '%'.$data['acremark'].'%');
         }
         if($data['starttime']){
             $strData = strtotime(date($data['starttime']." 0:0:0"));
-            $arrSQL['account.actime'] = array('egt', $strData);
+            $arrSQL[$alias.'actime'] = array('egt', $strData);
         }
         if($data['endtime']){
             $strData = strtotime(date($data['endtime']." 23:59:59"));
             $arrEnd = array('elt', $strData);
-            if(is_array($arrSQL['account.actime'])){
-                $arrSQL['account.actime'] = array($arrSQL['account.actime'], $arrEnd);
+            if(is_array($arrSQL[$alias.'actime'])){
+                $arrSQL[$alias.'actime'] = array($arrSQL[$alias.'actime'], $arrEnd);
             }else{
-                $arrSQL['account.actime'] = $arrEnd;
+                $arrSQL[$alias.'actime'] = $arrEnd;
             }
         }
         if($data['acclassid']){
-            $arrSQL['account.acclassid'] = $data['acclassid'];
+            $arrSQL[$alias.'acclassid'] = $data['acclassid'];
         }
         if($data['zhifu']){
-            $arrSQL['account.zhifu'] = $data['zhifu'];
+            $arrSQL[$alias.'zhifu'] = $data['zhifu'];
         }
-        $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
+        return $arrSQL;
+    }
+
+    //获取搜索记账数据库对象
+    function GetFindTransferAccountDb($data) {
+
+        // $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
+        // if($data['zhifu'] == 1){
+        //     $ret['SumInMoney']  += SumDbAccount(GetFindSqlArr($data));
+        // }elseif($data['zhifu'] == 2){
+        //     $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
+        // }else{
+        //     $data['zhifu'] = 1;
+        //     $ret['SumInMoney']  += SumDbAccount(GetFindSqlArr($data));
+        //     $data['zhifu'] = 2;
+        //     $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
+        //     unset($data['zhifu']);
+        // }
+        return M('account')->alias('account')
+            ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
+            ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
+            ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT')
+            ->union(GetFindTransferDb($data, 2)->fetchSql(true)->select())
+            ->union(GetFindTransferDb($data, 1)->fetchSql(true)->select() . " ORDER BY time DESC, id DESC")
+            ->where(GetFindTransferAccountSql($data, 'account.'));
+    }
+
+    //搜索转账和记账数据
+    function FindTransferAccountData($data, $page=0) {
+        //初始化返回值
+        $ret = array('count'=>0, 'SumInMoney'=>0.0, 'SumOutMoney'=>0.0, 'isTransfer'=>false);
+
+        //计算输出数量
+        $ret['count'] = M('account')->where(GetFindTransferAccountSql($data))->count() + GetFindTransferDb($data, 2)->count() + GetFindTransferDb($data, 1)->count();
+
+        //计算统计值
         if($data['zhifu'] == 1){
             $ret['SumInMoney']  += SumDbAccount(GetFindSqlArr($data));
         }elseif($data['zhifu'] == 2){
@@ -1400,19 +1423,23 @@
             $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
             unset($data['zhifu']);
         }
-        $DbSQL = M('account')->alias('account')
-            ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
-            ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
-            ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT')
-            ->union(GetFindTransferSql($data, 2))->union(GetFindTransferSql($data, 1) . " ORDER BY time DESC, id DESC")
-            ->fetchSql(true)->where($arrSQL);
+        if (isset($data['fid'])) {
+            $sumTransfer = GetFundsTransferMoney($data['fid'], $data['jiid'], $data);
+            if ($sumTransfer[0]) {
+                $ret['SumInMoney']  += $sumTransfer[1]['in'];
+                $ret['SumOutMoney'] += $sumTransfer[1]['out'];
+                $ret['isTransfer'] = true;
+            }
+        }
+
+        //输出明细
         $ret['page'] = 1;
         $ret['pagemax'] = 1;
         $ret['ArrPage'] = array();
+        $DbSQL = GetFindTransferAccountDb($data);
         if ($page > 0) {
             $strSQL = $DbSQL->fetchSql(true)->select()." LIMIT ".(intval($page)-1)*C('PAGE_SIZE').",".C('PAGE_SIZE');
             $ret['data'] = M()->query($strSQL);
-            $DbSQL = $DbSQL->page($page, C('PAGE_SIZE'));
             $ret['page'] = $page;
             $ret['pagemax'] = intval(($ret['count'] - 1) / C('PAGE_SIZE')) + 1;
             for($i=0; $i<$ret['pagemax']; $i++) {
@@ -1422,6 +1449,7 @@
             $ret['data'] = $DbSQL->select();
         }
         // dump($strSQL);
+        // dump($ret);
         return $ret;
     }
 
