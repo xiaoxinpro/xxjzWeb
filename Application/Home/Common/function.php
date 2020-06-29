@@ -1323,6 +1323,7 @@
                 $arrSQL['transfer.time'] = $arrEnd;
             }
         }
+        $arrSQL['transfer.source_fid'] = array('neq', 0);
         $DbSQL = M('account_transfer')->alias('transfer');
         if ($typeid == 2) {
             if ($data['fid']) {
@@ -1377,19 +1378,6 @@
 
     //获取搜索记账数据库对象
     function GetFindTransferAccountDb($data) {
-
-        // $ret['count'] = M('account')->alias('account')->where($arrSQL)->count();
-        // if($data['zhifu'] == 1){
-        //     $ret['SumInMoney']  += SumDbAccount(GetFindSqlArr($data));
-        // }elseif($data['zhifu'] == 2){
-        //     $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
-        // }else{
-        //     $data['zhifu'] = 1;
-        //     $ret['SumInMoney']  += SumDbAccount(GetFindSqlArr($data));
-        //     $data['zhifu'] = 2;
-        //     $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
-        //     unset($data['zhifu']);
-        // }
         return M('account')->alias('account')
             ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
