@@ -43,8 +43,8 @@
                     <div><p></p></div>
                     <div class="am-input-group">
                         <span class="am-input-group-label"><b>转出账户</b></span>
-                        <select id="select-funds-source" class="am-form-field" name="transfer_funds_source" data-am-selected placeholder="选择转出账户" required>
-                            <option value=""></option>
+                        <select id="select-funds-source" class="am-form-field" name="transfer_funds_source" placeholder="选择转出账户" required>
+                            <option value="">选择转出账户</option>
                             <foreach name="FundsData" item="data">
                                 <if condition="$data.id gt 0">
                                     <option value="{$data.id}">{$data.name}</option>
@@ -56,8 +56,8 @@
                     <div><p></p></div>
                     <div class="am-input-group">
                         <span class="am-input-group-label"><b>转入账户</b></span>
-                        <select id="select-funds-target" class="am-form-field" name="transfer_funds_target" data-am-selected placeholder="选择转入账户" required>
-                            <option value=""></option>
+                        <select id="select-funds-target" class="am-form-field" name="transfer_funds_target" placeholder="选择转入账户" required>
+                            <option value="">选择转入账户</option>
                             <foreach name="FundsData" item="data">
                                 <if condition="$data.id gt 0">
                                     <option value="{$data.id}">{$data.name}</option>
