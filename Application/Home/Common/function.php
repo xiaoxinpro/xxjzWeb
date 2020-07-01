@@ -1378,13 +1378,17 @@
 
     //获取搜索记账数据库对象
     function GetFindTransferAccountDb($data) {
-        return M('account')->alias('account')
+        $ret = M('account')->alias('account')
             ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
-            ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT')
-            ->union(GetFindTransferDb($data, 2)->fetchSql(true)->select())
-            ->union(GetFindTransferDb($data, 1)->fetchSql(true)->select() . " ORDER BY time DESC, id DESC")
-            ->where(GetFindTransferAccountSql($data, 'account.'));
+            ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT');
+        if ((!isset($data['acclassid']) && !isset($data['zhifu'])) || stripos($data['acclassid'], "transfer")!==false) {
+            $ret = $ret->union(GetFindTransferDb($data, 2)->fetchSql(true)->select())
+                ->union(GetFindTransferDb($data, 1)->fetchSql(true)->select() . " ORDER BY time DESC, id DESC");
+        } else {
+            $ret = $ret->order("time DESC , id DESC");
+        }
+        return $ret->where(GetFindTransferAccountSql($data, 'account.'));
     }
 
     //搜索转账和记账数据
@@ -1407,7 +1411,7 @@
             $ret['SumOutMoney'] += SumDbAccount(GetFindSqlArr($data));
             unset($data['zhifu']);
         }
-        if (isset($data['fid'])) {
+        if (isset($data['fid']) && !isset($data['acclassid']) && !isset($data['zhifu'])) {
             $sumTransfer = GetFundsTransferMoney($data['fid'], $data['jiid'], $data);
             if ($sumTransfer[0]) {
                 $ret['SumInMoney']  += $sumTransfer[1]['in'];
