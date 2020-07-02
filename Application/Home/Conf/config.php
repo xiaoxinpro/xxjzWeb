@@ -12,14 +12,14 @@ return array(
 
     //记账数据限制
     'MAX_MONEY_VALUE' => 999999999.99,  //单笔记录金额最大值（不超过999999999.99）
-    'MAX_CLASS_NAME' => 24,            //分类名最大长度（不超过24）
-    'MAX_FUNDS_NAME' => 24,            //资金账户名最大长度（不超过24）
-    'MAX_MARK_VALUE' => 64,            //备注最大长度（不超过64）
+    'MAX_CLASS_NAME' => 24,            //分类名最大长度（不超过255）
+    'MAX_FUNDS_NAME' => 24,            //资金账户名最大长度（不超过255）
+    'MAX_MARK_VALUE' => 64,            //备注最大长度（不超过255）
 
     //图片上传限制
     'IMAGE_SIZE'    => 3*1024*1024,     //图片大小限制
     'IMAGE_COUNT'   => 9,               //图片数量限制
     'IMAGE_EXT'     => array('jpg', 'gif', 'png', 'jpeg'), //允许图片格式
     'IMAGE_ROOT_PATH' => '/Uploads/',  //图片根目录路径
-    'IMAGE_CACHE_URL' => '',            //图片缓存URL,必须以http(s)开头,否则无效。
+    'IMAGE_CACHE_URL' => '',            //图片缓存URL,必须以`http(s)://`开头,否则无效。
 );
