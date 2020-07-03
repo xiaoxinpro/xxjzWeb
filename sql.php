@@ -30,6 +30,7 @@ return array(
 			"classname" => array('COLUMN_NAME'=>"classname",'COLUMN_TYPE'=>"varchar(255)",'IS_NULLABLE'=>"NOT NULL"),
 			"classtype" => array('COLUMN_NAME'=>"classtype",'COLUMN_TYPE'=>"int(1)",'IS_NULLABLE'=>"NOT NULL"),
 			"ufid" => array('COLUMN_NAME'=>"ufid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
+			"sort" => array('COLUMN_NAME'=>"sort",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL",'COLUMN_DEFAULT'=>"DEFAULT '255'"),
 		),
 		'tableKey' => "classid",
 		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
@@ -41,6 +42,7 @@ return array(
 			"fundsid" => array('COLUMN_NAME'=>"fundsid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL",'EXTRA'=>"AUTO_INCREMENT"),
 			"fundsname" => array('COLUMN_NAME'=>"fundsname",'COLUMN_TYPE'=>"varchar(255)",'IS_NULLABLE'=>"NOT NULL"),
 			"uid" => array('COLUMN_NAME'=>"uid",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL"),
+			"sort" => array('COLUMN_NAME'=>"sort",'COLUMN_TYPE'=>"int(11)",'IS_NULLABLE'=>"NOT NULL",'COLUMN_DEFAULT'=>"DEFAULT '255'"),
 		),
 		'tableKey' => "fundsid",
 		'tableOther' => "ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;"
