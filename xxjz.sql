@@ -27,6 +27,7 @@ CREATE TABLE `xxjz_account_class` (
   `classname` varchar(255) NOT NULL,
   `classtype` int(1) NOT NULL,
   `ufid` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT '255',
   PRIMARY KEY (`classid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
@@ -36,6 +37,7 @@ CREATE TABLE `xxjz_account_funds` (
   `fundsid` int(11) NOT NULL AUTO_INCREMENT,
   `fundsname` varchar(255) NOT NULL,
   `uid` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT '255',
   PRIMARY KEY (`fundsid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
