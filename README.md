@@ -18,11 +18,11 @@
 
 * 项目[V2.1.x版本](https://github.com/xiaoxinpro/xxjzWeb/tree/V2.1.x)功能已基本完成，不排除有部分比较隐蔽的Bug，后续将集中进行优化。
 
-* 项目[master版本](https://github.com/xiaoxinpro/xxjzWeb)目前正在添加更多功能，数据结构与功能随时变动，稳定性不如以上几个版本。
+* 项目[master版本](https://github.com/xiaoxinpro/xxjzWeb)目前正在添加更多功能，数据结构与功能随时变动，稳定性不如以上几个版本，不建议使用此版本。
 
 你可以使用Demo账号登陆最新稳定版本，也可以自行搭建任意稳定版本(https://github.com/xiaoxinpro/xxjzWeb/releases)项目。
 
->Demo  ：http://jz.xiaoxin.pro/xxjzApp/index.php
+>Demo: http://jz.xiaoxin.pro/xxjzApp/index.php
 
     Demo账号：demo
     Demo密码：xxgzs.org
@@ -33,7 +33,7 @@
 
 ### 2.1、安装
 
-部署项目建议选择[Releases](https://github.com/xiaoxinpro/xxjzWeb/releases)版本，master分支属于开发分支，可能存在一些BUG无法正常使用。
+部署项目建议选择[Releases](https://github.com/xiaoxinpro/xxjzWeb/releases)版本，master版本属于开发分支，可能存在一些BUG无法正常使用。
 
 #### 2.1.1、快速安装
 部署项目文件后使用浏览器访问/install.php文件，填写数据库配置信息与邮箱配置（可选）。
@@ -169,7 +169,7 @@
 |acmoney|double(9,2) unsigned|金额|
 |acclassid|int(11)|分类ID|
 |actime|int(11)|时间戳|
-|acremark|varchar(64)|备注|
+|acremark|varchar(255)|备注|
 |jiid|int(11)|用户ID|
 |zhifu|int(1)|收入1/支出2|
 |fid|int(11)[-1]|资金账户ID|
@@ -178,7 +178,7 @@
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |classid|int(11) |分类ID|
-|classname|varchar(24)|分类名称|
+|classname|varchar(255)|分类名称|
 |classtype|int(1)|收入1/支出2|
 |ufid|int(11)|所属用户ID|
 
@@ -186,10 +186,21 @@
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |fundsid|int(11)|资金账户ID|
-|fundsname|varchar(24)|资金账户名称|
+|fundsname|varchar(255)|资金账户名称|
 |uid|int(11)|所属用户ID|
 
-### 4.4、图片表 xxjz_account_image
+### 4.4、转账表 xxjz_account_transfer
+| 字段 | 类型 | 备注 |
+|:--------:|--------|--------|
+|tid|int(11)|转账账户ID|
+|uid|int(11)|所属用户ID|
+|money|double(9,2)|金额|
+|source_fid|int(11)|资金来源账户ID|
+|target_fid|int(11)|资金目标账户ID|
+|time|int(11)|转账时间|
+|mark|varchar(255)|备注|
+
+### 4.5、图片表 xxjz_account_image
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |id|int(11) 自动增量|图片ID|
@@ -197,23 +208,23 @@
 |acid|int(11)|记账ID|
 |name|varchar(32)|图片名称|
 |type|varchar(32)|图片类型|
-|size|int(11)|图片大小（字节）|
+|size|int(11) unsigned|图片大小（字节）|
 |ext|varchar(8)|图片扩展名|
 |md5|varchar(32)|图片Hash值|
 |savepath|varchar(32)|图片文件路径|
 |savename|varchar(32)|图片文件名称|
-|time|int(11)|上传时间|
+|time|int(11) unsigned|上传时间|
 
-### 4.5、用户表 xxjz_user
+### 4.6、用户表 xxjz_user
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |uid|int(11) 自动增量|用户ID|
-|username|varchar(24)|账号/用户名|
+|username|varchar(32)|账号/用户名|
 |password|varchar(32)|密码|
 |email|varchar(255)|邮箱|
 |utime|int(11)|注册时间戳|
 
-### 4.6、用户配置表 xxjz_user_config
+### 4.7、用户配置表 xxjz_user_config
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |cid|int(11) 自动增量|配置ID|
@@ -223,7 +234,7 @@
 |config_value|varchar(32)|配置值|
 |time|int(11)|创建时间戳|
 
-### 4.7、用户登陆表 xxjz_user_login
+### 4.8、用户登陆表 xxjz_user_login
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |lid|int(11) 自动增量|登陆ID|
@@ -233,7 +244,7 @@
 |login_key|varchar(32)|平台session_key|
 |login_token|varchar(32)|平台unionid|
 
-### 4.8、信息推送表 xxjz_user_push
+### 4.9、信息推送表 xxjz_user_push
 | 字段 | 类型 | 备注 |
 |:--------:|--------|--------|
 |pid|int(11) 自动增量|推送ID|
@@ -267,4 +278,3 @@ Bug 反馈及需求提交请使用GitHub中的[Issues](https://github.com/xiaoxi
 ### 微信扫描捐赠
 
 ![微信扫描捐赠](https://github.com/xiaoxinpro/xxjzWeb/blob/master/Public/Home/i/wechat.png)
-
