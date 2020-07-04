@@ -1034,6 +1034,16 @@
         }
     }
 
+    //调整账户排序
+    function SortFunds($FundsIdList, $uid)
+    {
+        for ($i=0; $i < count($FundsIdList); $i++) { 
+            $sql = array('uid'=>$uid, 'fundsid' => intval($FundsIdList[$i]));
+            M("account_funds")->where($sql)->setField('sort',$i);
+        }
+        ClearDataCache();
+    }
+
     //删除资金账户并转移记账数据
     function DeleteFunds($oldFundsId, $uid, $newFundsId = -1) {
         if ($oldFundsId == $newFundsId) {
