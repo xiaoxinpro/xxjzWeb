@@ -79,11 +79,9 @@
         var sortable = Sortable.create(el, {
             handle: ".sortEnable",
             ghostClass: "am-active",
+            animation: 200,
             onMove: function (evt) {
                 return evt.related.dataset.id !== "-1";
-            },
-            onUpdate: function (evt) {
-                
             },
         });
         if (sortable) {
