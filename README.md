@@ -181,6 +181,7 @@
 |classname|varchar(255)|分类名称|
 |classtype|int(1)|收入1/支出2|
 |ufid|int(11)|所属用户ID|
+|sort|int(11)[255]|排序字段|
 
 ### 4.3、账户表 xxjz_account_funds
 | 字段 | 类型 | 备注 |
@@ -188,6 +189,7 @@
 |fundsid|int(11)|资金账户ID|
 |fundsname|varchar(255)|资金账户名称|
 |uid|int(11)|所属用户ID|
+|sort|int(11)[255]|排序字段|
 
 ### 4.4、转账表 xxjz_account_transfer
 | 字段 | 类型 | 备注 |
