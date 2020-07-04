@@ -71,4 +71,18 @@ class FundsController extends BaseController {
             $this -> error('非法操作...');
         }
     }
+
+    public function sort() {
+        $uid = session('uid');
+        if (IS_POST) {
+            $fundsIdList = json_decode(I('post.data','[]'), true);
+            if (count($fundsIdList) > 0) {
+                SortFunds($fundsIdList, $uid);
+            }
+            ShowAlert("账户排序修改完成！",U('Home/Funds/index'));
+            $this -> display('Public/base');
+        } else {
+            $this -> error('非法操作...');
+        }
+    }
 }
