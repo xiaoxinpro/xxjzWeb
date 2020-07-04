@@ -469,7 +469,7 @@
             $strSQL['classtype'] = $type;
         }
         
-        $DbClass = M('account_class')->cache('account_class_'.$type.'_'.$uid)->where($strSQL)->select();
+        $DbClass = M('account_class')->cache('account_class_'.$type.'_'.$uid)->where($strSQL)->order('sort,classid')->select();
         
         //$ret = array();
         foreach($DbClass as $key => $Data) {
@@ -891,7 +891,7 @@
             return array(false, '资金账户名太长，请控制在' . C('MAX_FUNDS_NAME') . '个字符以内。');
         }
 
-        if ($FundsName == "默认") {
+        if (IsShowDefaultFunds($uid) && ($FundsName == "默认")) {
             return array(false, '资金账户名不可为默认。');
         }
 
@@ -952,7 +952,7 @@
             if (IsShowDefaultFunds($uid)) {
                 array_push($retData, array('name'=>'默认', 'id'=> -1, 'money'=> GetFundsAccountSumData(-1,$uid)));
             }
-            $DbData = M('account_funds')->where($sql)->select();
+            $DbData = M('account_funds')->where($sql)->order('sort,fundsid')->select();
             foreach ($DbData as $key => $FundsArr) {
                 array_push($retData, array('name'=>$FundsArr['fundsname'], 'id'=>intval($FundsArr['fundsid']), 'money'=> GetFundsAccountSumData($FundsArr['fundsid'],$uid)));
             }
@@ -1649,7 +1649,7 @@
         if($type) {
             $strSQL['classtype'] = $type;
         }
-        $DbClass = M('account_class')->where($strSQL)->select();
+        $DbClass = M('account_class')->where($strSQL)->order('sort,classid')->select();
         $CacheData = array();
         foreach($DbClass as $key => $Data) {
             $classId = intval($Data['classid']);
