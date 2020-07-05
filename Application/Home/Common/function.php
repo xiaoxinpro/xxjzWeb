@@ -1602,6 +1602,16 @@
         }
     }
 
+    //调整分类排序
+    function SortClass($ClassIdList, $uid)
+    {
+        for ($i=0; $i < count($ClassIdList); $i++) { 
+            $sql = array('uid'=>$uid, 'acclassid' => intval($ClassIdList[$i]));
+            M("account_class")->where($sql)->setField('sort',$i);
+        }
+        ClearDataCache();
+    }
+
     //获取指定分类记账数量
     function GetClassAccountNum($ClassId, $uid)
     {
