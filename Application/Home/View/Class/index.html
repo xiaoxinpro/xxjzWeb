@@ -1,129 +1,131 @@
 <extend name="Public:common"/>
 <block name="main">
-    <div data-am-widget="tabs" class="am-tabs am-tabs-secondary" >
-        <ul class="am-tabs-nav am-cf">
-            <if condition="$type eq 1">
-                <li class=""><a href="[data-tab-panel-0]">新建</a></li>
-                <li class="am-active"><a href="[data-tab-panel-1]">收入</a></li>
-                <li class=""><a href="[data-tab-panel-2]">支出</a></li>
-            <elseif condition="$type eq 2"/>
-                <li class=""><a href="[data-tab-panel-0]">新建</a></li>
-                <li class=""><a href="[data-tab-panel-1]">收入</a></li>
-                <li class="am-active"><a href="[data-tab-panel-2]">支出</a></li>
-            <else/>
-                <li class="am-active"><a href="[data-tab-panel-0]">新建</a></li>
-                <li class=""><a href="[data-tab-panel-1]">收入</a></li>
-                <li class=""><a href="[data-tab-panel-2]">支出</a></li>
-            </if>
-        </ul>
-        <div class="am-tabs-bd">
-            <if condition="$type eq 0">
-                <div data-tab-panel-0 class="am-tab-panel am-active">
-            <else/>
-                <div data-tab-panel-0 class="am-tab-panel ">
-            </if>
-                <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
-                    
-                    <legend>新建分类</legend>
-                    <div class="am-input-group">
-                        <span class="am-input-group-label"><b>名称</b></span>
-                        <input type="text" class="am-form-field" id="text-class" name="class_name" placeholder="输入分类名称">
-                    </div>
-                    <div><p></p></div>
-                    <div class="am-input-group">
-                        <span class="am-input-group-label"><b>类别</b></span>
-                        <select id="select-type" class="am-form-field" name="class_type" >
-                            <if condition="$ClassType eq 'in'">
-                                <option value="1">收入</option>
-                                <option value="2">支出</option>
-                            <else/>
-                                <option value="2">支出</option>
-                                <option value="1">收入</option>
-                            </if>
-                        </select>
-                    </div>
-                    <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="class_submit" value="新建"></p>
-                    
-                </form>
+
+    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+        <fieldset id="new">
+            <legend>新建分类</legend>
+            <div class="am-input-group">
+                <span class="am-input-group-label"><b>名称</b></span>
+                <input type="text" class="am-form-field" id="text-class" name="class_name" placeholder="输入分类名称">
             </div>
-            
-            <if condition="$type eq 1">
-                <div data-tab-panel-1 class="am-tab-panel am-active">
-            <else/>
-                <div data-tab-panel-1 class="am-tab-panel ">
-            </if>
-                
-                <legend>收入分类</legend>
-                <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
-                    <thead>
-                        <tr>
-                            <th bgcolor="#FFFFFF">分类名称</th>
-                            <th bgcolor="#FFFFFF">收入</th>
-                            <th bgcolor="#FFFFFF">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        <volist name="inMoneyClass" id="data">
-                        <tr>
-                            <td class="am-text-middle">{$data}</td>
-                            <td class="am-text-middle">
-                                <a href="<php>echo U("Home/Class/change?id=".$key);</php>" class="am-btn am-btn-success am-btn-xs">
-                                    转为支出
-                                </a>
-                            </td>
-                            <td class="am-text-middle">
-                                <a href="<php>echo U("Home/Class/edit?id=".$key);</php>" class="am-btn am-btn-secondary am-btn-xs">
-                                    编辑
-                                </a>
-                                <a href="javascript:void(0);" onclick="isDelete('<php>echo U("Home/Class/del?id=".$key);</php>')" class="am-btn am-btn-danger am-btn-xs">
-                                    删除
-                                </a>
-                            </td>
-                        </tr>
-                        </volist>
-                    </tbody>
-                </table>
-                
+            <div><p></p></div>
+            <div class="am-input-group">
+                <span class="am-input-group-label"><b>类别</b></span>
+                <select id="select-type" class="am-form-field" name="class_type" >
+                    <if condition="$ClassType eq 'in'">
+                        <option value="1">收入</option>
+                        <option value="2">支出</option>
+                    <else/>
+                        <option value="2">支出</option>
+                        <option value="1">收入</option>
+                    </if>
+                </select>
             </div>
-            
-            <if condition="$type eq 2">
-                <div data-tab-panel-2 class="am-tab-panel am-active">
-            <else/>
-                <div data-tab-panel-2 class="am-tab-panel">
-            </if>
-                
-                <legend>支出分类</legend>
-                <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
-                    <thead>
-                        <tr>
-                            <th bgcolor="#FFFFFF">分类名称</th>
-                            <th bgcolor="#FFFFFF">支出</th>
-                            <th bgcolor="#FFFFFF">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        <volist name="outMoneyClass" id="data">
-                        <tr>
-                            <td class="am-text-middle">{$data}</td>
-                            <td class="am-text-middle">
-                                <a href="<php>echo U("Home/Class/change?id=".$key);</php>" class="am-btn am-btn-success am-btn-xs">
-                                    转为收入
-                                </a>
-                            </td>
-                            <td class="am-text-middle">
-                                <a href="<php>echo U("Home/Class/edit?id=".$key);</php>" class="am-btn am-btn-secondary am-btn-xs">
-                                    编辑
-                                </a>
-                                <a href="javascript:void(0);" onclick="isDelete('<php>echo U("Home/Class/del?id=".$key);</php>')" class="am-btn am-btn-danger am-btn-xs">
-                                    删除
-                                </a>
-                            </td>
-                        </tr>
-                        </volist>
-                    </tbody>
-                </table>
-                
+            <p><input type="submit" class="am-btn am-btn-secondary am-btn-block" name="class_submit" value="新建"></p>
+        </fieldset>
+    </form>
+
+    <fieldset id="in">
+        <legend class="am-cf">
+            <div class="am-fl">收入分类</div>
+            <div class="am-fr">
+                <button class="am-btn am-btn-xs am-btn-success am-round sortInEnable" style="display: none;" id="sortInSave">保存排序</button>
             </div>
-        </div>
-    </div>
+        </legend>
+        <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
+            <thead>
+                <tr>
+                    <th bgcolor="#FFFFFF">分类名称</th>
+                    <th bgcolor="#FFFFFF">收入</th>
+                    <th bgcolor="#FFFFFF">操作</th>
+                    <th bgcolor="#FFFFFF">排序</th>
+                </tr>
+            </thead>
+            <tbody id="sortClassIn">
+                <volist name="inMoneyClass" id="data">
+                <tr data-id="{$key}">
+                    <td class="am-text-middle">{$data}</td>
+                    <td class="am-text-middle">
+                        <a href="<php>echo U("Home/Class/change?id=".$key);</php>" class="am-btn am-btn-success am-btn-xs">
+                            转为支出
+                        </a>
+                    </td>
+                    <td class="am-text-middle">
+                        <a href="<php>echo U("Home/Class/edit?id=".$key);</php>" class="am-btn am-btn-secondary am-btn-xs">
+                            编辑
+                        </a>
+                        <a href="javascript:void(0);" onclick="isDelete('<php>echo U("Home/Class/del?id=".$key);</php>')" class="am-btn am-btn-danger am-btn-xs">
+                            删除
+                        </a>
+                    </td>
+                    <td class="am-text-middle sortHandle">
+                        <i class="am-icon-arrows"></i>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </fieldset>
+
+    <fieldset id="out">
+        <legend>支出分类</legend>
+        <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
+            <thead>
+                <tr>
+                    <th bgcolor="#FFFFFF">分类名称</th>
+                    <th bgcolor="#FFFFFF">支出</th>
+                    <th bgcolor="#FFFFFF">操作</th>
+                </tr>
+            </thead>
+            <tbody class="">
+                <volist name="outMoneyClass" id="data">
+                <tr>
+                    <td class="am-text-middle">{$data}</td>
+                    <td class="am-text-middle">
+                        <a href="<php>echo U("Home/Class/change?id=".$key);</php>" class="am-btn am-btn-success am-btn-xs">
+                            转为收入
+                        </a>
+                    </td>
+                    <td class="am-text-middle">
+                        <a href="<php>echo U("Home/Class/edit?id=".$key);</php>" class="am-btn am-btn-secondary am-btn-xs">
+                            编辑
+                        </a>
+                        <a href="javascript:void(0);" onclick="isDelete('<php>echo U("Home/Class/del?id=".$key);</php>')" class="am-btn am-btn-danger am-btn-xs">
+                            删除
+                        </a>
+                    </td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </fieldset>
+</block>
+
+<block name="javascript">
+    <script src="__PUBLIC__/Home/js/sortable.min.js"></script>
+    <script type="text/javascript">
+        var elin = document.getElementById('sortClassIn');
+        var sortableIn = Sortable.create(elin, {
+            handle: ".sortHandle",
+            ghostClass: "am-active",
+            animation: 200,
+            onUpdate: function (evt) {
+                $(".sortInEnable").show();
+            },
+        });
+        if (sortableIn) {
+            $("#sortInSave").click(function(){
+                SaveSort(sortableIn.toArray());
+            });
+        }
+
+        function SaveSort(order) {
+            try {
+                FormPost("__APP__/Home/Class/sort", {'data': JSON.stringify(order).replace(/"/g, '')});
+            }catch(e){
+                console.log(e);
+                alert("缺少FormPost组件，请联系管理员。");
+            }
+        }
+    </script>
 </block>
