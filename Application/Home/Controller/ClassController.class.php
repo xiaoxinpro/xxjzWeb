@@ -4,29 +4,21 @@ use Think\Controller;
 class ClassController extends BaseController {
     public function index(){
         $uid = session('uid');
-        $type = I('get.type',0);
-        $ClassType = I('get.class',1);
+        $ClassType = I('get.class', 2);
         
         if(IS_POST){
             $data = array();
             $data['classname'] = I('post.class_name');
-            $data['classtype'] = I('post.class_type');
+            $data['classtype'] = I('post.class_type/d');
             $data['ufid']      = $uid;
             $Updata = AddNewClass($data);
-            // if($Updata[0]){
-            //     ClearDataCache(); //清除缓存
-            //     $this -> success($Updata[1],U('Home/Class/index/type/'.$data['classtype']));
-            // }else{
-            //     $this -> error($Updata[1],U('Home/Class/index/type/'.$data['classtype']));
-            // }
             ClearDataCache(); //清除缓存
-            $type = $data['classtype'];
+            $ClassType = $data['classtype'];
             ShowAlert($Updata[1]);
         }
         
         $MoneyClass[1] = GetClassData($uid,1);
         $MoneyClass[2] = GetClassData($uid,2);
-        $this -> assign('type',$type);
         $this -> assign('ClassType',$ClassType);
         $this -> assign('inMoneyClass',$MoneyClass[1]);
         $this -> assign('outMoneyClass',$MoneyClass[2]);
@@ -35,12 +27,12 @@ class ClassController extends BaseController {
     
     public function edit(){
         $uid = session('uid');
-        $ClassId = I('get.id','',int);
+        $ClassId = I('get.id/d');
         if($ClassId){
             $DbData = GetClassIdData($ClassId,$uid);
             if(IS_POST){
                 $ClassName = I('post.class_name');
-                $ClassType = I('post.class_type','',int);
+                $ClassType = I('post.class_type/d');
                 ClearDataCache(); //清除缓存
                 if(intval($DbData[1]['classtype']) != intval($ClassType)) {
                     $Change = ChangeClassType($ClassId,$uid);
@@ -63,6 +55,21 @@ class ClassController extends BaseController {
                 }
             }
         }else{
+            $this -> error('非法操作...');
+        }
+    }
+
+    public function sort() {
+        $uid = session('uid');
+        if (IS_POST) {
+            $classType = I('post.type','new');
+            $classIdList = json_decode(I('post.data','[]'), true);
+            if (count($classIdList) > 0) {
+                SortClass($classIdList, $uid);
+            }
+            ShowAlert("分类排序修改完成！",U('Home/Class/index#'.$classType));
+            $this -> display('Public/base');
+        } else {
             $this -> error('非法操作...');
         }
     }
