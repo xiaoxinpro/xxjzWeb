@@ -12,7 +12,7 @@
             <div class="am-input-group">
                 <span class="am-input-group-label"><b>类别</b></span>
                 <select id="select-type" class="am-form-field" name="class_type" >
-                    <if condition="$ClassType eq 'in'">
+                    <if condition="$ClassType eq 1">
                         <option value="1">收入</option>
                         <option value="2">支出</option>
                     <else/>
@@ -85,7 +85,7 @@
             </thead>
             <tbody id="sortClassOut">
                 <volist name="outMoneyClass" id="data">
-                <tr>
+                <tr data-id="{$key}">
                     <td class="am-text-middle">{$data}</td>
                     <td class="am-text-middle">
                         <a href="<php>echo U("Home/Class/change?id=".$key);</php>" class="am-btn am-btn-success am-btn-xs">
@@ -124,7 +124,7 @@
         });
         if (sortableIn) {
             $("#sortInSave").click(function(){
-                SaveSort(sortableIn.toArray());
+                SaveSort(sortableIn.toArray(), 'in');
             });
         }
 
@@ -139,13 +139,13 @@
         });
         if (sortableOut) {
             $("#sortOutSave").click(function(){
-                SaveSort(sortableOut.toArray());
+                SaveSort(sortableOut.toArray(), 'out');
             });
         }
 
-        function SaveSort(order) {
+        function SaveSort(order, type) {
             try {
-                FormPost("__APP__/Home/Class/sort", {'data': JSON.stringify(order).replace(/"/g, '')});
+                FormPost("__APP__/Home/Class/sort", {'data': JSON.stringify(order).replace(/"/g, ''), 'type': type});
             }catch(e){
                 console.log(e);
                 alert("缺少FormPost组件，请联系管理员。");
