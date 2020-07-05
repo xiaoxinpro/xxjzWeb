@@ -68,16 +68,22 @@
     </fieldset>
 
     <fieldset id="out">
-        <legend>支出分类</legend>
+        <legend>
+            <div class="am-fl">支出分类</div>
+            <div class="am-fr">
+                <button class="am-btn am-btn-xs am-btn-success am-round sortOutEnable" style="display: none;" id="sortOutSave">保存排序</button>
+            </div>
+        </legend>
         <table class="am-table am-table-bordered am-table-radius am-table-striped am-table-centered am-text-sm">
             <thead>
                 <tr>
                     <th bgcolor="#FFFFFF">分类名称</th>
                     <th bgcolor="#FFFFFF">支出</th>
                     <th bgcolor="#FFFFFF">操作</th>
+                    <th bgcolor="#FFFFFF">排序</th>
                 </tr>
             </thead>
-            <tbody class="">
+            <tbody id="sortClassOut">
                 <volist name="outMoneyClass" id="data">
                 <tr>
                     <td class="am-text-middle">{$data}</td>
@@ -93,6 +99,9 @@
                         <a href="javascript:void(0);" onclick="isDelete('<php>echo U("Home/Class/del?id=".$key);</php>')" class="am-btn am-btn-danger am-btn-xs">
                             删除
                         </a>
+                    </td>
+                    <td class="am-text-middle sortHandle">
+                        <i class="am-icon-arrows"></i>
                     </td>
                 </tr>
                 </volist>
@@ -116,6 +125,21 @@
         if (sortableIn) {
             $("#sortInSave").click(function(){
                 SaveSort(sortableIn.toArray());
+            });
+        }
+
+        var elout = document.getElementById('sortClassOut');
+        var sortableOut = Sortable.create(elout, {
+            handle: ".sortHandle",
+            ghostClass: "am-active",
+            animation: 200,
+            onUpdate: function (evt) {
+                $(".sortOutEnable").show();
+            },
+        });
+        if (sortableOut) {
+            $("#sortOutSave").click(function(){
+                SaveSort(sortableOut.toArray());
             });
         }
 
