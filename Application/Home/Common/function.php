@@ -1039,7 +1039,9 @@
     {
         for ($i=0; $i < count($FundsIdList); $i++) { 
             $sql = array('uid'=>$uid, 'fundsid' => intval($FundsIdList[$i]));
-            M("account_funds")->where($sql)->setField('sort',$i);
+            if ($sql['fundsid'] > 0) {
+                M("account_funds")->where($sql)->setField('sort', $i + 1);
+            }
         }
         ClearDataCache();
     }
@@ -1606,8 +1608,10 @@
     function SortClass($ClassIdList, $uid)
     {
         for ($i=0; $i < count($ClassIdList); $i++) { 
-            $sql = array('uid'=>$uid, 'acclassid' => intval($ClassIdList[$i]));
-            M("account_class")->where($sql)->setField('sort',$i);
+            $sql = array('ufid'=>$uid, 'classid' => intval($ClassIdList[$i]));
+            if ($sql['classid'] > 0) {
+                M("account_class")->where($sql)->setField('sort', $i + 1);
+            }
         }
         ClearDataCache();
     }
