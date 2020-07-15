@@ -616,8 +616,8 @@
         $ArrData['LastTodayOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
         
         //上月收支统计
-        $EndTime = strtotime(date("Y-m-d",mktime(23,59,59,date("m",time())-1,date("t",time()),date("Y",time()))));
-        $StartTime = strtotime(date("Y-m-d",mktime(0,0,0,date("m",time())-1,1,date("Y",time()))));
+        $EndTime = strtotime(date("Y-m-d 23:59:59", strtotime(-date('d').' day')));
+        $StartTime = strtotime(date("Y-m-01 00:00:00", strtotime('-1 month')));
         $ArrData['LastMonthInMoney']  = GetAccountStatistic($StartTime,$EndTime,1,$uid);
         $ArrData['LastMonthOutMoney'] = GetAccountStatistic($StartTime,$EndTime,2,$uid);
         
