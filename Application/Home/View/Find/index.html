@@ -20,20 +20,20 @@
         </div>
         <div><p></p></div>
         <div class="am-input-group">
+            <span class="am-input-group-label"><b>收支类别</b></span>
+            <select id="select-type" class="am-form-field" name="find_type">
+                <option value="">全部类别</option>
+                <option value="1">收入</option>
+                <option value="2">支出</option>
+                <option value="3">转账</option>
+            </select>
+            <span class="am-form-caret"></span>
+        </div>
+        <div><p></p></div>
+        <div class="am-input-group">
             <span class="am-input-group-label"><b>选择分类</b></span>
-            <select id="select-type" class="am-form-field" name="find_class">
-                <option value="all">全部分类</option>
-                <option value="outClass">支出--</option>
-                <foreach name="outClassData" item="ClassName">
-                    <option value="{$key}">----{$ClassName}</option>
-                </foreach>
-                <option value="inClass">收入--</option>
-                <foreach name="inClassData" item="ClassName">
-                    <option value="{$key}">----{$ClassName}</option>
-                </foreach>
-                <option value="transfer">转账--</option>
-                <option value="inTransfer">----转入</option>
-                <option value="outTransfer">----转出</option>
+            <select id="select-class" class="am-form-field" name="find_class">
+                <option value="">全部</option>
             </select>
         </div>
         <div><p></p></div>
@@ -78,13 +78,45 @@
 
 <block name="javascript">
     <script type="text/javascript">
+    function updataSelectClass(arrData) {
+        $('#select-class option').remove();
+        $("#select-class").append('<option value="">全部</option>');
+        console.log(arrData)
+        for (let key in arrData) {
+            $("#select-class").append('<option value="' + key + '">' + arrData[key] + '</option>');
+        }
+    }
+
     $(function(){
         if ("{$FindDataClass}" != "") {
-            $("#select-type").val("{$FindDataClass}");
+            $("#select-class").val("{$FindDataClass}");
         }
         if ("{$FindData.fid}" != "") {
             $("#select-funds").val("{$FindData.fid}");
-        }        
+        }
+
+        $('#select-type').change(function(){
+            $('#select-class').val('');
+            switch($('#select-type').val()) {
+                case '1':
+                    $('#select-class').parent().show();
+                    updataSelectClass(JSON.parse('{$inClassData|json_encode=true}'));
+                break;
+                case '2':
+                    $('#select-class').parent().show();
+                    updataSelectClass(JSON.parse('{$outClassData|json_encode=true}'));
+                break;
+                case '3':
+                    $('#select-class').parent().show();
+                    updataSelectClass({'inTransfer':'转入', 'outTransfer':'转出'});
+                break;
+                default:
+                    $('#select-class').parent().hide();
+                    updataSelectClass({});
+                break;
+            }
+        });
+        $('#select-type').trigger("change");
     });
     </script>
 </block>
