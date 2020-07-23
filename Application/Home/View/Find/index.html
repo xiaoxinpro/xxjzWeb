@@ -88,13 +88,12 @@
     }
 
     $(function(){
-        if ("{$FindDataClass}" != "") {
-            $("#select-class").val("{$FindDataClass}");
-        }
         if ("{$FindData.fid}" != "") {
             $("#select-funds").val("{$FindData.fid}");
         }
-
+        if ("{$FindDataType}" != "") {
+            $("#select-type").val("{$FindDataType}");
+        }
         $('#select-type').change(function(){
             $('#select-class').val('');
             switch($('#select-type').val()) {
@@ -117,6 +116,9 @@
             }
         });
         $('#select-type').trigger("change");
+        if ("{$FindDataClass}" != "") {
+            $("#select-class").val("{$FindDataClass}");
+        }
     });
     </script>
 </block>
