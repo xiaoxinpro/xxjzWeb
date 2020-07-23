@@ -325,6 +325,7 @@
         if($uid){
             S('find_data_'.$uid,null);
             S('find_data_class_'.$uid,null);
+            S('find_data_type_'.$uid,null);
         }
     }
 
@@ -358,7 +359,7 @@
             }
         }
         if($data['acclassid']){
-            $arrSQL['acclassid'] = $data['acclassid'];
+            $arrSQL['acclassid'] = Field2SqlArray($data['acclassid']);
         }
         if($data['zhifu']){
             $arrSQL['zhifu'] = $data['zhifu'];
@@ -1356,6 +1357,19 @@
         return $DbSQL;
     }
 
+    function Field2SqlArray($data) {
+        if (is_array($data) && count($data) > 0) {
+            $ret = array();
+            for ($i=0; $i < count($data); $i++) { 
+                array_push($ret, array('eq', $data[$i]));
+            }
+            array_push($ret, 'OR');
+            return $ret;
+        } else {
+            return $data;
+        }
+    }
+
     function GetFindTransferAccountSql($data, $alias='') {
         if($data['jiid']){
             $arrSQL[$alias.'jiid'] = $data['jiid'];
@@ -1380,7 +1394,7 @@
             }
         }
         if($data['acclassid']){
-            $arrSQL[$alias.'acclassid'] = $data['acclassid'];
+            $arrSQL[$alias.'acclassid'] = Field2SqlArray($data['acclassid']);
         }
         if($data['zhifu']){
             $arrSQL[$alias.'zhifu'] = $data['zhifu'];
@@ -1394,9 +1408,14 @@
             ->field("account.acid as id, account.acmoney as money, account.acclassid as classid, class.classname as class, account.acremark as mark, account.actime as time, account.zhifu as typeid, case account.zhifu when 1 then '收入'  when 2 then '支出' end as type, account.fid as fundsid, funds.fundsname as funds, account.jiid as uid")
             ->join('__ACCOUNT_FUNDS__ AS funds ON funds.fundsid = account.fid', 'LEFT')
             ->join('__ACCOUNT_CLASS__ AS class ON class.classid = account.acclassid', 'LEFT');
-        if ((!isset($data['acclassid']) && !isset($data['zhifu'])) || stripos($data['acclassid'], "transfer")!==false) {
-            $ret = $ret->union(GetFindTransferDb($data, 2)->fetchSql(true)->select())
-                ->union(GetFindTransferDb($data, 1)->fetchSql(true)->select() . " ORDER BY time DESC, id DESC");
+        if ((!isset($data['acclassid']) && !isset($data['zhifu'])) || (!is_array($data['acclassid']) && stripos($data['acclassid'], "transfer")!==false)) {
+            if ($data['acclassid'] == "outTransfer") {
+                $ret = $ret->union(GetFindTransferDb($data, 2)->fetchSql(true)->select() . " ORDER BY time DESC, id DESC");
+            } elseif ($data['acclassid'] == "inTransfer") {
+                $ret = $ret->union(GetFindTransferDb($data, 1)->fetchSql(true)->select() . " ORDER BY time DESC, id DESC");
+            } else {
+                $ret = $ret->union(GetFindTransferDb($data, 2)->fetchSql(true)->select())->union(GetFindTransferDb($data, 1)->fetchSql(true)->select() . " ORDER BY time DESC, id DESC");
+            }
         } else {
             $ret = $ret->order("time DESC , id DESC");
         }
