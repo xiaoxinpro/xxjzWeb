@@ -9,18 +9,15 @@ class FindController extends BaseController {
         $ShowFind = 1;
         if(IS_POST){
             $ClassValue = I('post.find_class');
-            if($ClassValue === 'all'){
-                //$data['acclassid'] = null;
-                //$data['zhifu']     = null;
-            }else if($ClassValue === 'outClass'){
-                //$data['acclassid'] = null;
+            $TypeValue = I('post.find_type');
+            if($TypeValue === '2'){
                 $data['zhifu']     = '2';
-            }else if($ClassValue === 'inClass'){
-                //$data['acclassid'] = null;
+            }else if($TypeValue === '1'){
                 $data['zhifu']     = '1';
-            }else{
+            }
+            if ($ClassValue !== '') {
                 $data['acclassid'] = $ClassValue;
-                //$data['zhifu']     = null;
+                // $data['acclassid'] = array('75', '1031');
             }
             $data['starttime'] = I('post.find_start_time');
             $data['endtime']   = I('post.find_end_time');
@@ -32,15 +29,17 @@ class FindController extends BaseController {
             ClearFindCache(); //清除查询缓存
             S('find_data_'.$uid,$data);
             S('find_data_class_'.$uid,$ClassValue);
-
+            S('find_data_type_'.$uid,$TypeValue);
         }else{
             //读取查询缓存
             $data = S('find_data_'.$uid);
             $ClassValue = S('find_data_class_'.$uid);
+            $TypeValue = S('find_data_type_'.$uid);
         }
 
-        if (stripos($ClassValue, 'transfer') !== false) {
+        if ($TypeValue == "3" && $ClassValue === '') {
             $this->isTransfer = true;
+            $data['acclassid'] = "transfer";
         }
 
         //表单信息
@@ -58,6 +57,7 @@ class FindController extends BaseController {
             //输出查询信息
             $this -> assign('FindData',$data);
             $this -> assign('FindDataClass',$ClassValue);
+            $this -> assign('FindDataType',$TypeValue);
             if ($this->isTransfer) {
                 $DbTransfer = FindTransferData($data, $p);
                 $this -> assign('Page', $DbTransfer['Page']);
