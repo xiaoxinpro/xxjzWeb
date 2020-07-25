@@ -88,6 +88,17 @@
     }
 
     $(function(){
+        $('#select-funds').change(function(){
+            $('#select-type').val("");
+            $('#select-type').trigger("change");
+            $('#select-type option').remove();
+            $("#select-type").append('<option value="">全部类别</option>');
+            $("#select-type").append('<option value="1">收入</option>');
+            $("#select-type").append('<option value="2">支出</option>');
+            if ($('#select-funds').val() != "-1") {
+                $("#select-type").append('<option value="3">转账</option>');
+            }
+        });
         if ("{$FindData.fid}" != "") {
             $("#select-funds").val("{$FindData.fid}");
         }
