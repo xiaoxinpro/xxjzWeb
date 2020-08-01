@@ -933,6 +933,9 @@
                         return array(false, $ret[1]);
                     }
                 }
+                if (M('account_funds')->where(array('uid'=>$uid))->count() == 1) {
+                    DeleteFunds(-1, $uid, $fid);
+                }
                 return array(true,'新建资金账户成功!');
             }else{
                 return array(false,'写入数据库出错(&_&)');
