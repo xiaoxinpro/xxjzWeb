@@ -131,10 +131,18 @@ class ApiController extends Controller {
                 $arrData['data'] = GetFundsIdData($data['fundsid'], $uid);
                 break;
             case 'add':
-                $arrData['data'] = AddNewFunds($data['fundsname'], 0, $uid);
+                if (!isset($data['fundsmoney'])) {
+                    $data['fundsmoney'] = 0;
+                }
+                $arrData['data'] = AddNewFunds($data['fundsname'], $data['fundsmoney'], $uid);
                 break;
             case 'edit':
-                $arrData['data'] = EditFundsName($data['fundsid'], $data['fundsname'], $uid);
+                if (isset($data['fundsname'])) {
+                    $arrData['data'] = EditFundsName($data['fundsid'], $data['fundsname'], $uid);
+                }
+                if (isset($data['fundsmoney'])) {
+                    $arrData['data'] = EditFundsDefaultMoney($data['fundsid'], $data['fundsmoney'], $uid)
+                }
                 break;
             case 'del':
                 $arrData['data'] = DeleteFunds($data['fundsid_old'], $uid, $data['fundsid_new']);
