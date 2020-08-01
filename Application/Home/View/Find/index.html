@@ -101,6 +101,7 @@
         });
         if ("{$FindData.fid}" != "") {
             $("#select-funds").val("{$FindData.fid}");
+            $('#select-funds').trigger("change");
         }
         if ("{$FindDataType}" != "") {
             $("#select-type").val("{$FindDataType}");
