@@ -78,13 +78,10 @@
 
 <block name="javascript">
     <script type="text/javascript">
-    function updataSelectClass(arrData) {
+    function updataSelectClass(strOption) {
         $('#select-class option').remove();
         $("#select-class").append('<option value="">全部</option>');
-        console.log(arrData)
-        for (let key in arrData) {
-            $("#select-class").append('<option value="' + key + '">' + arrData[key] + '</option>');
-        }
+        $("#select-class").append(strOption);
     }
 
     $(function(){
@@ -111,15 +108,15 @@
             switch($('#select-type').val()) {
                 case '1':
                     $('#select-class').parent().show();
-                    updataSelectClass(JSON.parse('{$inClassData|json_encode=true}'));
+                    updataSelectClass('<foreach name="inClassData" item="classname" key="classid" ><option value="{$classid}">{$classname}</option></foreach>');
                 break;
                 case '2':
                     $('#select-class').parent().show();
-                    updataSelectClass(JSON.parse('{$outClassData|json_encode=true}'));
+                    updataSelectClass('<foreach name="outClassData" item="classname" key="classid" ><option value="{$classid}">{$classname}</option></foreach>');
                 break;
                 case '3':
                     $('#select-class').parent().show();
-                    updataSelectClass({'inTransfer':'转入', 'outTransfer':'转出'});
+                    updataSelectClass('<option value="inTransfer">转入</option><option value="outTransfer">转出</option>');
                 break;
                 default:
                     $('#select-class').parent().hide();
