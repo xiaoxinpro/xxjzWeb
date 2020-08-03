@@ -19,24 +19,26 @@
         </form>
     </gt>
 
-    <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
-        <fieldset>
-            <legend>删除资金账户</legend>
-            <div class="am-input-group">
-                <span class="am-input-group-label"><b>将数据转移到</b></span>
-                <select id="select-funds" class="am-form-field" name="funds_change">
-                    <foreach name="FundsData" item="data">
-                        <if condition="$data['id'] neq $FundsId">
-                            <option value="{$data.id}">{$data.name}</option>
-                        </if>
-                    </foreach>
-                </select>
-                <span class="am-form-caret"></span>
-            </div>
-            <p><input type="submit" class="am-btn am-btn-block am-btn-danger" name="funds_submit" value="删除"></p>
-            <p><a href="__APP__/Home/Funds/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
-        </fieldset>
-    </form>
+    <if condition="count($FundsData) gt 1">
+        <form class="am-form am-form-horizontal" method="post" data-am-validator="H5validation:false">
+            <fieldset>
+                <legend>删除资金账户</legend>
+                <div class="am-input-group">
+                    <span class="am-input-group-label"><b>将数据转移到</b></span>
+                    <select id="select-funds" class="am-form-field" name="funds_change">
+                        <foreach name="FundsData" item="data">
+                            <if condition="$data['id'] neq $FundsId">
+                                <option value="{$data.id}">{$data.name}</option>
+                            </if>
+                        </foreach>
+                    </select>
+                    <span class="am-form-caret"></span>
+                </div>
+                <p><input type="submit" class="am-btn am-btn-block am-btn-danger" name="funds_submit" value="删除"></p>
+                <p><a href="__APP__/Home/Funds/index" class="am-btn am-btn-block am-btn-default">返回</a></p>
+            </fieldset>
+        </form>
+    </if>
 
     <fieldset>
         
