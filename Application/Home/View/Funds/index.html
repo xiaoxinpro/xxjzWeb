@@ -17,7 +17,7 @@
     </form>
 
     <p></p>
-    <fieldset id="accordion">
+    <fieldset id="funds-table">
         <legend class="am-cf">
             <div class="am-fl">管理资金账户</div>
             <div class="am-fr">
@@ -73,6 +73,11 @@
 </block>
 
 <block name="javascript">
+    <if condition="count($TransferData) eq 0">
+        <script type="text/javascript">
+            $('#transfer-table').hide();
+        </script>
+    </if>
     <script src="__PUBLIC__/Home/js/sortable.min.js"></script>
     <script type="text/javascript">
         var el = document.getElementById('sortFunds');
