@@ -9,7 +9,9 @@
                 <li class="am-active"><a href="[data-tab-panel-2]">支出</a></li>
                 <li class=""><a href="[data-tab-panel-1]">收入</a></li>
             </if>
-            <li class=""><a href="__APP__/Home/Add/transfer">转账</a></li>
+            <if condition="count($FundsData) gt 1">
+                <li class=""><a href="__APP__/Home/Add/transfer">转账</a></li>
+            </if>
         </ul>
         <div class="am-tabs-bd">
             <if condition="$type eq 1">
@@ -26,16 +28,18 @@
                         <p></p>
                     </div>
                     <div><p></p></div>
-                    <div class="am-input-group">
-                        <span class="am-input-group-label"><b>账户</b></span>
-                        <select id="select-funds" class="am-form-field" name="add_funds">
-                        <foreach name="FundsData" item="data">
-                            <option value="{$data.id}">{$data.name}</option>
-                        </foreach>
-                        </select>
-                        <span class="am-form-caret"></span>
-                    </div>
-                    <div><p></p></div>
+                    <if condition="count($FundsData) gt 1">
+                        <div class="am-input-group">
+                            <span class="am-input-group-label"><b>账户</b></span>
+                            <select id="select-funds" class="am-form-field" name="add_funds">
+                            <foreach name="FundsData" item="data">
+                                <option value="{$data.id}">{$data.name}</option>
+                            </foreach>
+                            </select>
+                            <span class="am-form-caret"></span>
+                        </div>
+                        <div><p></p></div>
+                    </if>
                     <div class="am-input-group">
                         <span class="am-input-group-label"><b>分类</b></span>
                         <select id="select-class" class="am-form-field" name="add_class">
@@ -86,16 +90,18 @@
                         <p></p>
                     </div>
                     <div><p></p></div>
-                    <div class="am-input-group">
-                        <span class="am-input-group-label"><b>账户</b></span>
-                        <select id="select-funds" class="am-form-field" name="add_funds">
-                        <foreach name="FundsData" item="data">
-                            <option value="{$data.id}">{$data.name}</option>
-                        </foreach>
-                        </select>
-                        <span class="am-form-caret"></span>
-                    </div>
-                    <div><p></p></div>
+                    <if condition="count($FundsData) gt 1">
+                        <div class="am-input-group">
+                            <span class="am-input-group-label"><b>账户</b></span>
+                            <select id="select-funds" class="am-form-field" name="add_funds">
+                            <foreach name="FundsData" item="data">
+                                <option value="{$data.id}">{$data.name}</option>
+                            </foreach>
+                            </select>
+                            <span class="am-form-caret"></span>
+                        </div>
+                        <div><p></p></div>
+                    </if>
                     <div class="am-input-group">
                         <span class="am-input-group-label"><b>分类</b></span>
                         <select id="select-class" class="am-form-field" name="add_class">
