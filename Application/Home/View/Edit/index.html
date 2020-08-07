@@ -30,20 +30,22 @@
                     <p></p>
                 </div>
                 <div><p></p></div>
-                <div class="am-input-group">
-                    <span class="am-input-group-label"><b>账户</b></span>
-                    <select id="select-funds" class="am-form-field" name="edit_funds">
-                    <foreach name="FundsData" item="data">
-                        <if condition="$data['id'] eq $DbFunds">
-                            <option value="{$data.id}" selected>{$data.name}</option>
-                        <else/>
-                            <option value="{$data.id}">{$data.name}</option>
-                        </if>
-                    </foreach>
-                    </select>
-                    <span class="am-form-caret"></span>
-                </div>
-                <div><p></p></div>
+                <if condition="count($FundsData) gt 1">
+                  <div class="am-input-group">
+                      <span class="am-input-group-label"><b>账户</b></span>
+                      <select id="select-funds" class="am-form-field" name="edit_funds">
+                      <foreach name="FundsData" item="data">
+                          <if condition="$data['id'] eq $DbFunds">
+                              <option value="{$data.id}" selected>{$data.name}</option>
+                          <else/>
+                              <option value="{$data.id}">{$data.name}</option>
+                          </if>
+                      </foreach>
+                      </select>
+                      <span class="am-form-caret"></span>
+                  </div>
+                  <div><p></p></div>
+                </if>
                 <div class="am-input-group">
                     <span class="am-input-group-label"><b>类别</b></span>
                     <select id="select-type" class="am-form-field" name="edit_type" onchange="ChangClass({$MoneyClass},'select-type','select-class')">
