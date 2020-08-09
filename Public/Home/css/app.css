@@ -1,1 +1,7 @@
 /* Write your styles */
+.am-form input[type="datetime-local"],
+.am-form input[type="date"],
+input[type="datetime-local"].am-form-field,
+input[type="date"].am-form-field {
+  height: 38px;
+}
