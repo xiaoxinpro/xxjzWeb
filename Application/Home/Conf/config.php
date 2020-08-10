@@ -1,9 +1,12 @@
 <?php
 return array(
     //'配置项'=>'配置值'
-    'APP_DEMO_USERNAME' => 'demo',
     'APP_IOS_URL' => 'http://downloadpkg.apicloud.com/app/download?path=http://7xwwr4.com1.z0.glb.clouddn.com/3148046adbdb7b3ae9736fb35e5b26ae.ipa',
     'APP_ANDROID_URL' => 'http://downloadpkg.apicloud.com/app/download?path=http://7xwwr4.com1.z0.glb.clouddn.com/dcace9ca9ecf952a679c88e04e7cf3bf_d',
+
+    //Demo账户信息
+    'APP_DEMO_USERNAME' => 'demo',
+    'APP_DEMO_PASSWORD' => 'xxgzs.org',
 
     //金额格式设置
     'MONEY_FORMAT_DECIMALS' => 2,    //金额保留小数位数（0-2）
