@@ -141,7 +141,7 @@ class ApiController extends Controller {
                     $arrData['data'] = EditFundsName($data['fundsid'], $data['fundsname'], $uid);
                 }
                 if (isset($data['fundsmoney'])) {
-                    $arrData['data'] = EditFundsDefaultMoney($data['fundsid'], $data['fundsmoney'], $uid)
+                    $arrData['data'] = EditFundsDefaultMoney($data['fundsid'], $data['fundsmoney'], $uid);
                 }
                 break;
             case 'del':
@@ -564,6 +564,25 @@ class ApiController extends Controller {
             'message' => C('XXJZ_WELCOME'),
             'version' => GetVersion(),
             'wechat' => C('WX_ENABLE'),
+            'admin' => array('uid'=>C('ADMIN_UID')),
+            'demo' => array(
+                'username' => C('APP_DEMO_USERNAME'),
+                'password' => C('APP_DEMO_PASSWORD'),
+            ),
+            'account' => array(
+                'PAGE_SIZE' => C('PAGE_SIZE'),
+                'MONEY_FORMAT_DECIMALS' => C('MONEY_FORMAT_DECIMALS'),
+                'MONEY_FORMAT_POINT' => C('MONEY_FORMAT_POINT'),
+                'MONEY_FORMAT_THOUSANDS' => C('MONEY_FORMAT_THOUSANDS'),
+                'MAX_MONEY_VALUE' => C('MAX_MONEY_VALUE'),
+                'MAX_CLASS_NAME' => C('MAX_CLASS_NAME'),
+                'MAX_FUNDS_NAME' => C('MAX_FUNDS_NAME'),
+                'MAX_MONEY_VALUE' => C('MAX_MONEY_VALUE'),
+                'MAX_MARK_VALUE' => C('MAX_MARK_VALUE'),
+                'IMAGE_SIZE' => C('IMAGE_SIZE'),
+                'IMAGE_COUNT' => C('IMAGE_COUNT'),
+                'IMAGE_CACHE_URL' => C('IMAGE_CACHE_URL'),
+            ),
         )));
     }
 
