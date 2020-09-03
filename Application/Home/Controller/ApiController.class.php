@@ -393,7 +393,7 @@ class ApiController extends Controller {
                 break;
 
             case 'add':
-                $data['jiid'] = $uid;
+                $data['uid'] = $uid;
                 $ret = AddTransferData($data);
                 $arrData['data']['ret'] = $ret[0];
                 $arrData['data']['msg'] = $ret[1];
@@ -401,7 +401,7 @@ class ApiController extends Controller {
                 break;
 
             case 'edit':
-                $data['jiid'] = $uid;
+                $data['uid'] = $uid;
                 $ret = EditTransferData($data['tid'], $data);
                 $arrData['data']['ret'] = $ret[0];
                 $arrData['data']['msg'] = $ret[1];
