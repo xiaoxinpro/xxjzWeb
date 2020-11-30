@@ -389,7 +389,9 @@ class ApiController extends Controller {
                 break;
                 
             case 'get_id':
-                $arrData['data'] = GetTransferIdData($data['tid'], $uid); // 获取转账ID数据
+                $ret = GetTransferIdData($data['tid'], $uid); // 获取转账ID数据
+                $arrData['data']['ret'] = $ret[0];
+                $arrData['data']['msg'] = $ret[1];
                 break;
 
             case 'add':
